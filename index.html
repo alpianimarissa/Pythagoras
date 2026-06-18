@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pusat Kuis Segitiga & Teorema Pythagoras - Kelas VIII</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX untuk render rumus Matematika yang indah -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8fafc;
+            user-select: none;
+        }
+        h1, h2, h3, h4, h5, .font-header {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden text-slate-800">
+
+<script>
+    // Web Audio Synthesizer untuk efek suara retro pendorong semangat belajar
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let soundEnabled = true;
+
+    function playSound(type) {
+        if (!soundEnabled) return;
+        try {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            if (type === 'click') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } else if (type === 'correct') {
+                osc.type = 'sine';
+                const now = audioCtx.currentTime;
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+                osc.frequency.setValueAtTime(1046.50, now + 0.24); // C6
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start();
+                osc.stop(now + 0.4);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.25);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.25);
+            } else if (type === 'triumph') {
+                osc.type = 'square';
+                const now = audioCtx.currentTime;
+                osc.frequency.setValueAtTime(261.63, now); // C4
+                osc.frequency.setValueAtTime(329.63, now + 0.1); // E4
+                osc.frequency.setValueAtTime(392.00, now + 0.2); // G4
+                osc.frequency.setValueAtTime(523.25, now + 0.3); // C5
+                osc.frequency.setValueAtTime(1046.50, now + 0.5); // C6
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.85);
+                osc.start();
+                osc.stop(now + 0.85);
+            }
+        } catch(e) { console.warn("Audio Context Error: ", e); }
+    }
+</script>
+
+<!-- HEADER UTAMA KUIS -->
+<header class="w-full max-w-7xl mx-auto mt-4 px-4">
+    <div class="bg-white border border-slate-200 py-4 px-6 rounded-2xl shadow-sm flex flex-wrap justify-between items-center gap-4">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center text-white text-2xl shadow-md font-black">📐</div>
+            <div>
+                <h1 class="text-lg md:text-xl font-black text-slate-900 tracking-tight">Pusat Kuis Segitiga & Teorema Pythagoras</h1>
+                <p class="text-xs text-emerald-600 font-bold font-header">Koleksi 30 Tantangan Interaktif: Tingkat Mudah, Medium, & Hard</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-2">
+            <button onclick="soundEnabled = !soundEnabled; this.classList.toggle('bg-rose-50'); playSound('click');" 
+                    class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 transition-all">
+                <span id="sound-icon">🔊</span> Efek Suara
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- AREA UTAMA STRUKTUR KUIS -->
+<main class="flex-grow w-full max-w-7xl mx-auto my-6 px-4 relative min-h-[600px] space-y-6">
+
+    <!-- Pemilih Tingkat Kesulitan -->
+    <div class="bg-white border p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+            <h2 class="text-base font-black text-slate-900">Pilih Tingkat Kesulitan</h2>
+            <p class="text-xs text-slate-500 font-bold">Latih pemahamanmu dari tingkat dasar hingga analitis tingkat tinggi.</p>
+        </div>
+        <div class="flex bg-slate-100 p-1.5 rounded-2xl border w-full md:w-auto">
+            <button onclick="switchCategory('easy')" id="btn-easy" class="flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-black transition-all bg-white text-emerald-700 shadow-sm">
+                Mudah (🟢)
+            </button>
+            <button onclick="switchCategory('medium')" id="btn-medium" class="flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-black transition-all text-slate-600 hover:text-emerald-700">
+                Medium (🟡)
+            </button>
+            <button onclick="switchCategory('hard')" id="btn-hard" class="flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-black transition-all text-slate-600 hover:text-emerald-700">
+                Hard (🔴)
+            </button>
+        </div>
+    </div>
+
+    <!-- Grid Kuis Utama -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Sisi Kiri: Daftar 10 Soal di Kategori yang Dipilih -->
+        <div class="lg:col-span-8 space-y-4" id="questions-list-container">
+            <!-- Diisi otomatis oleh JavaScript -->
+        </div>
+
+        <!-- Sisi Kanan: Status & Papan Cakar -->
+        <div class="lg:col-span-4 space-y-6">
+            
+            <!-- Progress Card Paket -->
+            <div class="bg-slate-900 text-white p-5 rounded-2xl shadow-lg border border-slate-900 text-center space-y-3 relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-emerald-900/40 rounded-full blur-xl"></div>
+                <h3 class="font-extrabold text-xs uppercase tracking-wider text-emerald-300">Total Progress Kuis</h3>
+                <div class="text-4xl font-black text-emerald-400" id="score-counter">0 / 30</div>
+                <p class="text-[11px] text-slate-300 font-semibold px-2">Selesaikan seluruh 30 tantangan dari semua kategori untuk mencetak piagam master Pythagoras!</p>
+                <button onclick="resetQuiz()" class="w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold py-2.5 rounded-xl transition-all border border-slate-700">
+                    🔄 Ulangi Seluruh Latihan
+                </button>
+            </div>
+
+            <!-- Papan Tulis Coretan Mandiri -->
+            <div class="bg-white border p-4 rounded-2xl shadow-sm space-y-3">
+                <div class="flex justify-between items-center">
+                    <h4 class="font-black text-xs text-slate-800 uppercase flex items-center gap-1.5">
+                        <span>✏️</span> Papan Coretan Siswa
+                    </h4>
+                    <button onclick="clearScratchpad()" class="text-[10px] bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold px-2.5 py-1 rounded-lg transition-colors">
+                        Bersihkan
+                    </button>
+                </div>
+                <canvas id="scratchpad-canvas" class="w-full h-52 bg-slate-50 border border-dashed rounded-xl cursor-crosshair"></canvas>
+                <p class="text-[10px] text-slate-400 font-bold text-center">Gunakan jarimu atau mouse di atas untuk coret-coret menghitung.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- AREA PIAGAM KELULUSAN -->
+    <div id="certificate-panel" class="hidden bg-gradient-to-br from-amber-50 via-white to-amber-50/30 border-4 border-amber-400 rounded-3xl p-6 md:p-10 text-center space-y-6 shadow-xl max-w-3xl mx-auto relative overflow-hidden">
+        <div class="absolute inset-1.5 border border-amber-300/40 pointer-events-none rounded-2xl"></div>
+        <div class="absolute -top-12 -left-12 w-32 h-32 bg-amber-200/20 rounded-full blur-xl"></div>
+        <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-amber-200/20 rounded-full blur-xl"></div>
+
+        <div class="text-5xl">🏆</div>
+        <div class="space-y-1">
+            <span class="text-[10px] font-black tracking-widest text-amber-700 block uppercase">Piagam Kelulusan Kuis</span>
+            <h2 class="text-2xl md:text-3xl font-black text-slate-900">Master Teorema Pythagoras</h2>
+        </div>
+
+        <div class="max-w-md mx-auto space-y-3">
+            <div class="space-y-1.5">
+                <label class="block text-[10px] font-black text-slate-600 uppercase">Tuliskan Namamu untuk Dicetak:</label>
+                <input type="text" id="student-name-input" oninput="updateCertName(this.value)" placeholder="Ketik namamu di sini..." 
+                       class="w-full px-4 py-2.5 text-center text-sm font-extrabold border-2 border-amber-200 rounded-xl focus:outline-none focus:border-amber-400 transition-colors shadow-inner" />
+            </div>
+
+            <div class="py-4 border-y border-dashed border-amber-300/50">
+                <span class="text-[10px] text-slate-400 block mb-1">Diberikan Sebagai Penghargaan Kepada Siswa Berbakat:</span>
+                <span id="cert-name-label" class="text-xl font-black text-amber-950 block">Siswa Berprestasi</span>
+            </div>
+
+            <p class="text-[11px] font-bold text-slate-500 leading-relaxed">
+                Telah berhasil menyelesaikan seluruh 30 tantangan kuis matematika **Segitiga & Teorema Pythagoras** dengan hasil yang luar biasa!
+            </p>
+        </div>
+
+        <div class="flex justify-center gap-3">
+            <button onclick="claimTriumph()" class="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-white font-black py-2.5 px-6 rounded-xl shadow-md text-xs transition-all transform active:scale-95 flex items-center gap-1.5">
+                🎉 Rayakan Kelulusan! 🌟
+            </button>
+        </div>
+        <canvas id="triumph-confetti" class="absolute inset-0 pointer-events-none w-full h-full rounded-2xl z-20"></canvas>
+    </div>
+
+</main>
+
+<footer class="w-full bg-slate-900 text-slate-400 text-center py-4 border-t border-slate-800 text-xs font-bold mt-10">
+    <p>© 2026 Kuis Teorema Pythagoras SMP. Matematika itu Menyenangkan dan Menantang!</p>
+</footer>
+
+<!-- ============================================== -->
+<!-- DATABASE UTAMA LATIHAN MANDIRI                 -->
+<!-- ============================================== -->
+<script>
+    const QUESTIONS_DB = {
+        easy: [
+            {
+                id: "easy_1",
+                q: "Sebuah segitiga siku-siku memiliki panjang sisi siku-siku masing-masing $3\\text{ cm}$ dan $4\\text{ cm}$. Berapakah panjang sisi miring (hipotenusa) segitiga tersebut?",
+                options: ["5 cm", "6 cm", "7 cm", "8 cm"],
+                correct: "5 cm",
+                explanation: "Gunakan Teorema Pythagoras: $c = \\sqrt{a^2 + b^2}$.<br>Dengan $a = 3$ dan $b = 4$:<br>$c = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5\\text{ cm}$."
+            },
+            {
+                id: "easy_2",
+                q: "Panjang sisi miring suatu segitiga siku-siku adalah $13\\text{ cm}$, dan salah satu sisi siku-sikunya adalah $5\\text{ cm}$. Berapakah panjang sisi siku-siku lainnya?",
+                options: ["8 cm", "10 cm", "12 cm", "14 cm"],
+                correct: "12 cm",
+                explanation: "Gunakan Teorema Pythagoras untuk mencari sisi tegak: $b = \\sqrt{c^2 - a^2}$.<br>Dengan $c = 13$ dan $a = 5$:<br>$b = \\sqrt{13^2 - 5^2} = \\sqrt{169 - 25} = \\sqrt{144} = 12\\text{ cm}$."
+            },
+            {
+                id: "easy_3",
+                q: "Kelompok tiga bilangan (ukuran panjang sisi) di bawah ini yang membentuk **Tripel Pythagoras** yang paling dasar adalah...",
+                options: ["3, 4, 6", "3, 4, 5", "5, 12, 15", "6, 8, 12"],
+                correct: "3, 4, 5",
+                explanation: "Tripel Pythagoras adalah kelompok tiga bilangan asli yang memenuhi syarat $a^2 + b^2 = c^2$.<br>Untuk bilangan 3, 4, dan 5:<br>$3^2 + 4^2 = 9 + 16 = 25 = 5^2$. Maka (3, 4, 5) adalah Tripel Pythagoras."
+            },
+            {
+                id: "easy_4",
+                q: "Manakah di antara kelompok ukuran sisi berikut yang membentuk segitiga siku-siku?",
+                options: ["8 cm, 15 cm, 17 cm", "8 cm, 12 cm, 15 cm", "10 cm, 15 cm, 20 cm", "7 cm, 9 cm, 12 cm"],
+                correct: "8 cm, 15 cm, 17 cm",
+                explanation: "Syarat segitiga siku-siku adalah memenuhi teorema Pythagoras:<br>$a^2 + b^2 = c^2$.<br>Uji pilihan pertama:<br>$8^2 + 15^2 = 64 + 225 = 289$.<br>$17^2 = 289$. Karena nilainya sama, kelompok sisi $8\\text{ cm}, 15\\text{ cm}, 17\\text{ cm}$ membentuk segitiga siku-siku."
+            },
+            {
+                id: "easy_5",
+                q: "Jika panjang sisi siku-siku $a = 6$ dan $b = 8$, tentukan panjang sisi miring $c$ menggunakan teorema Pythagoras!",
+                options: ["9", "10", "11", "12"],
+                correct: "10",
+                explanation: "Sesuai Teorema Pythagoras:<br>$c = \\sqrt{a^2 + b^2}$<br>$c = \\sqrt{6^2 + 8^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10$."
+            },
+            {
+                id: "easy_6",
+                q: "Diketahui sisi miring $c = 25$ dan salah satu sisi siku-siku $a = 7$. Hitunglah panjang sisi $b$!",
+                options: ["20", "22", "24", "26"],
+                correct: "24",
+                explanation: "Rumus mencari salah satu sisi tegak:<br>$b = \\sqrt{c^2 - a^2}$<br>$b = \\sqrt{25^2 - 7^2} = \\sqrt{625 - 49} = \\sqrt{576} = 24$."
+            },
+            {
+                id: "easy_7",
+                q: "Secara definisi, Teorema Pythagoras **hanya** berlaku secara mutlak pada jenis segitiga...",
+                options: ["Segitiga Sama Kaki", "Segitiga Sama Sisi", "Segitiga Sembarang", "Segitiga Siku-siku"],
+                correct: "Segitiga Siku-siku",
+                explanation: "Teorema Pythagoras menyatakan hubungan antara kuadrat panjang sisi-sisi pada segitiga siku-siku, di mana kuadrat sisi miring sama dengan jumlah kuadrat sisi siku-sikunya."
+            },
+            {
+                id: "easy_8",
+                q: "Jika sebuah segitiga siku-siku memiliki titik sudut siku-siku di $A$ dengan panjang sisi di hadapannya adalah $a$, serta sisi siku-siku lainnya adalah $b$ dan $c$, maka rumus Pythagoras yang benar adalah...",
+                options: ["$a^2 = b^2 + c^2$", "$b^2 = a^2 + c^2$", "$c^2 = a^2 + b^2$", "$a^2 = b^2 - c^2$"],
+                correct: "$a^2 = b^2 + c^2$",
+                explanation: "Sisi yang berada di depan sudut siku-siku $A$ merupakan sisi miring (hipotenusa), yaitu $a$. Oleh karena itu, hubungan kuadratnya adalah $a^2 = b^2 + c^2$."
+            },
+            {
+                id: "easy_9",
+                q: "Sebuah segitiga siku-siku memiliki panjang dua sisi siku-sikunya masing-masing $9\\text{ cm}$ dan $12\\text{ cm}$. Berapakah panjang sisi terpanjang segitiga tersebut?",
+                options: ["13 cm", "14 cm", "15 cm", "16 cm"],
+                correct: "15 cm",
+                explanation: "Panjang sisi terpanjang (sisi miring):<br>$c = \\sqrt{9^2 + 12^2} = \\sqrt{81 + 144} = \\sqrt{225} = 15\\text{ cm}$."
+            },
+            {
+                id: "easy_10",
+                q: "Panjang hipotenusa suatu segitiga siku-siku adalah $20\\text{ cm}$ dan salah satu sisi siku-sikunya adalah $12\\text{ cm}$. Panjang sisi siku-siku yang lain adalah...",
+                options: ["14 cm", "15 cm", "16 cm", "18 cm"],
+                correct: "16 cm",
+                explanation: "Sisi tegak lainnya:<br>$x = \\sqrt{20^2 - 12^2} = \\sqrt{400 - 144} = \\sqrt{256} = 16\\text{ cm}$."
+            }
+        ],
+        medium: [
+            {
+                id: "medium_1",
+                q: "Sebuah segitiga memiliki panjang sisi $5\\text{ cm}$, $12\\text{ cm}$, dan $15\\text{ cm}$. Berdasarkan panjang sisi-sisinya, jenis segitiga tersebut adalah...",
+                options: ["Segitiga Lancip", "Segitiga Siku-siku", "Segitiga Tumpul", "Segitiga Sama Kaki"],
+                correct: "Segitiga Tumpul",
+                explanation: "Bandingkan kuadrat sisi terpanjang ($c^2$) dengan jumlah kuadrat sisi lainnya ($a^2 + b^2$):<br>$c^2 = 15^2 = 225$.<br>$a^2 + b^2 = 5^2 + 12^2 = 25 + 144 = 169$.<br>Karena $c^2 > a^2 + b^2$ ($225 > 169$), maka segitiga tersebut adalah **segitiga tumpul**."
+            },
+            {
+                id: "medium_2",
+                q: "Sebuah segitiga memiliki panjang sisi $7\\text{ cm}$, $24\\text{ cm}$, dan $25\\text{ cm}$. Berdasarkan panjang sisi-sisinya, jenis segitiga tersebut adalah...",
+                options: ["Segitiga Lancip", "Segitiga Siku-siku", "Segitiga Tumpul", "Segitiga Sama Sisi"],
+                correct: "Segitiga Siku-siku",
+                explanation: "Kuadrat sisi terpanjang: $25^2 = 625$.<br>Jumlah kuadrat sisi lainnya: $7^2 + 24^2 = 49 + 576 = 625$.<br>Karena $c^2 = a^2 + b^2$ ($625 = 625$), maka segitiga tersebut adalah **segitiga siku-siku**."
+            },
+            {
+                id: "medium_3",
+                q: "Sebuah segitiga memiliki ukuran sisi $8\\text{ cm}$, $10\\text{ cm}$, dan $12\\text{ cm}$. Jenis segitiga yang terbentuk adalah...",
+                options: ["Segitiga Lancip", "Segitiga Siku-siku", "Segitiga Tumpul", "Segitiga Sembarang"],
+                correct: "Segitiga Lancip",
+                explanation: "Kuadrat sisi terpanjang: $12^2 = 144$.<br>Jumlah kuadrat sisi lainnya: $8^2 + 10^2 = 64 + 100 = 164$.<br>Karena $c^2 < a^2 + b^2$ ($144 < 164$), maka jenisnya adalah **segitiga lancip**."
+            },
+            {
+                id: "medium_4",
+                q: "Sebuah tangga yang panjangnya $5\\text{ meter}$ bersandar pada dinding rumah yang tegak lurus dengan tanah. Jika jarak kaki tangga ke dinding adalah $3\\text{ meter}$, tinggi dinding yang dicapai tangga adalah...",
+                options: ["3,5 meter", "4 meter", "4,2 meter", "4,5 meter"],
+                correct: "4 meter",
+                explanation: "Ilustrasi ini membentuk segitiga siku-siku dengan tangga sebagai sisi miring ($c=5\\text{ m}$) dan jarak kaki tangga ke dinding sebagai alas ($a=3\\text{ m}$).<br>Tinggi dinding ($b$):<br>$b = \\sqrt{5^2 - 3^2} = \\sqrt{25 - 9} = \\sqrt{16} = 4\\text{ meter}$."
+            },
+            {
+                id: "medium_5",
+                q: "Berapakah panjang diagonal dari sebuah bangun datar persegi yang memiliki panjang sisi $6\\text{ cm}$?",
+                options: ["$6\\sqrt{2}\\text{ cm}$", "$6\\sqrt{3}\\text{ cm}$", "$12\\text{ cm}$", "$8\\text{ cm}$"],
+                correct: "$6\\sqrt{2}\\text{ cm}$",
+                explanation: "Pada persegi dengan panjang sisi $s$, panjang diagonalnya dapat dicari dengan Pythagoras:<br>$d = \\sqrt{s^2 + s^2} = \\sqrt{2s^2} = s\\sqrt{2}$.<br>Dengan $s = 6\\text{ cm}$, panjang diagonalnya adalah $6\\sqrt{2}\\text{ cm}$."
+            },
+            {
+                id: "medium_6",
+                q: "Sebuah persegi panjang mempunyai ukuran panjang $15\\text{ cm}$ dan lebar $8\\text{ cm}$. Panjang diagonal persegi panjang tersebut adalah...",
+                options: ["16 cm", "17 cm", "18 cm", "19 cm"],
+                correct: "17 cm",
+                explanation: "Diagonal persegi panjang membagi persegi panjang menjadi dua segitiga siku-siku.<br>$d = \\sqrt{15^2 + 8^2} = \\sqrt{225 + 64} = \\sqrt{289} = 17\\text{ cm}$."
+            },
+            {
+                id: "medium_7",
+                q: "Sebuah segitiga siku-siku sama kaki memiliki panjang sisi miring $10\\text{ cm}$. Berapakah panjang sisi siku-sikunya?",
+                options: ["$5\\text{ cm}$", "$5\\sqrt{2}\\text{ cm}$", "$5\\sqrt{3}\\text{ cm}$", "$10\\sqrt{2}\\text{ cm}$"],
+                correct: "$5\\sqrt{2}\\text{ cm}$",
+                explanation: "Karena siku-siku sama kaki, panjang sisi siku-sikunya sama ($s$).<br>$s^2 + s^2 = 10^2 \\implies 2s^2 = 100 \\implies s^2 = 50$.<br>$s = \\sqrt{50} = \\sqrt{25 \\times 2} = 5\\sqrt{2}\\text{ cm}$."
+            },
+            {
+                id: "medium_8",
+                q: "Pada sebuah segitiga siku-siku dengan sudut istimewa $30^\\circ$, $60^\\circ$, dan $90^\\circ$, jika panjang sisi miringnya (hipotenusa) adalah $12\\text{ cm}$, berapakah panjang sisi yang berada di hadapan sudut $30^\\circ$?",
+                options: ["6 cm", "$6\\sqrt{2}\\text{ cm}$", "$6\\sqrt{3}\\text{ cm}$", "8 cm"],
+                correct: "6 cm",
+                explanation: "Pada segitiga siku-siku dengan sudut $30^\\circ-60^\\circ-90^\\circ$, panjang sisi di depan sudut $30^\\circ$ adalah setengah dari panjang hipotenusa.<br>Jadi, panjang sisi tersebut adalah:<br>$\\frac{1}{2} \\times 12\\text{ cm} = 6\\text{ cm}$."
+            },
+            {
+                id: "medium_9",
+                q: "Sisi terpendek dari sebuah segitiga siku-siku bersudut istimewa $30^\\circ-60^\\circ-90^\\circ$ adalah $5\\text{ cm}$. Berapakah panjang sisi miring (hipotenusa) segitiga tersebut?",
+                options: ["$5\\sqrt{3}\\text{ cm}$", "10 cm", "12 cm", "15 cm"],
+                correct: "10 cm",
+                explanation: "Sisi terpendek berada di hadapan sudut $30^\\circ$. Sisi miring (hipotenusa) selalu bernilai dua kali panjang sisi terpendek tersebut.<br>Maka, panjang sisi miring $= 2 \\times 5\\text{ cm} = 10\\text{ cm}$."
+            },
+            {
+                id: "medium_10",
+                q: "Sebuah kapal berlayar dari pelabuhan ke arah utara sejauh $12\\text{ km}$, kemudian berbelok ke arah timur sejauh $9\\text{ km}$. Jarak terdekat kapal sekarang dari titik awal keberangkatan adalah...",
+                options: ["13 km", "14 km", "15 km", "17 km"],
+                correct: "15 km",
+                explanation: "Perjalanan kapal membentuk lintasan siku-siku.<br>Jarak terdekat $= \\sqrt{12^2 + 9^2} = \\sqrt{144 + 81} = \\sqrt{225} = 15\\text{ km}$."
+            }
+        ],
+        hard: [
+            {
+                id: "hard_1",
+                q: "Tentukan jarak antara titik $P(2, 3)$ dan titik $Q(8, 11)$ pada koordinat Kartesius!",
+                options: ["8 satuan", "10 satuan", "12 satuan", "14 satuan"],
+                correct: "10 satuan",
+                explanation: "Rumus jarak antara dua titik pada bidang Kartesius adalah pengembangan Pythagoras:<br>$PQ = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$.<br>Substitusikan titiknya:<br>$PQ = \\sqrt{(8 - 2)^2 + (11 - 3)^2} = \\sqrt{6^2 + 8^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10\\text{ satuan}$."
+            },
+            {
+                id: "hard_2",
+                q: "Sebuah balok memiliki ukuran panjang $12\\text{ cm}$, lebar $9\\text{ cm}$, dan tinggi $8\\text{ cm}$. Berapakah panjang diagonal ruang balok tersebut?",
+                options: ["15 cm", "16 cm", "17 cm", "18 cm"],
+                correct: "17 cm",
+                explanation: "Rumus diagonal ruang balok:<br>$d_r = \\sqrt{p^2 + l^2 + t^2}$<br>$d_r = \\sqrt{12^2 + 9^2 + 8^2}$<br>$d_r = \\sqrt{144 + 81 + 64} = \\sqrt{289} = 17\\text{ cm}$."
+            },
+            {
+                id: "hard_3",
+                q: "Sebuah limas tegak $T.ABCD$ memiliki alas berbentuk persegi berukuran $12\\text{ cm} \\times 12\\text{ cm}$. Jika tinggi limas (jarak titik puncak $T$ ke titik pusat alas) adalah $8\\text{ cm}$, hitunglah tinggi segitiga bidang tegak (segitiga selimut limas)!",
+                options: ["8 cm", "10 cm", "12 cm", "13 cm"],
+                correct: "10 cm",
+                explanation: "Tinggi segitiga bidang tegak adalah hipotenusa dari segitiga siku-siku yang dibentuk oleh tinggi limas ($8\\text{ cm}$) dan setengah panjang sisi alas persegi ($\\frac{1}{2} \\times 12 = 6\\text{ cm}$).<br>Maka tinggi segitiga bidang tegak:<br>$t_{selimut} = \\sqrt{8^2 + 6^2} = \\sqrt{64 + 36} = \\sqrt{100} = 10\\text{ cm}$."
+            },
+            {
+                id: "hard_4",
+                q: "Dua buah tiang berdiri tegak di atas tanah rata. Tinggi Tiang A adalah $15\\text{ m}$ dan tinggi Tiang B adalah $7\\text{ m}$. Jarak antara kedua tiang tersebut adalah $15\\text{ m}$. Sebuah kawat dipasang lurus dari ujung atas Tiang A ke ujung atas Tiang B. Berapa panjang kawat minimal tersebut?",
+                options: ["16 m", "17 m", "18 m", "20 m"],
+                correct: "17 m",
+                explanation: "Perbedaan tinggi kedua tiang $= 15\\text{ m} - 7\\text{ m} = 8\\text{ m}$.<br>Jarak horizontal antara kedua tiang $= 15\\text{ m}$.<br>Dengan membuat garis bantu horizontal, didapat segitiga siku-siku dengan sisi tegak $8\\text{ m}$ dan alas $15\\text{ m}$.<br>Panjang kawat (hipotenusa) $= \\sqrt{8^2 + 15^2} = \\sqrt{64 + 225} = \\sqrt{289} = 17\\text{ meter}$."
+            },
+            {
+                id: "hard_5",
+                q: "Sebuah layang-layang $ABCD$ memiliki diagonal $AC = 24\\text{ cm}$ dan diagonal $BD$ saling berpotongan tegak lurus di titik $O$. Jika panjang sisi $AB = 13\\text{ cm}$ dan $AD = 20\\text{ cm}$, berapakah luas layang-layang tersebut?",
+                options: ["$252\\text{ cm}^2$", "$504\\text{ cm}^2$", "$240\\text{ cm}^2$", "$192\\text{ cm}^2$"],
+                correct: "$252\\text{ cm}^2$",
+                explanation: "Diagonal $AC$ dibagi dua sama panjang oleh diagonal $BD$, sehingga $AO = OC = 12\\text{ cm}$.<br>1. Cari $OB$ pada $\\triangle AOB$: $OB = \\sqrt{AB^2 - AO^2} = \\sqrt{13^2 - 12^2} = \\sqrt{169 - 144} = 5\\text{ cm}$.<br>2. Cari $OD$ pada $\\triangle AOD$: $OD = \\sqrt{AD^2 - AO^2} = \\sqrt{20^2 - 12^2} = \\sqrt{400 - 144} = 16\\text{ cm}$.<br>3. Panjang diagonal $BD = OB + OD = 5 + 16 = 21\\text{ cm}$.<br>4. Luas Layang-layang $= \\frac{1}{2} \\times AC \\times BD = \\frac{1}{2} \\times 24 \\times 21 = 252\\text{ cm}^2$."
+            },
+            {
+                id: "hard_6",
+                q: "Sebuah segitiga sembarang memiliki panjang sisi-sisi masing-masing $13\\text{ cm}$, $14\\text{ cm}$, dan $15\\text{ cm}$. Berapakah panjang garis tinggi segitiga tersebut yang ditarik ke sisi dengan panjang $14\\text{ cm}$?",
+                options: ["10 cm", "11 cm", "12 cm", "13 cm"],
+                correct: "12 cm",
+                explanation: "Misalkan garis tinggi tersebut membagi sisi $14\\text{ cm}$ menjadi dua segmen: $x$ dan $(14 - x)$.<br>Gunakan kesamaan tinggi ($t^2$) pada dua segitiga siku-siku yang terbentuk:<br>$t^2 = 13^2 - x^2$ dan $t^2 = 15^2 - (14-x)^2$.<br>$169 - x^2 = 225 - (196 - 28x + x^2)$<br>$169 - x^2 = 29 + 28x - x^2$<br>$140 = 28x \\implies x = 5\\text{ cm}$.<br>Hitung tingginya: $t = \\sqrt{13^2 - 5^2} = \\sqrt{169 - 25} = \\sqrt{144} = 12\\text{ cm}$."
+            },
+            {
+                id: "hard_7",
+                q: "Sebuah kawat baja sepanjang $26\\text{ meter}$ diikatkan dari puncak sebuah antena radio pemancar ke sebuah pasak beton di tanah. Jika tinggi antena tersebut adalah $24\\text{ meter}$, berapakah jarak horizontal dari kaki antena ke lokasi pasak tersebut?",
+                options: ["10 meter", "12 meter", "14 meter", "15 meter"],
+                correct: "10 meter",
+                explanation: "Ini merupakan aplikasi dasar segitiga siku-siku:<br>Jarak horizontal $= \\sqrt{26^2 - 24^2} = \\sqrt{676 - 576} = \\sqrt{100} = 10\\text{ meter}$."
+            },
+            {
+                id: "hard_8",
+                q: "Jarak antara titik $A(-3, 4)$ dan titik $B(x, -8)$ adalah $13$ satuan. Manakah di antara nilai $x$ berikut yang memenuhi kondisi tersebut?",
+                options: ["$x = 2$ atau $x = -8$", "$x = 3$ atau $x = -7$", "$x = 4$ atau $x = -6$", "$x = 5$ atau $x = -9$"],
+                correct: "$x = 2$ atau $x = -8$",
+                explanation: "Gunakan rumus jarak:<br>$13 = \\sqrt{(x - (-3))^2 + (-8 - 4)^2}$<br>$13^2 = (x + 3)^2 + (-12)^2$<br>$169 = (x + 3)^2 + 144 \\implies (x + 3)^2 = 25$.<br>$x + 3 = 5 \\implies x = 2$.<br>Atau $x + 3 = -5 \\implies x = -8$.<br>Jadi nilainya adalah $x = 2$ atau $x = -8$."
+            },
+            {
+                id: "hard_9",
+                q: "Diketahui segitiga $PQR$ siku-siku di $Q$. Jika panjang sisi $PQ = 2x\\text{ cm}$, $QR = (2x + 2)\\text{ cm}$, dan $PR = (4x - 2)\\text{ cm}$, berapakah nilai $x$ yang memenuhi?",
+                options: ["x = 2", "x = 3", "x = 4", "x = 5"],
+                correct: "x = 3",
+                explanation: "Gunakan hubungan Teorema Pythagoras:<br>$PQ^2 + QR^2 = PR^2$<br>$(2x)^2 + (2x + 2)^2 = (4x - 2)^2$<br>$4x^2 + (4x^2 + 8x + 4) = 16x^2 - 16x + 4$<br>$8x^2 + 8x + 4 = 16x^2 - 16x + 4$<br>Pindahkan semua ke satu ruas:<br>$8x^2 - 24x = 0 \\implies 8x(x - 3) = 0$.<br>Karena panjang harus positif, maka nilai $x = 3$."
+            },
+            {
+                id: "hard_10",
+                q: "Sebuah kubus $ABCD.EFGH$ memiliki panjang rusuk $10\\text{ cm}$. Tentukan jarak terdekat dari titik sudut $A$ ke garis diagonal bidang $CF$!",
+                options: ["$5\\sqrt{3}\\text{ cm}$", "$5\\sqrt{6}\\text{ cm}$", "$5\\sqrt{2}\\text{ cm}$", "$10\\text{ cm}$"],
+                correct: "$5\\sqrt{6}\\text{ cm}$",
+                explanation: "Titik $A$, $C$, dan $F$ jika dihubungkan akan membentuk sebuah segitiga sama sisi $ACF$ karena semua sisinya merupakan diagonal bidang kubus ($s\\sqrt{2} = 10\\sqrt{2}\\text{ cm}$).<br>Jarak terdekat $A$ ke $CF$ adalah tinggi segitiga sama sisi tersebut.<br>$t = \\frac{1}{2} \\times \\text{sisi} \\times \\sqrt{3}$<br>$t = \\frac{1}{2} \\times 10\\sqrt{2} \\times \\sqrt{3} = 5\\sqrt{6}\\text{ cm}$."
+            }
+        ]
+    };
+</script>
+
+<!-- ============================================== -->
+<!-- JAVASCRIPT KONTROL LOGIKA INTERAKSI KUIS        -->
+<!-- ============================================== -->
+<script>
+    let activeCategory = "easy";
+    let userAnswers = {}; // Menyimpan jawaban terpilih { "easy_1": { chosen: "...", isCorrect: true/false } }
+
+    function switchCategory(cat) {
+        playSound('click');
+        activeCategory = cat;
+        
+        const btnEasy = document.getElementById('btn-easy');
+        const btnMedium = document.getElementById('btn-medium');
+        const btnHard = document.getElementById('btn-hard');
+
+        btnEasy.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-black transition-all text-slate-600 hover:text-emerald-700";
+        btnMedium.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-black transition-all text-slate-600 hover:text-emerald-700";
+        btnHard.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-black transition-all text-slate-600 hover:text-emerald-700";
+
+        if (cat === 'easy') {
+            btnEasy.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-black transition-all bg-white text-emerald-700 shadow-sm border-2 border-slate-100";
+        } else if (cat === 'medium') {
+            btnMedium.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-black transition-all bg-white text-emerald-700 shadow-sm border-2 border-slate-100";
+        } else {
+            btnHard.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-black transition-all bg-white text-emerald-700 shadow-sm border-2 border-slate-100";
+        }
+
+        renderQuestions();
+    }
+
+    function renderQuestions() {
+        const container = document.getElementById('questions-list-container');
+        container.innerHTML = '';
+
+        const list = QUESTIONS_DB[activeCategory];
+
+        list.forEach((qObj, index) => {
+            const state = userAnswers[qObj.id];
+            const hasAnswered = !!state;
+
+            const card = document.createElement('div');
+            card.className = "bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4 transition-all";
+
+            // Kepala Soal
+            const header = document.createElement('div');
+            header.className = "flex justify-between items-start gap-4";
+            
+            let colorBadge = "bg-emerald-100 text-emerald-700";
+            let diffLabel = "Mudah";
+            if (activeCategory === 'medium') {
+                colorBadge = "bg-amber-100 text-amber-700";
+                diffLabel = "Medium";
+            } else if (activeCategory === 'hard') {
+                colorBadge = "bg-rose-100 text-rose-700";
+                diffLabel = "Hard";
+            }
+
+            header.innerHTML = `
+                <div>
+                    <span class="${colorBadge} text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase">${diffLabel} - Tantangan ${index + 1}</span>
+                    <h3 class="text-sm font-bold text-slate-800 mt-2 leading-relaxed">${qObj.q}</h3>
+                </div>
+            `;
+            card.appendChild(header);
+
+            // Kisi Pilihan Ganda
+            const optionsGrid = document.createElement('div');
+            optionsGrid.className = "grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-1";
+
+            qObj.options.forEach(opt => {
+                const optBtn = document.createElement('button');
+                optBtn.innerText = opt;
+                optBtn.disabled = hasAnswered;
+
+                if (hasAnswered) {
+                    if (opt === qObj.correct) {
+                        optBtn.className = "p-3 rounded-xl border-2 text-xs font-extrabold text-left transition-all bg-emerald-500 border-emerald-500 text-white";
+                    } else if (state.chosen === opt && !state.isCorrect) {
+                        optBtn.className = "p-3 rounded-xl border-2 text-xs font-extrabold text-left transition-all bg-rose-500 border-rose-500 text-white";
+                    } else {
+                        optBtn.className = "p-3 rounded-xl border-2 text-xs font-extrabold text-left transition-all border-slate-100 bg-slate-50 text-slate-400";
+                    }
+                } else {
+                    optBtn.className = "p-3 rounded-xl border-2 text-xs font-extrabold text-left transition-all border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/50 text-slate-700";
+                    optBtn.onclick = () => submitAnswer(qObj.id, opt, qObj.correct);
+                }
+                optionsGrid.appendChild(optBtn);
+            });
+            card.appendChild(optionsGrid);
+
+            // Kotak Pembahasan (Tampil setelah dijawab)
+            if (hasAnswered) {
+                const explCard = document.createElement('div');
+                explCard.className = `p-4 rounded-xl border mt-3 text-xs space-y-2 ${
+                    state.isCorrect ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-amber-50 border-amber-200 text-amber-950'
+                }`;
+                explCard.innerHTML = `
+                    <div class="flex items-center gap-1.5 font-black uppercase text-[10px]">
+                        <span>${state.isCorrect ? '⭐ Jawabanmu Betul!' : '💡 Pembahasan Lengkap:'}</span>
+                    </div>
+                    <p class="font-bold leading-relaxed">${qObj.explanation}</p>
+                `;
+                card.appendChild(explCard);
+            }
+
+            container.appendChild(card);
+        });
+
+        // Trigger render rumus LaTeX (KaTeX)
+        if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(container, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+    }
+
+    function submitAnswer(qId, chosen, correct) {
+        const isCorrect = chosen === correct;
+        if (isCorrect) {
+            playSound('correct');
+        } else {
+            playSound('wrong');
+        }
+
+        userAnswers[qId] = { chosen, isCorrect };
+        renderQuestions();
+        updateProgressCounters();
+    }
+
+    function updateProgressCounters() {
+        let completed = 0;
+        
+        // Loop menghitung seluruh jawaban yang sudah terisi di semua kategori
+        Object.keys(QUESTIONS_DB).forEach(cat => {
+            QUESTIONS_DB[cat].forEach(q => {
+                if (userAnswers[q.id]) completed++;
+            });
+        });
+
+        document.getElementById('score-counter').innerText = `${completed} / 30`;
+
+        const certificatePanel = document.getElementById('certificate-panel');
+        if (completed === 30) {
+            certificatePanel.classList.remove('hidden');
+            setTimeout(() => {
+                certificatePanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        } else {
+            certificatePanel.classList.add('hidden');
+        }
+    }
+
+    function resetQuiz() {
+        playSound('click');
+        userAnswers = {};
+        switchCategory('easy');
+        updateProgressCounters();
+    }
+</script>
+
+<!-- ============================================== -->
+<!-- PIAGAM PENGHARGAAN & KONFETTI SELEBRASI        -->
+<!-- ============================================== -->
+<script>
+    function updateCertName(val) {
+        document.getElementById('cert-name-label').innerText = val.trim() === "" ? "Siswa Berprestasi" : val;
+    }
+
+    function claimTriumph() {
+        playSound('triumph');
+        startCelebrationConfetti();
+    }
+
+    function startCelebrationConfetti() {
+        const canvas = document.getElementById('triumph-confetti');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+
+        let particles = [];
+        for (let i = 0; i < 60; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                r: Math.random() * 4 + 4,
+                d: Math.random() * canvas.height,
+                color: `hsla(${Math.random() * 360}, 100%, 50%, 0.8)`,
+                tilt: Math.random() * 8 - 4,
+                tiltAngleIncremental: Math.random() * 0.05 + 0.02,
+                tiltAngle: 0
+            });
+        }
+
+        let animationId;
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.tiltAngle += p.tiltAngleIncremental;
+                p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+                p.tilt = Math.sin(p.tiltAngle) * 10;
+
+                ctx.beginPath();
+                ctx.lineWidth = p.r;
+                ctx.strokeStyle = p.color;
+                ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+                ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+                ctx.stroke();
+
+                if (p.y > canvas.height) {
+                    particles[index] = {
+                        x: Math.random() * canvas.width,
+                        y: -10,
+                        r: p.r,
+                        d: p.d,
+                        color: p.color,
+                        tilt: p.tilt,
+                        tiltAngleIncremental: p.tiltAngleIncremental,
+                        tiltAngle: p.tiltAngle
+                    };
+                }
+            });
+            animationId = requestAnimationFrame(draw);
+        }
+
+        draw();
+        setTimeout(() => {
+            cancelAnimationFrame(animationId);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }, 4000);
+    }
+</script>
+
+<!-- ============================================== -->
+<!-- ALAT BANTU PAPAN CAKARAN INTERAKTIF            -->
+<!-- ============================================== -->
+<script>
+    const scratchpad = document.getElementById('scratchpad-canvas');
+    const sCtx = scratchpad.getContext('2d');
+    let isDrawing = false;
+
+    function resizeScratchpad() {
+        const containerWidth = scratchpad.parentElement.clientWidth;
+        scratchpad.width = containerWidth - 32;
+        scratchpad.height = 208;
+        clearScratchpad();
+    }
+
+    function clearScratchpad() {
+        sCtx.fillStyle = "#f8fafc";
+        sCtx.fillRect(0, 0, scratchpad.width, scratchpad.height);
+    }
+
+    function getMousePos(e) {
+        const rect = scratchpad.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+            x: clientX - rect.left,
+            y: clientY - rect.top
+        };
+    }
+
+    scratchpad.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        const pos = getMousePos(e);
+        sCtx.beginPath();
+        sCtx.moveTo(pos.x, pos.y);
+        sCtx.strokeStyle = "#475569";
+        sCtx.lineWidth = 2.5;
+        sCtx.lineCap = "round";
+    });
+
+    scratchpad.addEventListener('mousemove', (e) => {
+        if (!isDrawing) return;
+        const pos = getMousePos(e);
+        sCtx.lineTo(pos.x, pos.y);
+        sCtx.stroke();
+    });
+
+    scratchpad.addEventListener('mouseup', () => isDrawing = false);
+    scratchpad.addEventListener('mouseleave', () => isDrawing = false);
+
+    // Dukungan gestur sentuh (HP / Tablet)
+    scratchpad.addEventListener('touchstart', (e) => {
+        isDrawing = true;
+        const pos = getMousePos(e);
+        sCtx.beginPath();
+        sCtx.moveTo(pos.x, pos.y);
+        sCtx.strokeStyle = "#475569";
+        sCtx.lineWidth = 2.5;
+        sCtx.lineCap = "round";
+        e.preventDefault();
+    });
+    scratchpad.addEventListener('touchmove', (e) => {
+        if (!isDrawing) return;
+        const pos = getMousePos(e);
+        sCtx.lineTo(pos.x, pos.y);
+        sCtx.stroke();
+        e.preventDefault();
+    });
+    scratchpad.addEventListener('touchend', () => isDrawing = false);
+
+    window.addEventListener('resize', resizeScratchpad);
+
+    window.onload = function() {
+        switchCategory('easy');
+        setTimeout(resizeScratchpad, 150);
+    };
+</script>
+</body>
+</html>
