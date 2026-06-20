@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Pythagoras Kilat - Trik Cepat & Warm-Up</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f172a;
+            color: #f1f5f9;
+        }
+        .font-header {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .math-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid #334155;
+        }
+        .highlight-blue {
+            color: #38bdf8;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+        .highlight-green {
+            color: #4ade80;
+            text-shadow: 0 0 10px rgba(74, 222, 128, 0.2);
+        }
+        .highlight-yellow {
+            color: #facc15;
+            text-shadow: 0 0 10px rgba(250, 204, 21, 0.2);
+        }
+        /* Custom Scrollbar for responsive formulas */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Header Section -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-indigo-600 rounded-xl text-white font-bold font-header text-xl shadow-lg shadow-indigo-500/20">
+                    ⚡
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold font-header tracking-tight text-white">Pythagoras <span class="text-indigo-400">Kilat</span></h1>
+                    <p class="text-xs text-slate-400">Formula & Trik 3 Detik Tanpa Ribet Kuadrat</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-4 flex-wrap justify-center">
+                <a href="#tujuan-section" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-750 transition text-xs font-semibold rounded-lg text-slate-300 border border-slate-700">
+                    🎯 Tujuan
+                </a>
+                <a href="#warm-up-section" class="px-3 py-1.5 bg-pink-600/20 hover:bg-pink-600/30 transition text-xs font-semibold rounded-lg text-pink-300 border border-pink-500/30">
+                    ☕ Pemanasan
+                </a>
+                <a href="#real-section" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 transition text-xs font-semibold rounded-lg text-slate-300 border border-slate-700">
+                    🌍 Penerapan
+                </a>
+                <a href="#speed-drill" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 transition text-xs font-semibold rounded-lg text-white shadow-lg shadow-indigo-500/20">
+                    Uji Kecepatan ⚡
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-8 space-y-16">
+
+        <!-- 1. TUJUAN PEMBELAJARAN -->
+        <section id="tujuan-section" class="space-y-6 scroll-mt-20">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl text-indigo-400">🎯</span>
+                <h3 class="text-xl font-bold font-header text-white">Misi Kita & Kompetensi Kurikulum Merdeka</h3>
+            </div>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                Berdasarkan capaian Kurikulum Merdeka Fase D, mari kuasai kompetensi esensial Teorema Pythagoras secara taktis:
+            </p>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+                    <span class="text-lg">⭐</span>
+                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 font-header">Identifikasi Sisi</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Mengidentifikasi hipotenusa & sisi penyiku secara instan secara visual.</p>
+                </div>
+                <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+                    <span class="text-lg">⚡</span>
+                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 font-header">Bypass Kuadrat</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Menghitung panjang sisi tanpa kalkulasi kuadrat manual yang melelahkan.</p>
+                </div>
+                <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+                    <span class="text-lg">🧱</span>
+                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 font-header">Solusi Realitas</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Memecahkan soal kontekstual dunia nyata & dimensi tiga dengan trik bimbingan belajar.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. WARM-UP (PEMANASAN) SECTION -->
+        <section id="warm-up-section" class="space-y-6 scroll-mt-20">
+            <div class="flex items-center gap-3 border-b border-pink-500 pb-3">
+                <span class="text-2xl text-pink-400">☕</span>
+                <h3 class="text-xl font-bold font-header text-pink-400">Pemanasan Otak Terpandu (Warm-Up)</h3>
+            </div>
+            <p class="text-slate-300 text-sm">
+                Ayo coba asah insting berhitungmu secara perlahan di bawah ini sebelum memasuki medan uji kecepatan waktu nyata!
+            </p>
+
+            <div class="bg-gradient-to-br from-slate-900 to-slate-950 border-2 border-pink-500/30 rounded-2xl p-6 space-y-6 shadow-xl shadow-pink-500/5">
+                <!-- Warm up 1: Radical Sum -->
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 bg-pink-500/15 text-pink-300 border border-pink-500/30 rounded text-xs font-bold">Latihan Pemanasan 1</span>
+                        <h4 class="text-sm font-bold text-white">Segitiga siku-siku dengan sisi penyiku \(5\sqrt{2}\) dan \(5\sqrt{7}\). Berapa sisi miringnya?</h4>
+                    </div>
+                    <p class="text-xs text-slate-400">Kedua sisi memiliki faktor pengali luar \(5\). Jumlahkan langsung angka dalam akar: \(5\sqrt{2+7}\)</p>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <button onclick="checkWarmUp(1, 'wrong')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-xl border border-slate-700 text-slate-300 font-semibold transition-all">\(5\sqrt{5}\)</button>
+                        <button onclick="checkWarmUp(1, 'correct')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-xl border border-slate-700 text-slate-300 font-semibold transition-all">\(5\sqrt{9}\) (Sama dengan \(15\))</button>
+                        <button onclick="checkWarmUp(1, 'wrong2')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-xl border border-slate-700 text-slate-300 font-semibold transition-all">\(10\sqrt{9}\)</button>
+                    </div>
+                    <div id="warmup-feedback-1" class="text-xs font-semibold p-3 rounded-xl hidden transition-all duration-300"></div>
+                </div>
+
+                <!-- Warm up 2: Radical Subtract -->
+                <div class="space-y-3 pt-5 border-t border-slate-850">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 bg-pink-500/15 text-pink-300 border border-pink-500/30 rounded text-xs font-bold">Latihan Pemanasan 2</span>
+                        <h4 class="text-sm font-bold text-white">Sisi miring \(6\sqrt{5}\), sisi tegak \(6\sqrt{2}\). Berapa sisi lurus lainnya?</h4>
+                    </div>
+                    <p class="text-xs text-slate-400">Gunakan operasi pengurangan akar secara instan: \(6\sqrt{5-2}\)</p>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <button onclick="checkWarmUp(2, 'correct')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-xl border border-slate-700 text-slate-300 font-semibold transition-all">\(6\sqrt{3}\)</button>
+                        <button onclick="checkWarmUp(2, 'wrong')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-xl border border-slate-700 text-slate-300 font-semibold transition-all">\(6\sqrt{7}\)</button>
+                        <button onclick="checkWarmUp(2, 'wrong2')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-xl border border-slate-700 text-slate-300 font-semibold transition-all">\(36\sqrt{3}\)</button>
+                    </div>
+                    <div id="warmup-feedback-2" class="text-xs font-semibold p-3 rounded-xl hidden transition-all duration-300"></div>
+                </div>
+
+                <!-- Warm up 3: FPB Scale -->
+                <div class="space-y-3 pt-5 border-t border-slate-850">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 bg-pink-500/15 text-pink-300 border border-pink-500/30 rounded text-xs font-bold">Latihan Pemanasan 3</span>
+                        <h4 class="text-sm font-bold text-white">Sisi miring \(39\) dan sisi alas \(36\). Berapa tinggi segitiga tersebut?</h4>
+                    </div>
+                    <p class="text-xs text-slate-400">FPB dari \(39\) dan \(36\) adalah \(3\). Jika dibagi \(3\), menghasilkan perbandingan \(13\) (miring) dan \(12\) (alas). Pasangannya adalah...</p>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <button onclick="checkWarmUp(3, 'wrong')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-xl border border-slate-700 text-slate-300 font-semibold transition-all">\(5\) (Lupa dikalikan FPB)</button>
+                        <button onclick="checkWarmUp(3, 'correct')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-xl border border-slate-700 text-slate-300 font-semibold transition-all">\(15\) (Karena \(5 \times 3\))</button>
+                        <button onclick="checkWarmUp(3, 'wrong2')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-xl border border-slate-700 text-slate-300 font-semibold transition-all">\(25\)</button>
+                    </div>
+                    <div id="warmup-feedback-3" class="text-xs font-semibold p-3 rounded-xl hidden transition-all duration-300"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. PENERAPAN REAL (KONTAK DUNIA NYATA) -->
+        <section id="real-section" class="space-y-6 scroll-mt-20">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl text-emerald-400">🌍</span>
+                <h3 class="text-xl font-bold font-header text-white">Penerapan Riil Teorema Pythagoras</h3>
+            </div>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                Matematika bukan hanya sekadar deretan rumus! Teorema Pythagoras adalah pilar utama teknologi modern kita:
+            </p>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl">🛰️</span>
+                        <h4 class="font-bold text-white text-sm">Bagaimana Satelit GPS Menghitung Jarak?</h4>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Satelit GPS mengirimkan sinyal waktu ke ponsel pintarmu di bumi. Dengan membentuk segitiga imajiner tiga dimensi, algoritma ponsel menggunakan formula perluasan Pythagoras untuk menentukan titik posisimu secara presisi hingga satuan meter!
+                    </p>
+                </div>
+                <div class="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl">🧱</span>
+                        <h4 class="font-bold text-white text-sm">Keamanan Kemiringan Konstruksi Tangga</h4>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Arsitek dan pekerja konstruksi wajib menghitung panjang tangga dan jaraknya terhadap dinding. Jika tangga diletakkan terlalu tegak, tangga rawan terbalik ke belakang. Jika terlalu landai, tangga rawan melorot ke bawah.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. MATERI (TRIK CEPAT PYTHAGORAS) -->
+        <section id="materi-section" class="space-y-8 scroll-mt-20">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl text-blue-400">🔥</span>
+                <h3 class="text-xl font-bold font-header text-white">Materi Inti: Tiga Trik Kilat</h3>
+            </div>
+
+            <!-- TRIK 1 -->
+            <div class="space-y-4">
+                <h4 class="text-sm font-extrabold uppercase tracking-widest text-blue-400 font-header">Trik 1: Formula Trik Akar Radikal</h4>
+                <p class="text-slate-300 text-sm">
+                    Jika kedua sisi siku-siku memiliki faktor luar atau angka pengali luar yang sama, ubah ke bentuk akar sederhana dan langsung operasikan angka di dalam akarnya.
+                </p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="math-card p-6 rounded-xl hover:border-blue-500/50 transition duration-300 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded border border-blue-500/20">Mencari Sisi Miring (Hipotenusa)</span>
+                            <div class="my-4 overflow-x-auto custom-scrollbar py-2 w-full">
+                                <div class="text-lg sm:text-xl font-bold font-header highlight-blue text-center whitespace-nowrap">
+                                    \(a\sqrt{x} + a\sqrt{y} \rightarrow \text{Miring} = a\sqrt{x+y}\)
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed mt-2 border-t border-slate-800/60 pt-3">
+                            <strong>Contoh Kasus:</strong> Sisi penyikunya adalah <span class="text-blue-400 font-semibold">\(3\sqrt{3}\)</span> and <span class="text-blue-400 font-semibold">\(3\)</span> (bisa ditulis \(3\sqrt{1}\)). Sisi miringnya:
+                            <br>
+                            <span class="text-white font-semibold block mt-1.5 bg-slate-900/50 p-2 rounded text-center border border-slate-800">\(\text{Miring} = 3\sqrt{3+1} = 3\sqrt{4} = 3 \times 2 = 6\)</span>
+                        </p>
+                    </div>
+
+                    <div class="math-card p-6 rounded-xl hover:border-green-500/50 transition duration-300 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-green-500/10 text-green-400 rounded border border-green-500/20">Mencari Sisi Siku-Siku Lain</span>
+                            <div class="my-4 overflow-x-auto custom-scrollbar py-2 w-full">
+                                <div class="text-lg sm:text-xl font-bold font-header highlight-green text-center whitespace-nowrap">
+                                    \(a\sqrt{x} - a\sqrt{y} \rightarrow \text{Sisi} = a\sqrt{x-y}\)
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed mt-2 border-t border-slate-800/60 pt-3">
+                            <strong>Contoh Kasus:</strong> Sisi miring adalah <span class="text-green-400 font-semibold">\(10\)</span> (bisa ditulis \(5\sqrt{4}\)) dan sisi tegak <span class="text-green-400 font-semibold">\(5\sqrt{3}\)</span>. Sisi tegak lainnya:
+                            <br>
+                            <span class="text-white font-semibold block mt-1.5 bg-slate-900/50 p-2 rounded text-center border border-slate-800">\(\text{Sisi} = 5\sqrt{4-3} = 5\sqrt{1} = 5\)</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRIK 2 -->
+            <div class="space-y-4 pt-4 border-t border-slate-800">
+                <h4 class="text-sm font-extrabold uppercase tracking-widest text-yellow-400 font-header">Trik 2: Sistem Skala FPB & Tripel Pythagoras Utama</h4>
+                <p class="text-slate-300 text-sm">
+                    Gunakan pembagi terbesar (FPB) untuk memperkecil rasio angka, pasangkan dengan pola tripel populer, lalu kalikan kembali dengan faktor pembaginya untuk mendapatkan hasil instan.
+                </p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="math-card p-6 rounded-xl">
+                        <h4 class="text-xs font-extrabold uppercase tracking-widest text-yellow-400 mb-3 flex items-center gap-2">
+                            ⭐ 4 Kelompok Tripel Terpopuler
+                        </h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between p-2 bg-slate-900/60 rounded border border-slate-800">
+                                <span class="text-slate-400">Pola Dasar 1</span>
+                                <span class="font-bold text-white">\(3\ , \ 4\ , \ 5\)</span>
+                            </div>
+                            <div class="flex justify-between p-2 bg-slate-900/60 rounded border border-slate-800">
+                                <span class="text-slate-400">Pola Dasar 2</span>
+                                <span class="font-bold text-white">\(5\ , \ 12\ , \ 13\)</span>
+                            </div>
+                            <div class="flex justify-between p-2 bg-slate-900/60 rounded border border-slate-800">
+                                <span class="text-slate-400">Pola Dasar 3</span>
+                                <span class="font-bold text-white">\(8\ , \ 15\ , \ 17\)</span>
+                            </div>
+                            <div class="flex justify-between p-2 bg-slate-900/60 rounded border border-slate-800">
+                                <span class="text-slate-400">Pola Dasar 4</span>
+                                <span class="font-bold text-white">\(7\ , \ 24\ , \ 25\)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="math-card p-6 rounded-xl flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-xs font-extrabold uppercase tracking-widest text-indigo-400 mb-2 font-header">💡 Alur Berpikir Trik FPB</h4>
+                            <ol class="list-decimal list-inside text-xs text-slate-300 space-y-2">
+                                <li>Cari pembagi terbesar (FPB) dari dua sisi yang diketahui.</li>
+                                <li>Bagi angka asli dengan FPB untuk mendapatkan perbandingan terkecil.</li>
+                                <li>Tentukan pasangan tripel dari angka sederhana tersebut.</li>
+                                <li>Kalikan kembali pasangan tersebut dengan FPB semula.</li>
+                            </ol>
+                        </div>
+                        <div class="mt-4 p-2.5 bg-indigo-950/40 border border-indigo-900/60 rounded text-center text-xs">
+                            <strong>Contoh:</strong> Sisi \(18\) dan \(24\). FPB-nya adalah <span class="font-bold text-white">\(6\)</span>. 
+                            Rasionya menjadi \(3 : 4\). Pasangan tripelnya pasti <span class="font-bold text-white">\(5\)</span>. 
+                            Sisi miring = \(5 \times 6 = 30\)!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRIK 3 -->
+            <div class="space-y-4 pt-4 border-t border-slate-800">
+                <h4 class="text-sm font-extrabold uppercase tracking-widest text-purple-400 font-header">Trik 3: Segitiga Istimewa (\(45^\circ\) & \(30^\circ - 60^\circ\))</h4>
+                <p class="text-slate-300 text-sm">
+                    Gunakan perbandingan konstan berikut untuk langsung mendapatkan panjang sisi tanpa perhitungan rumit:
+                </p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="math-card p-5 rounded-xl">
+                        <h4 class="text-xs font-bold text-purple-400 mb-3 uppercase tracking-wider font-header">Siku-siku Sama Kaki (\(45^\circ - 45^\circ - 90^\circ\))</h4>
+                        <div class="flex items-center gap-4">
+                            <div class="w-1/3 flex justify-center">
+                                <svg width="70" height="70" viewBox="0 0 100 100" class="text-slate-400">
+                                    <polygon points="20,80 80,80 20,20" fill="none" stroke="currentColor" stroke-width="3" />
+                                    <text x="15" y="55" fill="#f1f5f9" font-size="14" font-weight="bold">s</text>
+                                    <text x="45" y="95" fill="#f1f5f9" font-size="14" font-weight="bold">s</text>
+                                    <text x="50" y="40" fill="#a78bfa" font-size="14" font-weight="bold">s√2</text>
+                                </svg>
+                            </div>
+                            <div class="w-2/3 text-xs text-slate-300 space-y-2">
+                                <p>Rasio Sisi: <br><strong class="text-white text-sm">\(1 : 1 : \sqrt{2}\)</strong></p>
+                                <p class="text-slate-400"><strong>Trik Cepat:</strong> Jika sisi tegak adalah \(7\), maka sisi miringnya langsung tinggal ditambahkan \(\sqrt{2}\) di belakangnya \(\rightarrow \mathbf{7\sqrt{2}}\).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="math-card p-5 rounded-xl">
+                        <h4 class="text-xs font-bold text-purple-400 mb-3 uppercase tracking-wider font-header">Segitiga Sudut Istimewa (\(30^\circ - 60^\circ - 90^\circ\))</h4>
+                        <div class="flex items-center gap-4">
+                            <div class="w-1/3 flex justify-center">
+                                <svg width="70" height="70" viewBox="0 0 100 100" class="text-slate-400">
+                                    <polygon points="20,80 80,80 20,40" fill="none" stroke="currentColor" stroke-width="3" />
+                                    <text x="12" y="65" fill="#f1f5f9" font-size="14" font-weight="bold">s</text>
+                                    <text x="45" y="95" fill="#a78bfa" font-size="14" font-weight="bold">s√3</text>
+                                    <text x="50" y="50" fill="#f1f5f9" font-size="14" font-weight="bold">2s</text>
+                                </svg>
+                            </div>
+                            <div class="w-2/3 text-xs text-slate-300 space-y-2">
+                                <p>Rasio Sisi: <br><strong class="text-white text-sm">\(1 : \sqrt{3} : 2\)</strong></p>
+                                <p class="text-slate-400"><strong>Trik Cepat:</strong> Sisi miring (terpanjang) selalu <strong class="text-white">2x lipat</strong> dari sisi terpendek (depan \(30^\circ\)). Sisi sedang tinggal dikalikan \(\sqrt{3}\).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. CONTOH SOAL -->
+        <section id="contoh-section" class="space-y-6 scroll-mt-20">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <span class="text-2xl text-blue-400">📝</span>
+                <h3 class="text-xl font-bold font-header text-white">Contoh Soal & Pembahasan Kilat</h3>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Contoh 1 -->
+                <div class="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded border border-blue-500/20 font-header">Contoh 1</span>
+                        <span class="text-xs text-slate-500 font-semibold">Trik Radikal</span>
+                    </div>
+                    <h4 class="text-sm font-bold text-white">Hitunglah sisi miring jika kedua sisi siku-siku berukuran \(4\sqrt{5}\) dan \(4\sqrt{11}\)!</h4>
+                    <div class="text-xs text-slate-400 leading-relaxed bg-slate-950/60 p-3 rounded-lg border border-slate-850 space-y-1">
+                        <p class="font-bold text-indigo-400">Pembahasan 3 Detik:</p>
+                        <p>Faktor luar sama, yaitu \(a = 4\). Gunakan penjumlahan langsung di dalam akar:</p>
+                        <p class="text-white font-semibold">Sisi Miring = \(4\sqrt{5 + 11} = 4\sqrt{16} = 4 \times 4 = 16\text{ cm}\)!</p>
+                    </div>
+                </div>
+
+                <!-- Contoh 2 -->
+                <div class="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-yellow-500/10 text-yellow-400 rounded border border-yellow-500/20 font-header">Contoh 2</span>
+                        <span class="text-xs text-slate-500 font-semibold">Trik Skala FPB</span>
+                    </div>
+                    <h4 class="text-sm font-bold text-white">Tinggi suatu dinding adalah \(21\text{ meter}\), panjang tangga bersandar adalah \(29\text{ meter}\). Berapakah jarak kaki tangga ke dasar dinding?</h4>
+                    <div class="text-xs text-slate-400 leading-relaxed bg-slate-950/60 p-3 rounded-lg border border-slate-850 space-y-1">
+                        <p class="font-bold text-indigo-400">Pembahasan 3 Detik:</p>
+                        <p>Ingat pasangan Tripel Pythagoras populer yang diawali dengan \(21\) dan sisi miring \(29\):</p>
+                        <p class="text-white font-semibold">Pola Tripel: \((20, 21, 29)\) \(\rightarrow\) Jarak kaki tangga langsung diperoleh \(20\text{ meter}\)!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. SPEED DRILL (LATIHAN INTERAKTIF) -->
+        <section id="speed-drill" class="space-y-6 pt-6 scroll-mt-20">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-3 gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl text-emerald-400">⚡</span>
+                    <h3 class="text-xl font-bold font-header text-white">SPEED DRILL: Uji Seberapa Cepat Kamu!</h3>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1 rounded-lg">
+                    <span class="text-xs text-slate-400 font-bold">Waktu Berjalan:</span>
+                    <span id="speed-timer" class="text-sm font-mono font-bold text-emerald-400">0.0s</span>
+                </div>
+            </div>
+
+            <p class="text-slate-300 text-sm">
+                Gunakan semua trik cepat di atas untuk menjawab soal kuis secara instan tanpa coret-coretan panjang.
+            </p>
+
+            <!-- Quiz Container -->
+            <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-indigo-500/25 rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+                <div class="absolute top-0 left-0 h-1 bg-indigo-500 transition-all duration-300" id="progress-bar" style="width: 20%"></div>
+                
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-xs font-semibold px-2.5 py-1 bg-indigo-500/15 text-indigo-300 rounded-lg border border-indigo-500/30 font-header" id="question-index">Pertanyaan 1 dari 5</span>
+                    <span class="text-xs font-medium text-slate-400" id="best-speed-badge">Tercepat: -</span>
+                </div>
+
+                <!-- Soal & Visualisasi -->
+                <div class="grid md:grid-cols-2 gap-6 items-center">
+                    <div class="space-y-4">
+                        <h4 id="question-text" class="text-base sm:text-lg font-bold text-white leading-relaxed">
+                            Mencari nilai \(x\) pada segitiga berikut...
+                        </h4>
+                        <div class="p-4 bg-slate-800/50 rounded-xl border border-slate-700/50 text-xs text-slate-300 space-y-1">
+                            <span class="font-bold text-indigo-400 block mb-0.5">💡 Petunjuk Kilat:</span>
+                            <p id="question-hint">Gunakan Trik Radikal: \(a\sqrt{x} + a\sqrt{y} = a\sqrt{x+y}\)</p>
+                        </div>
+                    </div>
+
+                    <!-- Gambar Segitiga Sederhana SVG Bebas Bug Tampilan -->
+                    <div class="flex justify-center p-4 bg-slate-950 rounded-xl border border-slate-850">
+                        <svg width="180" height="140" viewBox="0 0 200 150" class="text-slate-500">
+                            <!-- Segitiga siku-siku -->
+                            <polygon points="40,120 160,120 40,30" fill="none" stroke="#6366f1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                            <!-- Penanda Siku-siku -->
+                            <rect x="40" y="110" width="10" height="10" fill="none" stroke="#475569" stroke-width="2" />
+                            <!-- Label Sisi-sisi Menggunakan Simbol Unicode Yang Aman -->
+                            <!-- Sisi Tegak -->
+                            <text id="side-left" x="12" y="80" fill="#38bdf8" font-size="14" font-weight="extrabold" class="font-header">3√3</text>
+                            <!-- Sisi Alas -->
+                            <text id="side-bottom" x="90" y="140" fill="#38bdf8" font-size="14" font-weight="extrabold" class="font-header">3</text>
+                            <!-- Hipotenusa -->
+                            <text id="side-hyp" x="110" y="70" fill="#a78bfa" font-size="14" font-weight="extrabold" class="font-header">x</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Pilihan Jawaban (Ter-render Sempurna Melalui Pembatas LaTeX) -->
+                <div class="grid sm:grid-cols-2 gap-3 mt-8" id="answers-container">
+                    <!-- Dinamis terisi dari Javascript -->
+                </div>
+
+                <!-- Feedback Box -->
+                <div id="feedback-box" class="mt-4 p-3 rounded-xl text-center font-semibold text-sm hidden"></div>
+            </div>
+        </section>
+
+        <!-- HASIL & SERTIFIKAT KILAT -->
+        <section id="results-section" class="math-card p-6 sm:p-8 rounded-2xl text-center space-y-6 hidden animate-fade-in">
+            <span class="text-4xl">👑</span>
+            <h3 class="text-2xl font-extrabold font-header text-white">Sesi Latihan Kecepatan Selesai!</h3>
+            <p class="text-sm text-slate-300 max-w-md mx-auto">
+                Kamu berhasil melibas semua soal kuis menggunakan taktik super cepat tanpa kalkulator rumit.
+            </p>
+
+            <div class="grid grid-cols-3 gap-4 max-w-lg mx-auto">
+                <div class="p-3 bg-slate-900 rounded-xl border border-slate-800">
+                    <span class="text-[10px] text-slate-400 block">Total Benar</span>
+                    <span class="text-xl font-extrabold text-white" id="stat-correct">0/5</span>
+                </div>
+                <div class="p-3 bg-slate-900 rounded-xl border border-slate-800">
+                    <span class="text-[10px] text-slate-400 block">Rata-Rata Waktu</span>
+                    <span class="text-xl font-extrabold text-emerald-400" id="stat-time">0.0s</span>
+                </div>
+                <div class="p-3 bg-slate-900 rounded-xl border border-slate-800">
+                    <span class="text-[10px] text-slate-400 block">Gelar Kecepatan</span>
+                    <span class="text-sm font-extrabold text-purple-400 block mt-1" id="stat-rank">SIPUT</span>
+                </div>
+            </div>
+
+            <button onclick="restartQuiz()" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-500 transition rounded-lg font-bold text-sm text-white">
+                Coba Lagi & Pecahkan Rekor ⚡
+            </button>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-950 py-8 text-center text-xs text-slate-500 space-y-2">
+        <p>© 2026 Master Pythagoras Kilat. Penguatan Konsep Cepat Tanpa Rumus Panjang.</p>
+    </footer>
+
+    <!-- Audio Synthesizer untuk Gamifikasi (Tanpa File Eksternal) -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playBeep(freq, type, duration) {
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type || 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                // Audio context block protection
+            }
+        }
+
+        function playSuccessSound() {
+            playBeep(523.25, 'triangle', 0.1); // C5
+            setTimeout(() => playBeep(659.25, 'triangle', 0.15), 80); // E5
+        }
+
+        function playErrorSound() {
+            playBeep(220, 'sawtooth', 0.3); // A3
+        }
+    </script>
+
+    <!-- JS Untuk Warm-Up & Kuis Interaktif -->
+    <script>
+        // --- LOGIKA WARM-UP (PEMANASAN) ---
+        function checkWarmUp(index, type) {
+            const feedback = document.getElementById(`warmup-feedback-${index}`);
+            feedback.classList.remove('hidden');
+            
+            if (type === 'correct') {
+                playSuccessSound();
+                feedback.className = "text-xs font-semibold p-3 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mt-3";
+                if (index === 1) {
+                    feedback.innerHTML = "Tepat sekali! Karena \\(5\\sqrt{2} + 5\\sqrt{7} = 5\\sqrt{2+7} = 5\\sqrt{9} = 5 \\times 3 = 15\\).";
+                } else if (index === 2) {
+                    feedback.innerHTML = "Luar biasa! Karena mencari salah satu sisi penyiku, kurangi angka di dalam akar: \\(6\\sqrt{5-2} = 6\\sqrt{3}\\).";
+                } else if (index === 3) {
+                    feedback.innerHTML = "Benar! Perbandingan dasar segitiga adalah 5:12:13. Sisi miringnya 39 (13x3), alasnya 36 (12x3), maka tinggi aslinya adalah \\(5 \\times 3 = 15\\).";
+                }
+            } else {
+                playErrorSound();
+                feedback.className = "text-xs font-semibold p-3 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 mt-3";
+                if (type === 'wrong') {
+                    feedback.innerHTML = "Salah, coba ingat rumusnya lagi atau baca petunjuk perlahan-lahan.";
+                } else {
+                    feedback.innerHTML = "Hampir benar, tapi perhatikan faktor pengalinya dengan teliti.";
+                }
+            }
+            
+            // Re-render KaTeX khusus untuk elemen feedback yang baru muncul
+            renderMathInElement(feedback, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false}
+                ],
+                throwOnError : false
+            });
+        }
+
+        // --- LOGIKA KUIS SPEED DRILL ---
+        const dbQuestions = [
+            {
+                type: 'radical',
+                leftSVG: '3√3',
+                bottomSVG: '3',
+                hypSVG: 'x',
+                question: 'Sebuah segitiga siku-siku memiliki sisi siku-siku sebesar \\(3\\sqrt{3}\\) dan \\(3\\) (bisa ditulis \\(3\\sqrt{1}\\)). Berapakah sisi miringnya (\\(x\\))?',
+                hint: 'Gunakan: \\(\\text{Miring} = a\\sqrt{x+y} \\rightarrow 3\\sqrt{3+1}\\)',
+                answers: ['\\(6\\)', '\\(3\\sqrt{2}\\)', '\\(9\\)', '\\(3\\sqrt{5}\\)'],
+                correct: '\\(6\\)'
+            },
+            {
+                type: 'radical',
+                leftSVG: 'y',
+                bottomSVG: '5√3',
+                hypSVG: '10',
+                question: 'Sisi miring segitiga siku-siku adalah \\(10\\) (bisa ditulis \\(5\\sqrt{4}\\)) dan salah satu sisi siku-sikunya adalah \\(5\\sqrt{3}\\). Berapakah sisi siku-siku lainnya (\\(y\\))?',
+                hint: 'Gunakan: \\(\\text{Sisi} = a\\sqrt{x-y} \\rightarrow 5\\sqrt{4-3}\\)',
+                answers: ['\\(5\\)', '\\(5\\sqrt{2}\\)', '\\(10\\sqrt{2}\\)', '\\(5\\sqrt{7}\\)'],
+                correct: '\\(5\\)'
+            },
+            {
+                type: 'triple',
+                leftSVG: '18',
+                bottomSVG: '24',
+                hypSVG: 'x',
+                question: 'Sisi siku-siku segitiga adalah \\(18\\) dan \\(24\\). Berapakah nilai sisi miring (\\(x\\))?',
+                hint: 'Gunakan Trik FPB: Bagi keduanya dengan 6 \\(\\rightarrow\\) rasio 3:4. Sisi miringnya adalah 5 dikalikan dengan FPB.',
+                answers: ['\\(30\\)', '\\(35\\)', '\\(28\\)', '\\(32\\)'],
+                correct: '\\(30\\)'
+            },
+            {
+                type: 'special45',
+                leftSVG: '7',
+                bottomSVG: '7',
+                hypSVG: 'x',
+                question: 'Sebuah segitiga siku-siku sama kaki memiliki kedua sisi siku-siku sepanjang \\(7\\). Berapakah panjang sisi miringnya (\\(x\\))?',
+                hint: 'Gunakan perbandingan Segitiga \\(45^\\circ\\) : Sisi miring langsung ditambahkan \\(\\sqrt{2}\\).',
+                answers: ['\\(7\\sqrt{2}\\)', '\\(14\\)', '\\(7\\sqrt{3}\\)', '\\(7\\)'],
+                correct: '\\(7\\sqrt{2}\\)'
+            },
+            {
+                type: 'special30',
+                leftSVG: 'x',
+                bottomSVG: '5√3',
+                hypSVG: '10',
+                question: 'Pada segitiga siku-siku dengan sudut \\(30^\\circ - 60^\\circ - 90^\\circ\\), hipotenusa bernilai \\(10\\) dan sisi alasnya \\(5\\sqrt{3}\\). Berapakah tinggi segitiga (\\(x\\))?',
+                hint: 'Sisi di depan sudut \\(30^\\circ\\) selalu bernilai setengah dari panjang hipotenusa.',
+                answers: ['\\(5\\)', '\\(5\\sqrt{2}\\)', '\\(6\\)', '\\(2.5\\)'],
+                correct: '\\(5\\)'
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let correctAnswersCount = 0;
+        let questionStartTime = 0;
+        let totalTimeSpent = 0;
+        let timerInterval = null;
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            questionStartTime = Date.now();
+            const timerEl = document.getElementById('speed-timer');
+            timerInterval = setInterval(() => {
+                const elapsed = (Date.now() - questionStartTime) / 1000;
+                timerEl.innerText = elapsed.toFixed(1) + 's';
+            }, 100);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            const elapsed = (Date.now() - questionStartTime) / 1000;
+            totalTimeSpent += elapsed;
+            return elapsed;
+        }
+
+        function renderQuestion() {
+            if (currentQuestionIndex >= dbQuestions.length) {
+                showResults();
+                return;
+            }
+
+            const q = dbQuestions[currentQuestionIndex];
+            
+            // Set Progress Bar
+            const progPercent = ((currentQuestionIndex + 1) / dbQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = progPercent + '%';
+
+            // Set Index Text
+            document.getElementById('question-index').innerText = `Pertanyaan ${currentQuestionIndex + 1} dari ${dbQuestions.length}`;
+            
+            // Set Soal & Hint
+            document.getElementById('question-text').innerHTML = q.question;
+            document.getElementById('question-hint').innerHTML = `<span class="font-bold text-indigo-400 block mb-0.5">💡 Petunjuk Kilat:</span> ${q.hint}`;
+
+            // Update Sisi Gambar Segitiga SVG dengan Teks Unicode Bersih
+            document.getElementById('side-left').textContent = q.leftSVG;
+            document.getElementById('side-bottom').textContent = q.bottomSVG;
+            document.getElementById('side-hyp').textContent = q.hypSVG;
+
+            // Generate Pilihan Jawaban
+            const container = document.getElementById('answers-container');
+            container.innerHTML = '';
+            
+            // Urutan acak pilihan jawaban
+            const shuffledAnswers = [...q.answers].sort(() => Math.random() - 0.5);
+            shuffledAnswers.forEach(ans => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 bg-slate-800 hover:bg-slate-750 active:bg-slate-900 border border-slate-700 hover:border-indigo-500 rounded-xl text-left text-sm font-semibold transition flex justify-between items-center";
+                btn.innerHTML = `<span class="answer-math-text">${ans}</span> <span class="text-xs text-slate-500">Pilih ⚡</span>`;
+                btn.onclick = () => checkAnswer(ans, btn);
+                container.appendChild(btn);
+            });
+
+            // Sembunyikan feedback box
+            document.getElementById('feedback-box').className = "mt-4 p-3 rounded-xl text-center font-semibold text-sm hidden";
+
+            // Trigger KaTeX render ulang di area kuis saja
+            renderMathInElement(document.getElementById('speed-drill'), {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false}
+                ],
+                throwOnError : false
+            });
+
+            startTimer();
+        }
+
+        function checkAnswer(chosen, buttonElement) {
+            const q = dbQuestions[currentQuestionIndex];
+            const elapsed = stopTimer();
+            
+            // Disable all answer buttons
+            const buttons = document.querySelectorAll('#answers-container button');
+            buttons.forEach(btn => btn.disabled = true);
+
+            const feedback = document.getElementById('feedback-box');
+            feedback.classList.remove('hidden');
+
+            if (chosen === q.correct) {
+                correctAnswersCount++;
+                playSuccessSound();
+                buttonElement.classList.remove('border-slate-700');
+                buttonElement.classList.add('border-emerald-500', 'bg-emerald-950/30');
+                feedback.className = "mt-4 p-3 rounded-xl text-center font-semibold text-sm bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+                feedback.innerText = `Luar biasa! Benar dalam ${elapsed.toFixed(1)} detik.`;
+            } else {
+                playErrorSound();
+                buttonElement.classList.remove('border-slate-700');
+                buttonElement.classList.add('border-red-500', 'bg-red-950/30');
+                feedback.className = "mt-4 p-3 rounded-xl text-center font-semibold text-sm bg-red-500/10 text-red-400 border border-red-500/20";
+                feedback.innerText = `Kurang tepat. Jawaban yang benar: ${q.correct}`;
+            }
+
+            // Re-render KaTeX khusus untuk elemen feedback
+            renderMathInElement(feedback, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false}
+                ],
+                throwOnError : false
+            });
+
+            // Jeda singkat lalu lanjut ke pertanyaan berikutnya
+            setTimeout(() => {
+                currentQuestionIndex++;
+                renderQuestion();
+            }, 2000);
+        }
+
+        function showResults() {
+            document.getElementById('speed-drill').classList.add('hidden');
+            const resultsSection = document.getElementById('results-section');
+            resultsSection.classList.remove('hidden');
+
+            const avgTime = totalTimeSpent / dbQuestions.length;
+            document.getElementById('stat-correct').innerText = `${correctAnswersCount}/${dbQuestions.length}`;
+            document.getElementById('stat-time').innerText = `${avgTime.toFixed(1)}s`;
+
+            let rank = "SIPUT";
+            if (correctAnswersCount === dbQuestions.length) {
+                if (avgTime < 4) rank = "FLASH ⚡";
+                else if (avgTime < 8) rank = "MASTER KILAT 🔮";
+                else rank = "PENDETA PYTHAGORAS 📐";
+            } else if (correctAnswersCount >= 3) {
+                rank = "PRAJURIT RUMUS";
+            }
+
+            document.getElementById('stat-rank').innerText = rank;
+
+            // Scroll ke bagian hasil otomatis secara halus
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            correctAnswersCount = 0;
+            totalTimeSpent = 0;
+            document.getElementById('results-section').classList.add('hidden');
+            document.getElementById('speed-drill').classList.remove('hidden');
+            renderQuestion();
+        }
+
+        // Jalankan saat halaman siap
+        window.onload = function() {
+            // Render KaTeX di seluruh dokumen secara aman
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false}
+                ],
+                throwOnError : false
+            });
+            renderQuestion();
+        }
+    </script>
+</body>
+</html>
