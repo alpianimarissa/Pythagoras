@@ -1,0 +1,210 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" style="background-color: #f4f4f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+  <text x="400" y="40" font-size="28" font-weight="bold" fill="#333" text-anchor="middle">Visualisasi Soal Pythagoras</text>
+  <line x1="50" y1="55" x2="750" y2="55" stroke="#ccc" stroke-width="1"/>
+
+  <g transform="translate(50, 70)">
+    <rect width="700" height="230" rx="10" fill="#fff" stroke="#eee" stroke-width="1"/>
+    <text x="15" y="25" font-size="18" font-weight="bold" fill="#0056b3">Soal 3: Tinggi Segitiga Selimut Limas</text>
+    
+    <text x="15" y="50" font-size="12" fill="#555">Alas persegi 12x12, tinggi limas 8 cm.</text>
+
+    <g transform="translate(150, 60) scale(0.9)">
+      <path d="M 0 100 L 150 100 L 200 50 L 50 50 Z" fill="#e1f5fe" stroke="#01579b" stroke-width="2"/>
+      <text x="75" y="115" font-size="12" text-anchor="middle" fill="#01579b">12 cm (Rusuk s)</text>
+      
+      <circle cx="100" cy="75" r="3" fill="#d32f2f"/>
+      <text x="105" y="72" font-size="12" fill="#d32f2f">T'</text>
+      
+      <circle cx="100" cy="-25" r="4" fill="#1976d2"/>
+      <text x="100" y="-35" font-size="12" text-anchor="middle" font-weight="bold" fill="#1976d2">T (Puncak)</text>
+      
+      <line x1="100" y1="-25" x2="100" y2="75" stroke="#d32f2f" stroke-width="2" stroke-dasharray="5,5"/>
+      <text x="85" y="30" font-size="12" fill="#d32f2f" transform="rotate(-90 85 30)">t = 8 cm</text>
+      
+      <line x1="100" y1="-25" x2="0" y2="100" stroke="#01579b" stroke-width="1.5"/>
+      <line x1="100" y1="-25" x2="150" y2="100" stroke="#01579b" stroke-width="1.5"/>
+      
+      <line x1="100" y1="-25" x2="75" y2="100" stroke="#fbc02d" stroke-width="3"/>
+      <circle cx="75" cy="100" r="3" fill="#fbc02d"/>
+      <text x="60" y="50" font-size="14" font-weight="bold" fill="#c49000" transform="rotate(-70 60 50)">t_s = ?</text>
+      
+      <line x1="100" y1="75" x2="75" y2="100" stroke="#388e3c" stroke-width="2.5"/>
+      <text x="85" y="93" font-size="12" fill="#388e3c" transform="rotate(45 85 93)">6 cm</text>
+    </g>
+
+    <g transform="translate(480, 50)" font-size="12" fill="#333">
+      <text x="0" y="20" font-weight="bold">Langkah:</text>
+      <text x="10" y="40">1. Alas (s) = 12, s/2 = 6.</text>
+      <text x="10" y="60">2. Tinggi limas (t) = 8.</text>
+      <text x="10" y="80">3. Gunakan Pythagoras:</text>
+      <text x="20" y="100" font-weight="bold" fill="#01579b">(t_s)² = t² + (s/2)²</text>
+      <text x="20" y="120">(t_s)² = 8² + 6²</text>
+      <text x="20" y="140">(t_s)² = 64 + 36 = 100</text>
+      <text x="10" y="160">4. t_s = √100 = 10.</text>
+      <rect x="10" y="175" width="130" height="25" rx="5" fill="#e8f5e9"/>
+      <text x="75" y="193" font-size="14" font-weight="bold" fill="#2e7d32" text-anchor="middle">Jawaban: 10 cm</text>
+    </g>
+  </g>
+
+  <g transform="translate(50, 310)">
+    <rect width="700" height="210" rx="10" fill="#fff" stroke="#eee" stroke-width="1"/>
+    <text x="15" y="25" font-size="18" font-weight="bold" fill="#c62828">Soal 4: Panjang Kawat Minimal</text>
+    
+    <text x="15" y="50" font-size="12" fill="#555">Tiang A (15m), Tiang B (7m), jarak antar tiang 15m.</text>
+
+    <g transform="translate(100, 60)">
+      <line x1="-20" y1="130" x2="220" y2="130" stroke="#8d6e63" stroke-width="3"/>
+      
+      <rect x="0" y="-20" width="15" height="150" fill="#757575"/>
+      <text x="-10" y="60" font-size="12" fill="#757575" transform="rotate(-90 -10 60)">Tiang A (15m)</text>
+      
+      <rect x="150" y="60" width="15" height="70" fill="#757575"/>
+      <text x="175" y="100" font-size="12" fill="#757575" transform="rotate(-90 175 100)">Tiang B (7m)</text>
+      
+      <line x1="15" y1="135" x2="150" y2="135" stroke="#333" stroke-width="1" stroke-dasharray="3,3"/>
+      <text x="82" y="150" font-size="12" text-anchor="middle" fill="#333">15m</text>
+      
+      <line x1="15" y1="-20" x2="150" y2="60" stroke="#fbc02d" stroke-width="4"/>
+      <text x="85" y="15" font-size="16" font-weight="bold" fill="#c49000" transform="rotate(30 85 15)">Kawat = ?</text>
+      
+      <line x1="15" y1="60" x2="150" y2="60" stroke="#d32f2f" stroke-width="2" stroke-dasharray="5,5"/>
+      <text x="82" y="55" font-size="12" text-anchor="middle" fill="#d32f2f">15m (alas)</text>
+      
+      <line x1="15" y1="-20" x2="15" y2="60" stroke="#d32f2f" stroke-width="2"/>
+      <text x="25" y="25" font-size="12" fill="#d32f2f" transform="rotate(-90 25 25)">(15-7)=8m (tinggi)</text>
+    </g>
+
+    <g transform="translate(480, 50)" font-size="12" fill="#333">
+      <text x="0" y="20" font-weight="bold">Langkah:</text>
+      <text x="10" y="40">1. Perbedaan tinggi (t) = 15 - 7 = 8m.</text>
+      <text x="10" y="60">2. Jarak horizontal (a) = 15m.</text>
+      <text x="10" y="80">3. Gunakan Pythagoras:</text>
+      <text x="20" y="100" font-weight="bold" fill="#01579b">(Kawat)² = t² + a²</text>
+      <text x="20" y="120">(Kawat)² = 8² + 15²</text>
+      <text x="20" y="140">(Kawat)² = 64 + 225 = 289</text>
+      <text x="10" y="160">4. Kawat = √289 = 17.</text>
+      <rect x="10" y="175" width="130" height="25" rx="5" fill="#ffebee"/>
+      <text x="75" y="193" font-size="14" font-weight="bold" fill="#b71c1c" text-anchor="middle">Jawaban: 17 m</text>
+    </g>
+  </g>
+
+  <g transform="translate(50, 530)">
+    <rect width="700" height="230" rx="10" fill="#fff" stroke="#eee" stroke-width="1"/>
+    <text x="15" y="25" font-size="18" font-weight="bold" fill="#2e7d32">Soal 5: Luas Layang-layang</text>
+    
+    <text x="15" y="50" font-size="12" fill="#555">AC=24, AB=13, AD=20, sdt.siku di O.</text>
+
+    <g transform="translate(100, 60) scale(0.8)">
+      <path d="M 0 100 L 120 0 L 300 100 L 120 200 Z" fill="#e8f5e9" stroke="#1b5e20" stroke-width="2.5"/>
+      <text x="120" y="-10" font-size="16" text-anchor="middle" fill="#1b5e20">B</text>
+      <text x="120" y="215" font-size="16" text-anchor="middle" fill="#1b5e20">D</text>
+      <text x="-15" y="105" font-size="16" fill="#1b5e20">A</text>
+      <text x="305" y="105" font-size="16" fill="#1b5e20">C</text>
+      
+      <text x="50" y="45" font-size="14" fill="#1b5e20" transform="rotate(-40 50 45)">13 cm</text>
+      <text x="50" y="160" font-size="14" fill="#1b5e20" transform="rotate(40 50 160)">20 cm</text>
+
+      <line x1="0" y1="100" x2="300" y2="100" stroke="#01579b" stroke-width="2"/>
+      <text x="150" y="115" font-size="14" text-anchor="middle" fill="#01579b">AC = 24 cm</text>
+      
+      <line x1="120" y1="0" x2="120" y2="200" stroke="#d32f2f" stroke-width="2"/>
+      <text x="105" y="50" font-size="14" fill="#d32f2f" transform="rotate(-90 105 50)">BD = ?</text>
+      
+      <circle cx="120" cy="100" r="4" fill="#333"/>
+      <text x="128" y="95" font-size="16" fill="#333">O</text>
+      
+      <path d="M 120 80 L 100 100 L 120 100 L 120 80" fill="none" stroke="#333" stroke-width="1.5"/>
+      <text x="60" y="95" font-size="12" fill="#01579b">AO=12</text>
+      <text x="125" y="40" font-size="12" fill="#d32f2f">BO=?</text>
+      
+      <text x="125" y="160" font-size="12" fill="#d32f2f">DO=?</text>
+    </g>
+
+    <g transform="translate(480, 50)" font-size="12" fill="#333">
+      <text x="0" y="20" font-weight="bold">Langkah:</text>
+      <text x="10" y="40">1. AO = AC/2 = 24/2 = 12.</text>
+      <text x="10" y="60">2. ∆AOB: BO² = AB² - AO²</text>
+      <text x="20" y="75">BO² = 13² - 12² = 169 - 144 = 25. (BO=5)</text>
+      <text x="10" y="95">3. ∆AOD: DO² = AD² - AO²</text>
+      <text x="20" y="110">DO² = 20² - 12² = 400 - 144 = 256. (DO=16)</text>
+      <text x="10" y="130">4. Diagonal BD = BO + DO = 5 + 16 = 21.</text>
+      <text x="10" y="150">5. Luas = (AC × BD) / 2 = (24 × 21) / 2</text>
+      <text x="20" y="165">Luas = 12 × 21 = 252.</text>
+      <rect x="10" y="175" width="130" height="25" rx="5" fill="#e8f5e9"/>
+      <text x="75" y="193" font-size="14" font-weight="bold" fill="#1b5e20" text-anchor="middle">Jawaban: 252 cm²</text>
+    </g>
+  </g>
+
+  <g transform="translate(50, 770)">
+    <rect width="700" height="210" rx="10" fill="#fff" stroke="#eee" stroke-width="1"/>
+    <text x="15" y="25" font-size="18" font-weight="bold" fill="#ef6c00">Soal 6: Tinggi Segitiga Sembarang</text>
+    
+    <text x="15" y="50" font-size="12" fill="#555">Sisi 13, 14, 15. Tinggi ke sisi 14.</text>
+
+    <g transform="translate(120, 70) scale(1.1)">
+      <path d="M 0 0 L 140 0 L 50 -120 Z" fill="#fff3e0" stroke="#e65100" stroke-width="2"/>
+      
+      <text x="70" y="15" font-size="14" text-anchor="middle" fill="#e65100">Alas = 14 cm</text>
+      <text x="10" y="-60" font-size="14" fill="#e65100" transform="rotate(-67 10 -60)">13 cm</text>
+      <text x="110" y="-60" font-size="14" fill="#e65100" transform="rotate(53 110 -60)">15 cm</text>
+      
+      <line x1="50" y1="0" x2="50" y2="-120" stroke="#01579b" stroke-width="3"/>
+      <text x="40" y="-60" font-size="16" font-weight="bold" fill="#01579b" transform="rotate(-90 40 -60)">h = ?</text>
+      
+      <path d="M 50 -10 L 60 0" fill="none" stroke="#333" stroke-width="1"/>
+
+      <text x="25" y="-5" font-size="12" fill="#333">x</text>
+      <text x="95" y="-5" font-size="12" fill="#333">14-x</text>
+    </g>
+
+    <g transform="translate(480, 50)" font-size="12" fill="#333">
+      <text x="0" y="20" font-weight="bold">Langkah (Persamaan):</text>
+      <text x="10" y="40">1. Letakkan tinggi (h), membagi alas.</text>
+      <text x="10" y="60">2. ∆Kiri: h² = 13² - x² = 169 - x²</text>
+      <text x="10" y="80">3. ∆Kanan: h² = 15² - (14-x)²</text>
+      <text x="20" y="95">h² = 225 - (196 - 28x + x²)</text>
+      <text x="10" y="115">4. Samakan h²: 169 - x² = 225 - 196 + 28x - x²</text>
+      <text x="20" y="130">169 = 29 + 28x  =>  140 = 28x  => x = 5.</text>
+      <text x="10" y="150">5. Hitung h: h = √(13² - 5²) = √(169 - 25)</text>
+      <text x="20" y="165">h = √144 = 12.</text>
+      <rect x="10" y="175" width="130" height="25" rx="5" fill="#fff3e0"/>
+      <text x="75" y="193" font-size="14" font-weight="bold" fill="#e65100" text-anchor="middle">Jawaban: 12 cm</text>
+    </g>
+  </g>
+
+  <g transform="translate(50, 1000)">
+    <rect width="700" height="180" rx="10" fill="#fff" stroke="#eee" stroke-width="1"/>
+    <text x="15" y="25" font-size="18" font-weight="bold" fill="#01579b">Soal 7: Jarak Antena ke Pasak</text>
+    
+    <text x="15" y="50" font-size="12" fill="#555">Tinggi 24m, Kawat 26m. Jarak horizontal?</text>
+
+    <g transform="translate(150, 60)">
+      <line x1="-30" y1="100" x2="180" y2="100" stroke="#8d6e63" stroke-width="3"/>
+      
+      <rect x="0" y="0" width="10" height="100" fill="#757575"/>
+      <text x="-15" y="50" font-size="12" fill="#757575" transform="rotate(-90 -15 50)">Antena (24m)</text>
+      
+      <line x1="10" y1="0" x2="130" y2="100" stroke="#fbc02d" stroke-width="4"/>
+      <text x="65" y="45" font-size="14" font-weight="bold" fill="#c49000" transform="rotate(40 65 45)">Kawat = 26m</text>
+      
+      <circle cx="130" cy="100" r="4" fill="#d32f2f"/>
+      <text x="135" y="115" font-size="12" fill="#d32f2f">Pasak</text>
+      
+      <line x1="10" y1="105" x2="130" y2="105" stroke="#333" stroke-width="1" stroke-dasharray="3,3"/>
+      <text x="70" y="120" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">Jarak d = ?</text>
+    </g>
+
+    <g transform="translate(480, 50)" font-size="12" fill="#333">
+      <text x="0" y="20" font-weight="bold">Langkah:</text>
+      <text x="10" y="40">1. Sisi miring (Kawat, c) = 26.</text>
+      <text x="10" y="60">2. Sisi tegak (Antena, b) = 24.</text>
+      <text x="10" y="80">3. Gunakan Pythagoras:</text>
+      <text x="20" y="100" font-weight="bold" fill="#01579b">d² = Kawat² - Antena²</text>
+      <text x="20" y="120">d² = 26² - 24²</text>
+      <text x="20" y="140">d² = 676 - 576 = 100.</text>
+      <text x="10" y="160">4. d = √100 = 10.</text>
+      <rect x="10" y="175" width="130" height="25" rx="5" fill="#e1f5fe"/>
+      <text x="75" y="193" font-size="14" font-weight="bold" fill="#01579b" text-anchor="middle">Jawaban: 10 m</text>
+    </g>
+  </g>
+</svg>
