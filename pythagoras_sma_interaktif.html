@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastery Teorema Pythagoras SMA - Interactive Lab</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- Three.js (For 3D Geometry Visualization) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #090d16;
+            color: #f1f5f9;
+        }
+        .font-mono-code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-panel-interactive {
+            transition: all 0.25s ease;
+        }
+        .glass-panel-interactive:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.2);
+        }
+        canvas {
+            touch-action: none;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b82f6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-blue-600 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-500/25">
+                    📐
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                        Pythagoras <span class="text-blue-400">Lab SMA</span>
+                        <span class="text-[10px] bg-blue-500/20 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded-full font-mono">Fase F / SMA</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">Eksplorasi Visual 2D, Kartesius, Dimensi 3D & Solver</p>
+                </div>
+            </div>
+
+            <!-- Module Navigation Tabs -->
+            <nav class="flex items-center gap-1 sm:gap-2 overflow-x-auto py-1 max-w-full">
+                <button onclick="switchTab('visual2d')" id="tab-btn-visual2d" class="nav-tab-btn active px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition">
+                    <span>📐</span> Visual 2D & Bukti
+                </button>
+                <button onclick="switchTab('kartesius')" id="tab-btn-kartesius" class="nav-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition">
+                    <span>📍</span> Grid Kartesius
+                </button>
+                <button onclick="switchTab('dimensi3d')" id="tab-btn-dimensi3d" class="nav-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition">
+                    <span>🧊</span> Ruang 3D
+                </button>
+                <button onclick="switchTab('triple')" id="tab-btn-triple" class="nav-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition">
+                    <span>🔢</span> Triple Pythagoras
+                </button>
+                <button onclick="switchTab('solver')" id="tab-btn-solver" class="nav-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition">
+                    <span>🧮</span> Smart Solver
+                </button>
+                <button onclick="switchTab('quiz')" id="tab-btn-quiz" class="nav-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition">
+                    <span>⚡</span> Quiz Interaktif
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex-grow w-full space-y-6">
+
+        <!-- TAB 1: VISUAL 2D & BUKTI TE OREMA -->
+        <section id="view-visual2d" class="tab-view space-y-6">
+            <div class="grid lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- Canvas Visualization Controls -->
+                <div class="lg:col-span-7 glass-panel p-5 rounded-3xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-base font-bold text-white flex items-center gap-2">
+                                <span>📐</span> Simulator Segitiga & Luas Persegi
+                            </h2>
+                            <p class="text-xs text-slate-400">Geser slider untuk melihat perubahan segitiga dan pembuktian $a^2 + b^2 = c^2$</p>
+                        </div>
+                        <div class="flex gap-1.5">
+                            <button onclick="set2DPreset(3,4)" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-[11px] font-semibold text-blue-300 rounded-lg border border-slate-700 transition">3 : 4 : 5</button>
+                            <button onclick="set2DPreset(5,12)" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-[11px] font-semibold text-blue-300 rounded-lg border border-slate-700 transition">5 : 12 : 13</button>
+                            <button onclick="set2DPreset(6,6)" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-[11px] font-semibold text-cyan-300 rounded-lg border border-slate-700 transition">$45^\circ-45^\circ$</button>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Canvas 2D -->
+                    <div class="relative w-full aspect-square max-h-[460px] bg-slate-950/90 rounded-2xl border border-slate-800/80 overflow-hidden flex items-center justify-center p-2">
+                        <canvas id="canvas2d" class="w-full h-full cursor-pointer"></canvas>
+                    </div>
+
+                    <!-- Dynamic Controls -->
+                    <div class="grid sm:grid-cols-2 gap-4 bg-slate-950/50 p-4 rounded-2xl border border-slate-800/60">
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs font-semibold">
+                                <span class="text-rose-400">Sisi Alas ($a$):</span>
+                                <span id="val-a-display" class="font-mono text-white">6.0 cm</span>
+                            </div>
+                            <input type="range" id="slider-a" min="1" max="15" step="0.5" value="6" oninput="update2DVisual()" class="w-full accent-rose-500 bg-slate-800 rounded-lg h-2 cursor-pointer">
+                        </div>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs font-semibold">
+                                <span class="text-emerald-400">Sisi Tegak ($b$):</span>
+                                <span id="val-b-display" class="font-mono text-white">8.0 cm</span>
+                            </div>
+                            <input type="range" id="slider-b" min="1" max="15" step="0.5" value="8" oninput="update2DVisual()" class="w-full accent-emerald-500 bg-slate-800 rounded-lg h-2 cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Mathematical Analysis -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="glass-panel p-5 rounded-3xl space-y-4">
+                        <h3 class="text-sm font-bold text-white border-b border-slate-800 pb-2 flex items-center gap-2">
+                            <span>📊</span> Kalkulasi Real-Time
+                        </h3>
+
+                        <div class="space-y-3 font-mono text-xs">
+                            <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex justify-between items-center">
+                                <span class="text-slate-400">Luas Persegi $a^2$:</span>
+                                <span id="out-a2" class="text-rose-400 font-bold text-sm">36.00 cm²</span>
+                            </div>
+                            <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex justify-between items-center">
+                                <span class="text-slate-400">Luas Persegi $b^2$:</span>
+                                <span id="out-b2" class="text-emerald-400 font-bold text-sm">64.00 cm²</span>
+                            </div>
+                            <div class="p-3 bg-blue-950/40 rounded-xl border border-blue-800/60 flex justify-between items-center">
+                                <span class="text-blue-300">Luas Persegi $c^2 = a^2 + b^2$:</span>
+                                <span id="out-c2" class="text-cyan-300 font-bold text-sm">100.00 cm²</span>
+                            </div>
+                            <div class="p-3 bg-indigo-950/50 rounded-xl border border-indigo-700/60 flex justify-between items-center">
+                                <span class="text-indigo-200">Hipotenusa ($c = \sqrt{c^2}$):</span>
+                                <span id="out-c" class="text-indigo-300 font-bold text-base">10.00 cm</span>
+                            </div>
+                        </div>
+
+                        <!-- Special Angle Checks -->
+                        <div class="p-4 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-2 text-xs">
+                            <div class="flex justify-between text-slate-300">
+                                <span>Sudut $\theta_A$ (Alas):</span>
+                                <span id="out-angle-a" class="font-bold font-mono text-amber-400">53.13°</span>
+                            </div>
+                            <div class="flex justify-between text-slate-300">
+                                <span>Sudut $\theta_B$ (Atas):</span>
+                                <span id="out-angle-b" class="font-bold font-mono text-amber-400">36.87°</span>
+                            </div>
+                            <div id="special-ratio-badge" class="mt-2 p-2 bg-blue-500/10 border border-blue-500/30 text-blue-300 rounded-xl text-[11px] text-center font-medium">
+                                Ratio Mode: Umum
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conceptual SMA Card -->
+                    <div class="glass-panel p-5 rounded-3xl space-y-2 border-l-4 border-l-blue-500">
+                        <h4 class="text-xs font-bold text-blue-400 font-mono uppercase tracking-wider">💡 Poin Kunci SMA (Rasio Istimewa)</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            • Segitiga $45^\circ-45^\circ-90^\circ$: Rasio sisi $1 : 1 : \sqrt{2}$<br>
+                            • Segitiga $30^\circ-60^\circ-90^\circ$: Rasio sisi $1 : \sqrt{3} : 2$ (Sisi terpendek di depan $30^\circ$ = setengah hipotenusa).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: KOORDINAT KARTESIUS 2D -->
+        <section id="view-kartesius" class="tab-view space-y-6 hidden">
+            <div class="grid lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- Interactive Grid Canvas -->
+                <div class="lg:col-span-7 glass-panel p-5 rounded-3xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-base font-bold text-white flex items-center gap-2">
+                                <span>📍</span> Interactive Cartesian Plotter
+                            </h2>
+                            <p class="text-xs text-slate-400">Klik atau geser slider titik $A(x_1, y_1)$ dan $B(x_2, y_2)$ untuk melihat terbentuknya segitiga siku-siku.</p>
+                        </div>
+                        <button onclick="resetKartesius()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 rounded-xl border border-slate-700 transition">Reset Titik</button>
+                    </div>
+
+                    <div class="relative w-full aspect-square max-h-[460px] bg-slate-950/90 rounded-2xl border border-slate-800/80 overflow-hidden flex items-center justify-center p-2">
+                        <canvas id="canvas-kartesius" class="w-full h-full cursor-crosshair"></canvas>
+                    </div>
+
+                    <!-- Sliders for Points -->
+                    <div class="grid sm:grid-cols-2 gap-4 bg-slate-950/50 p-4 rounded-2xl border border-slate-800/60 text-xs">
+                        <!-- Point A Controls -->
+                        <div class="space-y-2 border-r border-slate-800/80 pr-2">
+                            <span class="font-bold text-rose-400 flex items-center gap-1">📍 Titik A ($x_1, y_1$)</span>
+                            <div class="space-y-1">
+                                <div class="flex justify-between"><span class="text-slate-400">$x_1$:</span><span id="k-x1-val" class="font-mono text-white">2</span></div>
+                                <input type="range" id="k-x1" min="-8" max="8" value="2" oninput="updateKartesius()" class="w-full accent-rose-500 bg-slate-800 rounded h-1.5">
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex justify-between"><span class="text-slate-400">$y_1$:</span><span id="k-y1-val" class="font-mono text-white">2</span></div>
+                                <input type="range" id="k-y1" min="-8" max="8" value="2" oninput="updateKartesius()" class="w-full accent-rose-500 bg-slate-800 rounded h-1.5">
+                            </div>
+                        </div>
+
+                        <!-- Point B Controls -->
+                        <div class="space-y-2 pl-2">
+                            <span class="font-bold text-cyan-400 flex items-center gap-1">📍 Titik B ($x_2, y_2$)</span>
+                            <div class="space-y-1">
+                                <div class="flex justify-between"><span class="text-slate-400">$x_2$:</span><span id="k-x2-val" class="font-mono text-white">7</span></div>
+                                <input type="range" id="k-x2" min="-8" max="8" value="7" oninput="updateKartesius()" class="w-full accent-cyan-500 bg-slate-800 rounded h-1.5">
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex justify-between"><span class="text-slate-400">$y_2$:</span><span id="k-y2-val" class="font-mono text-white">7</span></div>
+                                <input type="range" id="k-y2" min="-8" max="8" value="7" oninput="updateKartesius()" class="w-full accent-cyan-500 bg-slate-800 rounded h-1.5">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Distance Formula Calculations -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="glass-panel p-5 rounded-3xl space-y-4">
+                        <h3 class="text-sm font-bold text-white border-b border-slate-800 pb-2 flex items-center gap-2">
+                            <span>📐</span> Analisis Jarak Euclidean
+                        </h3>
+
+                        <div id="katex-kartesius-formula" class="p-4 bg-slate-950/80 rounded-2xl border border-slate-800 font-mono text-xs text-blue-300 space-y-2 overflow-x-auto">
+                            <!-- Formula LaTeX output -->
+                        </div>
+
+                        <div class="space-y-3 font-mono text-xs">
+                            <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex justify-between">
+                                <span class="text-slate-400">Selisih Horizontal ($\Delta x$):</span>
+                                <span id="k-dx" class="text-rose-400 font-bold">5</span>
+                            </div>
+                            <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex justify-between">
+                                <span class="text-slate-400">Selisih Vertikal ($\Delta y$):</span>
+                                <span id="k-dy" class="text-cyan-400 font-bold">5</span>
+                            </div>
+                            <div class="p-3 bg-emerald-950/50 rounded-xl border border-emerald-800/60 flex justify-between items-center">
+                                <span class="text-emerald-300">Jarak Lurus $d_{AB}$:</span>
+                                <span id="k-dist" class="text-emerald-400 font-bold text-base">7.071</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-5 rounded-3xl space-y-2 border-l-4 border-l-emerald-500 text-xs text-slate-300">
+                        <strong class="text-emerald-400 font-mono uppercase tracking-wider block">📌 Rumus Utama Kartesius SMA:</strong>
+                        $$d = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$$
+                        <p class="text-slate-400 pt-1">Rumus jarak dua titik ini pada hakikatnya adalah Teorema Pythagoras di mana alas segitiga $= |x_2 - x_1|$ dan tinggi $= |y_2 - y_1|$.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: DIMENSI TIGA (3D RUANG) -->
+        <section id="view-dimensi3d" class="tab-view space-y-6 hidden">
+            <div class="grid lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- 3D Canvas Box -->
+                <div class="lg:col-span-7 glass-panel p-5 rounded-3xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-base font-bold text-white flex items-center gap-2">
+                                <span>🧊</span> Simulator Balok & Kubus 3D
+                            </h2>
+                            <p class="text-xs text-slate-400">Rotasi objek dengan mouse/touch. Lihat Diagonal Bidang ($AC$) & Diagonal Ruang ($AG$).</p>
+                        </div>
+                        <button onclick="toggle3DCubeMode()" id="btn-cube-mode" class="px-3 py-1.5 bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 text-xs font-semibold rounded-xl border border-indigo-500/40 transition">
+                            Mode: Balok
+                        </button>
+                    </div>
+
+                    <!-- ThreeJS Canvas Host -->
+                    <div id="threejs-container" class="relative w-full aspect-square max-h-[460px] bg-slate-950 rounded-2xl border border-slate-800/80 overflow-hidden cursor-grab active:cursor-grabbing">
+                        <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur px-3 py-1.5 rounded-xl border border-slate-800 text-[10px] text-slate-400 pointer-events-none">
+                            🖱️ Drag untuk merotasi 3D | Zoom scroll
+                        </div>
+                    </div>
+
+                    <!-- 3D Controls -->
+                    <div class="grid sm:grid-cols-3 gap-3 bg-slate-950/50 p-4 rounded-2xl border border-slate-800/60 text-xs">
+                        <div class="space-y-1">
+                            <div class="flex justify-between"><span class="text-slate-400">Panjang ($p$):</span><span id="3d-p-val" class="font-mono text-white">8 cm</span></div>
+                            <input type="range" id="3d-p" min="2" max="12" value="8" oninput="update3DVisual()" class="w-full accent-blue-500 bg-slate-800 rounded h-1.5">
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex justify-between"><span class="text-slate-400">Lebar ($l$):</span><span id="3d-l-val" class="font-mono text-white">6 cm</span></div>
+                            <input type="range" id="3d-l" min="2" max="12" value="6" oninput="update3DVisual()" class="w-full accent-emerald-500 bg-slate-800 rounded h-1.5">
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex justify-between"><span class="text-slate-400">Tinggi ($t$):</span><span id="3d-t-val" class="font-mono text-white">5 cm</span></div>
+                            <input type="range" id="3d-t" min="2" max="12" value="5" oninput="update3DVisual()" class="w-full accent-purple-500 bg-slate-800 rounded h-1.5">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3D Mathematical Calculations -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="glass-panel p-5 rounded-3xl space-y-4">
+                        <h3 class="text-sm font-bold text-white border-b border-slate-800 pb-2 flex items-center gap-2">
+                            <span>📐</span> Kalkulasi Geometri Ruang (3D)
+                        </h3>
+
+                        <div class="space-y-3 font-mono text-xs">
+                            <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex justify-between items-center">
+                                <div>
+                                    <span class="text-slate-400 block">Diagonal Alas ($AC$):</span>
+                                    <span class="text-[10px] text-slate-500">$\sqrt{p^2 + l^2}$</span>
+                                </div>
+                                <span id="out-3d-diag-alas" class="text-emerald-400 font-bold text-sm">10.00 cm</span>
+                            </div>
+
+                            <div class="p-3 bg-purple-950/40 rounded-xl border border-purple-800/60 flex justify-between items-center">
+                                <div>
+                                    <span class="text-purple-300 block">Diagonal Ruang ($AG$):</span>
+                                    <span class="text-[10px] text-purple-400/70">$\sqrt{p^2 + l^2 + t^2}$</span>
+                                </div>
+                                <span id="out-3d-diag-ruang" class="text-purple-300 font-bold text-base">11.18 cm</span>
+                            </div>
+
+                            <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex justify-between items-center">
+                                <span class="text-slate-400">Volume Balok:</span>
+                                <span id="out-3d-vol" class="text-amber-400 font-bold text-sm">240 cm³</span>
+                            </div>
+                        </div>
+
+                        <!-- Formula Latex Display for 3D -->
+                        <div id="katex-3d-formula" class="p-3 bg-slate-950/90 rounded-2xl border border-slate-800 text-xs text-slate-300 space-y-1">
+                            <!-- Formula KaTeX -->
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-5 rounded-3xl space-y-2 border-l-4 border-l-purple-500 text-xs text-slate-300">
+                        <strong class="text-purple-400 font-mono uppercase tracking-wider block">📌 Catatan Khusus Kubus ($s$):</strong>
+                        • Diagonal Bidang = $s\sqrt{2}$<br>
+                        • Diagonal Ruang = $s\sqrt{3}$
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB BARU: TRIPLE PYTHAGORAS INTERAKTIF -->
+        <section id="view-triple" class="tab-view space-y-6 hidden">
+            <div class="grid lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- Generator Euclid Card -->
+                <div class="lg:col-span-5 glass-panel p-5 rounded-3xl space-y-4">
+                    <div>
+                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                            <span>⚙️</span> Euclid Triple Generator
+                        </h2>
+                        <p class="text-xs text-slate-400">Buat Triple Pythagoras baru dari dua bilangan bulat $m$ dan $n$ ($m > n$).</p>
+                    </div>
+
+                    <div class="p-4 bg-slate-950/80 rounded-2xl border border-slate-800 space-y-2 text-xs text-blue-300">
+                        <strong class="text-blue-400 font-mono uppercase tracking-wider block">📌 Formulasi Euclid:</strong>
+                        $$a = m^2 - n^2, \quad b = 2mn, \quad c = m^2 + n^2$$
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 bg-slate-950/50 p-4 rounded-2xl border border-slate-800/60 text-xs">
+                        <div class="space-y-1.5">
+                            <label class="block text-slate-300 font-semibold">Nilai $m$ ($m > n$):</label>
+                            <input type="number" id="euclid-m" min="2" max="20" value="3" oninput="generateEuclidTriple()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white font-mono focus:border-blue-500 focus:outline-none">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="block text-slate-300 font-semibold">Nilai $n$:</label>
+                            <input type="number" id="euclid-n" min="1" max="19" value="2" oninput="generateEuclidTriple()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white font-mono focus:border-blue-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Output Hasil Euclid -->
+                    <div id="euclid-result-box" class="p-4 bg-blue-950/40 rounded-2xl border border-blue-800/60 space-y-2 text-xs">
+                        <div class="flex justify-between items-center border-b border-blue-800/40 pb-2">
+                            <span class="text-slate-300 font-semibold">Triple Dihasilkan:</span>
+                            <span id="euclid-triple-text" class="text-cyan-300 font-mono font-bold text-base">(5, 12, 13)</span>
+                        </div>
+                        <div id="euclid-calc-detail" class="font-mono text-[11px] text-slate-300 leading-relaxed pt-1">
+                            <!-- Detail perhitungan -->
+                        </div>
+                        <button onclick="applyEuclidTo2D()" class="w-full mt-2 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 transition text-xs flex items-center justify-center gap-2">
+                            <span>📐</span> Visualisasikan di Simulator 2D
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table & Catalog Card -->
+                <div class="lg:col-span-7 glass-panel p-5 rounded-3xl space-y-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div>
+                            <h2 class="text-base font-bold text-white flex items-center gap-2">
+                                <span>📚</span> Catalog Triple Pythagoras Utama
+                            </h2>
+                            <p class="text-xs text-slate-400">Daftar kelompok angka populer dan kelipatannya yang paling sering muncul di ujian SMA.</p>
+                        </div>
+                        <div class="w-full sm:w-auto">
+                            <input type="text" id="search-triple" placeholder="Cari angka... (mis: 13, 17, 24)" oninput="filterTriplesTable()" class="w-full sm:w-48 bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-blue-500 focus:outline-none font-mono">
+                        </div>
+                    </div>
+
+                    <!-- Cards Grid Triple -->
+                    <div class="grid sm:grid-cols-2 gap-3 max-h-[440px] overflow-y-auto pr-1" id="triple-cards-container">
+                        <!-- Triple Cards Generated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: SMART SOLVER & UJI SEGITIGA -->
+        <section id="view-solver" class="tab-view space-y-6 hidden">
+            <div class="grid md:grid-cols-2 gap-6">
+                
+                <!-- Solver Card -->
+                <div class="glass-panel p-6 rounded-3xl space-y-5 border-t-2 border-t-blue-500">
+                    <div>
+                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                            <span>🧮</span> Kalkulator Sisi Hilang Pythagoras
+                        </h2>
+                        <p class="text-xs text-slate-400">Masukkan 2 nilai sisi yang diketahui untuk menghitung sisi sisanya.</p>
+                    </div>
+
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <label class="block text-slate-300 mb-1 font-semibold">Sisi Alas ($a$):</label>
+                            <input type="number" id="solve-a" placeholder="Contoh: 3" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-blue-500 focus:outline-none font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 mb-1 font-semibold">Sisi Tegak ($b$):</label>
+                            <input type="number" id="solve-b" placeholder="Contoh: 4" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-blue-500 focus:outline-none font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 mb-1 font-semibold">Hipotenusa ($c$ - opsional jika $a$ & $b$ diisi):</label>
+                            <input type="number" id="solve-c" placeholder="Kosongkan jika mencari c" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-blue-500 focus:outline-none font-mono">
+                        </div>
+
+                        <button onclick="runSolver()" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 transition">
+                            Hitung Sisi Hilang 🚀
+                        </button>
+                    </div>
+
+                    <div id="solver-result" class="hidden p-4 bg-slate-950/80 rounded-2xl border border-slate-800 space-y-2 text-xs">
+                        <span class="font-bold text-emerald-400 font-mono block">Langkah Pembahasan:</span>
+                        <div id="solver-output-katex" class="text-slate-200 leading-relaxed font-mono"></div>
+                    </div>
+                </div>
+
+                <!-- Triangle Classifier Card -->
+                <div class="glass-panel p-6 rounded-3xl space-y-5 border-t-2 border-t-purple-500">
+                    <div>
+                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                            <span>📐</span> Penguji Jenis Segitiga (Lancip/Siku/Tumpul)
+                        </h2>
+                        <p class="text-xs text-slate-400">Masukkan 3 panjang sisi ($a, b, c$) untuk menguji jenis segitiga.</p>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 text-xs">
+                        <div>
+                            <label class="block text-slate-300 mb-1 font-semibold">Sisi $a$:</label>
+                            <input type="number" id="test-a" placeholder="9" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-purple-500 focus:outline-none font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 mb-1 font-semibold">Sisi $b$:</label>
+                            <input type="number" id="test-b" placeholder="12" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-purple-500 focus:outline-none font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 mb-1 font-semibold">Sisi $c$:</label>
+                            <input type="number" id="test-c" placeholder="16" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-purple-500 focus:outline-none font-mono">
+                        </div>
+                    </div>
+
+                    <button onclick="runTriangleTest()" class="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl shadow-lg shadow-purple-600/30 transition">
+                        Uji Jenis Segitiga 🔍
+                    </button>
+
+                    <div id="test-result" class="hidden p-4 bg-slate-950/80 rounded-2xl border border-slate-800 space-y-2 text-xs">
+                        <span id="test-badge" class="px-3 py-1 rounded-full font-bold text-xs inline-block"></span>
+                        <div id="test-output-katex" class="text-slate-200 leading-relaxed font-mono pt-1"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: QUIZ INTERAKTIF SMA -->
+        <section id="view-quiz" class="tab-view space-y-6 hidden">
+            <div class="glass-panel p-6 rounded-3xl space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-4 gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                            <span>⚡</span> Quiz Evaluasi Pythagoras SMA (12 Soal)
+                        </h2>
+                        <p class="text-xs text-slate-400">Uji pemahaman Anda pada materi 2D, Kartesius, Sudut Istimewa & Dimensi 3D.</p>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="bg-blue-950/60 border border-blue-800/80 px-4 py-2 rounded-2xl flex items-center gap-2">
+                            <span class="text-xs text-slate-400 font-bold">Skor:</span>
+                            <span id="quiz-score" class="text-sm font-bold font-mono text-blue-300">0 / 12</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6" id="quiz-items-host">
+                    <!-- Quiz Cards generated by JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500 space-y-1">
+        <p>© 2026 Master Pythagoras SMA - Modul Pembelajaran Interaktif & Visual</p>
+        <p class="text-slate-600">Dikembangkan untuk Kurikulum Merdeka Matematika Fase F / SMA</p>
+    </footer>
+
+    <!-- JAVASCRIPT ENGINE -->
+    <script>
+        // Global Tab Management
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/30');
+                btn.classList.add('bg-slate-800/60', 'text-slate-300', 'hover:bg-slate-700');
+            });
+
+            const targetView = document.getElementById(`view-${tabId}`);
+            const targetBtn = document.getElementById(`tab-btn-${tabId}`);
+            if (targetView && targetBtn) {
+                targetView.classList.remove('hidden');
+                targetBtn.classList.add('active', 'bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/30');
+                targetBtn.classList.remove('bg-slate-800/60', 'text-slate-300');
+            }
+
+            if (tabId === 'visual2d') update2DVisual();
+            if (tabId === 'kartesius') updateKartesius();
+            if (tabId === 'dimensi3d') {
+                if (!threeRenderer) init3DScene();
+                update3DVisual();
+            }
+        }
+
+        // --- 2D VISUAL CANVAS LOGIC ---
+        function set2DPreset(a, b) {
+            document.getElementById('slider-a').value = a;
+            document.getElementById('slider-b').value = b;
+            update2DVisual();
+        }
+
+        function update2DVisual() {
+            const a = parseFloat(document.getElementById('slider-a').value);
+            const b = parseFloat(document.getElementById('slider-b').value);
+            
+            document.getElementById('val-a-display').innerText = `${a.toFixed(1)} cm`;
+            document.getElementById('val-b-display').innerText = `${b.toFixed(1)} cm`;
+
+            const a2 = a * a;
+            const b2 = b * b;
+            const c2 = a2 + b2;
+            const c = Math.sqrt(c2);
+
+            document.getElementById('out-a2').innerText = `${a2.toFixed(2)} cm²`;
+            document.getElementById('out-b2').innerText = `${b2.toFixed(2)} cm²`;
+            document.getElementById('out-c2').innerText = `${c2.toFixed(2)} cm²`;
+            document.getElementById('out-c').innerText = `${c.toFixed(2)} cm`;
+
+            // Angles
+            const angleA = Math.atan2(b, a) * (180 / Math.PI);
+            const angleB = 90 - angleA;
+
+            document.getElementById('out-angle-a').innerText = `${angleA.toFixed(2)}°`;
+            document.getElementById('out-angle-b').innerText = `${angleB.toFixed(2)}°`;
+
+            // Ratio badge check
+            const ratioBadge = document.getElementById('special-ratio-badge');
+            if (Math.abs(a - b) < 0.1) {
+                ratioBadge.innerText = "Ratio Mode: Segitiga Siku-siku Sama Kaki (45°-45°-90°)";
+                ratioBadge.className = "mt-2 p-2 bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 rounded-xl text-[11px] text-center font-semibold";
+            } else if (Math.abs(angleA - 60) < 1 || Math.abs(angleA - 30) < 1) {
+                ratioBadge.innerText = "Ratio Mode: Segitiga Sudut Istimewa (30°-60°-90°)";
+                ratioBadge.className = "mt-2 p-2 bg-amber-500/10 border border-amber-500/30 text-amber-300 rounded-xl text-[11px] text-center font-semibold";
+            } else {
+                ratioBadge.innerText = "Ratio Mode: Segitiga Siku-siku Umum";
+                ratioBadge.className = "mt-2 p-2 bg-blue-500/10 border border-blue-500/30 text-blue-300 rounded-xl text-[11px] text-center font-medium";
+            }
+
+            draw2DCanvas(a, b, c);
+        }
+
+        function draw2DCanvas(a, b, c) {
+            const canvas = document.getElementById('canvas2d');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+
+            const w = rect.width;
+            const h = rect.height;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Scale factor
+            const maxVal = Math.max(a, b) * 1.8;
+            const scale = Math.min(w, h) / (maxVal * 2.2);
+
+            const originX = w * 0.35;
+            const originY = h * 0.65;
+
+            // Coordinates of Right Triangle: P0(0,0), P1(a,0), P2(0,-b)
+            const p0 = { x: originX, y: originY };
+            const p1 = { x: originX + a * scale, y: originY };
+            const p2 = { x: originX, y: originY - b * scale };
+
+            // 1. Draw Square A (below base)
+            ctx.fillStyle = 'rgba(244, 63, 94, 0.15)';
+            ctx.strokeStyle = '#f43f5e';
+            ctx.lineWidth = 2;
+            ctx.fillRect(p0.x, p0.y, a * scale, a * scale);
+            ctx.strokeRect(p0.x, p0.y, a * scale, a * scale);
+
+            // Label A
+            ctx.fillStyle = '#fda4af';
+            ctx.font = 'bold 11px sans-serif';
+            ctx.fillText(`a² = ${(a*a).toFixed(0)}`, p0.x + (a * scale)/2 - 15, p0.y + (a * scale)/2 + 4);
+
+            // 2. Draw Square B (left of vertical)
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
+            ctx.strokeStyle = '#10b981';
+            ctx.fillRect(p0.x - b * scale, p2.y, b * scale, b * scale);
+            ctx.strokeRect(p0.x - b * scale, p2.y, b * scale, b * scale);
+
+            // Label B
+            ctx.fillStyle = '#6ee7b7';
+            ctx.fillText(`b² = ${(b*b).toFixed(0)}`, p0.x - (b * scale)/2 - 15, p0.y - (b * scale)/2 + 4);
+
+            // 3. Draw Triangle
+            ctx.beginPath();
+            ctx.moveTo(p0.x, p0.y);
+            ctx.lineTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.3)';
+            ctx.fill();
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Right angle symbol
+            const squareSize = 12;
+            ctx.beginPath();
+            ctx.moveTo(p0.x + squareSize, p0.y);
+            ctx.lineTo(p0.x + squareSize, p0.y - squareSize);
+            ctx.lineTo(p0.x, p0.y - squareSize);
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Labels on sides
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 12px sans-serif';
+            ctx.fillText(`a = ${a}`, (p0.x + p1.x)/2 - 10, p0.y - 6);
+            ctx.fillText(`b = ${b}`, p0.x + 8, (p0.y + p2.y)/2 + 4);
+            ctx.fillText(`c = ${c.toFixed(1)}`, (p1.x + p2.x)/2 + 8, (p1.y + p2.y)/2);
+        }
+
+        // --- CARTESIAN GRID LOGIC ---
+        function resetKartesius() {
+            document.getElementById('k-x1').value = 2;
+            document.getElementById('k-y1').value = 2;
+            document.getElementById('k-x2').value = 7;
+            document.getElementById('k-y2').value = 7;
+            updateKartesius();
+        }
+
+        function updateKartesius() {
+            const x1 = parseInt(document.getElementById('k-x1').value);
+            const y1 = parseInt(document.getElementById('k-y1').value);
+            const x2 = parseInt(document.getElementById('k-x2').value);
+            const y2 = parseInt(document.getElementById('k-y2').value);
+
+            document.getElementById('k-x1-val').innerText = x1;
+            document.getElementById('k-y1-val').innerText = y1;
+            document.getElementById('k-x2-val').innerText = x2;
+            document.getElementById('k-y2-val').innerText = y2;
+
+            const dx = Math.abs(x2 - x1);
+            const dy = Math.abs(y2 - y1);
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            document.getElementById('k-dx').innerText = dx;
+            document.getElementById('k-dy').innerText = dy;
+            document.getElementById('k-dist').innerText = dist.toFixed(3);
+
+            // Render LaTeX formula
+            const formulaDiv = document.getElementById('katex-kartesius-formula');
+            formulaDiv.innerHTML = `d = \\sqrt{(${x2} - (${x1}))^2 + (${y2} - (${y1}))^2} = \\sqrt{${dx}^2 + ${dy}^2} = \\sqrt{${dx*dx + dy*dy}} = ${dist.toFixed(3)}`;
+            renderMathInElement(formulaDiv, { delimiters: [{left: '$', right: '$', display: false}], throwOnError: false });
+
+            drawKartesiusGrid(x1, y1, x2, y2);
+        }
+
+        function drawKartesiusGrid(x1, y1, x2, y2) {
+            const canvas = document.getElementById('canvas-kartesius');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+
+            const w = rect.width;
+            const h = rect.height;
+
+            ctx.clearRect(0, 0, w, h);
+
+            const gridSize = 10; // -10 to +10
+            const step = w / (gridSize * 2);
+            const centerX = w / 2;
+            const centerY = h / 2;
+
+            // Grid lines
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 1;
+            for (let i = -gridSize; i <= gridSize; i++) {
+                // Vertical
+                ctx.beginPath();
+                ctx.moveTo(centerX + i * step, 0);
+                ctx.lineTo(centerX + i * step, h);
+                ctx.stroke();
+
+                // Horizontal
+                ctx.beginPath();
+                ctx.moveTo(0, centerY - i * step);
+                ctx.lineTo(w, centerY - i * step);
+                ctx.stroke();
+            }
+
+            // Axes
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 2;
+
+            // X Axis
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(w, centerY);
+            ctx.stroke();
+
+            // Y Axis
+            ctx.beginPath();
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, h);
+            ctx.stroke();
+
+            // Convert math coords to canvas coords
+            const toCanvas = (x, y) => ({
+                x: centerX + x * step,
+                y: centerY - y * step
+            });
+
+            const ptA = toCanvas(x1, y1);
+            const ptB = toCanvas(x2, y2);
+            const ptC = toCanvas(x2, y1); // Corner point for right triangle
+
+            // Draw Right Triangle
+            ctx.beginPath();
+            ctx.moveTo(ptA.x, ptA.y);
+            ctx.lineTo(ptC.x, ptC.y);
+            ctx.lineTo(ptB.x, ptB.y);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.15)';
+            ctx.fill();
+
+            // Δx line
+            ctx.beginPath();
+            ctx.moveTo(ptA.x, ptA.y);
+            ctx.lineTo(ptC.x, ptC.y);
+            ctx.strokeStyle = '#f43f5e';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            // Δy line
+            ctx.beginPath();
+            ctx.moveTo(ptC.x, ptC.y);
+            ctx.lineTo(ptB.x, ptB.y);
+            ctx.strokeStyle = '#06b6d4';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            // Distance line d
+            ctx.beginPath();
+            ctx.moveTo(ptA.x, ptA.y);
+            ctx.lineTo(ptB.x, ptB.y);
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Point A
+            ctx.beginPath();
+            ctx.arc(ptA.x, ptA.y, 6, 0, Math.PI * 2);
+            ctx.fillStyle = '#f43f5e';
+            ctx.fill();
+
+            // Point B
+            ctx.beginPath();
+            ctx.arc(ptB.x, ptB.y, 6, 0, Math.PI * 2);
+            ctx.fillStyle = '#06b6d4';
+            ctx.fill();
+
+            // Labels
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 11px sans-serif';
+            ctx.fillText(`A(${x1},${y1})`, ptA.x - 20, ptA.y - 10);
+            ctx.fillText(`B(${x2},${y2})`, ptB.x + 10, ptB.y - 10);
+        }
+
+        // --- THREE.JS 3D RUANG LOGIC ---
+        let threeScene, threeCamera, threeRenderer, boxMesh, diagLine1, diagLine2;
+        let isCubeMode = false;
+
+        function init3DScene() {
+            const container = document.getElementById('threejs-container');
+            if (!container) return;
+
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            threeScene = new THREE.Scene();
+            threeScene.background = new THREE.Color(0x090d16);
+
+            threeCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            threeCamera.position.set(15, 12, 18);
+            threeCamera.lookAt(0, 0, 0);
+
+            threeRenderer = new THREE.WebGLRenderer({ antialias: true });
+            threeRenderer.setSize(width, height);
+            threeRenderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(threeRenderer.domElement);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            threeScene.add(ambientLight);
+
+            const dirLight = new THREE.DirectionalLight(0x3b82f6, 0.8);
+            dirLight.position.set(10, 20, 15);
+            threeScene.add(dirLight);
+
+            // Orbit drag control implementation
+            let isDragging = false;
+            let prevMouse = { x: 0, y: 0 };
+
+            container.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                prevMouse = { x: e.clientX, y: e.clientY };
+            });
+
+            window.addEventListener('mouseup', () => isDragging = false);
+
+            container.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const deltaX = e.clientX - prevMouse.x;
+                const deltaY = e.clientY - prevMouse.y;
+
+                threeScene.rotation.y += deltaX * 0.01;
+                threeScene.rotation.x += deltaY * 0.01;
+
+                prevMouse = { x: e.clientX, y: e.clientY };
+                threeRenderer.render(threeScene, threeCamera);
+            });
+
+            // Touch events for mobile
+            container.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                }
+            });
+            window.addEventListener('touchend', () => isDragging = false);
+            container.addEventListener('touchmove', (e) => {
+                if (!isDragging || e.touches.length !== 1) return;
+                const deltaX = e.touches[0].clientX - prevMouse.x;
+                const deltaY = e.touches[0].clientY - prevMouse.y;
+
+                threeScene.rotation.y += deltaX * 0.01;
+                threeScene.rotation.x += deltaY * 0.01;
+
+                prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                threeRenderer.render(threeScene, threeCamera);
+            });
+        }
+
+        function toggle3DCubeMode() {
+            isCubeMode = !isCubeMode;
+            const btn = document.getElementById('btn-cube-mode');
+            if (isCubeMode) {
+                btn.innerText = "Mode: Kubus";
+                btn.className = "px-3 py-1.5 bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 text-xs font-semibold rounded-xl border border-purple-500/40 transition";
+            } else {
+                btn.innerText = "Mode: Balok";
+                btn.className = "px-3 py-1.5 bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 text-xs font-semibold rounded-xl border border-indigo-500/40 transition";
+            }
+            update3DVisual();
+        }
+
+        function update3DVisual() {
+            let p = parseFloat(document.getElementById('3d-p').value);
+            let l = parseFloat(document.getElementById('3d-l').value);
+            let t = parseFloat(document.getElementById('3d-t').value);
+
+            if (isCubeMode) {
+                l = p;
+                t = p;
+                document.getElementById('3d-l').value = p;
+                document.getElementById('3d-t').value = p;
+            }
+
+            document.getElementById('3d-p-val').innerText = `${p} cm`;
+            document.getElementById('3d-l-val').innerText = `${l} cm`;
+            document.getElementById('3d-t-val').innerText = `${t} cm`;
+
+            const diagAlas = Math.sqrt(p * p + l * l);
+            const diagRuang = Math.sqrt(p * p + l * l + t * t);
+            const volume = p * l * t;
+
+            document.getElementById('out-3d-diag-alas').innerText = `${diagAlas.toFixed(2)} cm`;
+            document.getElementById('out-3d-diag-ruang').innerText = `${diagRuang.toFixed(2)} cm`;
+            document.getElementById('out-3d-vol').innerText = `${volume} cm³`;
+
+            const katexDiv = document.getElementById('katex-3d-formula');
+            katexDiv.innerHTML = `$$AG = \\sqrt{${p}^2 + ${l}^2 + ${t}^2} = \\sqrt{${p*p + l*l + t*t}} = ${diagRuang.toFixed(2)}\\text{ cm}$$`;
+            renderMathInElement(katexDiv, { delimiters: [{left: '$$', right: '$$', display: true}], throwOnError: false });
+
+            render3DMesh(p, l, t);
+        }
+
+        function render3DMesh(p, l, t) {
+            if (!threeScene) return;
+
+            // Remove old meshes
+            if (boxMesh) threeScene.remove(boxMesh);
+            if (diagLine1) threeScene.remove(diagLine1);
+            if (diagLine2) threeScene.remove(diagLine2);
+
+            // Scale for 3D view
+            const sx = p * 0.8;
+            const sy = t * 0.8;
+            const sz = l * 0.8;
+
+            // Box Geometry
+            const geometry = new THREE.BoxGeometry(sx, sy, sz);
+            const material = new THREE.MeshPhongMaterial({
+                color: 0x3b82f6,
+                transparent: true,
+                opacity: 0.3,
+                wireframe: false
+            });
+
+            boxMesh = new THREE.Mesh(geometry, material);
+
+            // Wireframe Edges
+            const edges = new THREE.EdgesGeometry(geometry);
+            const lineMat = new THREE.LineBasicMaterial({ color: 0x60a5fa, linewidth: 2 });
+            const wireframe = new THREE.LineSegments(edges, lineMat);
+            boxMesh.add(wireframe);
+
+            threeScene.add(boxMesh);
+
+            // Diagonal Lines (Face Diagonal AC & Space Diagonal AG)
+            // Corners:
+            const pA = new THREE.Vector3(-sx/2, -sy/2, sz/2);
+            const pC = new THREE.Vector3(sx/2, -sy/2, -sz/2);
+            const pG = new THREE.Vector3(sx/2, sy/2, -sz/2);
+
+            // Diagonal Alas (AC)
+            const geomLine1 = new THREE.BufferGeometry().setFromPoints([pA, pC]);
+            const matLine1 = new THREE.LineDashedMaterial({ color: 0x10b981, dashSize: 0.5, gapSize: 0.2 });
+            diagLine1 = new THREE.Line(geomLine1, matLine1);
+            diagLine1.computeLineDistances();
+            threeScene.add(diagLine1);
+
+            // Diagonal Ruang (AG)
+            const geomLine2 = new THREE.BufferGeometry().setFromPoints([pA, pG]);
+            const matLine2 = new THREE.LineBasicMaterial({ color: 0xa855f7, linewidth: 3 });
+            diagLine2 = new THREE.Line(geomLine2, matLine2);
+            threeScene.add(diagLine2);
+
+            threeRenderer.render(threeScene, threeCamera);
+        }
+
+        // --- SMART SOLVER & CLASSIFIER LOGIC ---
+        function runSolver() {
+            const a = parseFloat(document.getElementById('solve-a').value);
+            const b = parseFloat(document.getElementById('solve-b').value);
+            const c = parseFloat(document.getElementById('solve-c').value);
+
+            const resultDiv = document.getElementById('solver-result');
+            const outputKatex = document.getElementById('solver-output-katex');
+            resultDiv.classList.remove('hidden');
+
+            if (!isNaN(a) && !isNaN(b) && isNaN(c)) {
+                const cVal = Math.sqrt(a * a + b * b);
+                outputKatex.innerHTML = `Mencari Hipotenusa ($c$):<br>
+                $$c = \\sqrt{a^2 + b^2} = \\sqrt{${a}^2 + ${b}^2} = \\sqrt{${a*a} + ${b*b}} = \\sqrt{${a*a + b*b}} = ${cVal.toFixed(2)}$$`;
+            } else if (!isNaN(a) && isNaN(b) && !isNaN(c)) {
+                if (c <= a) {
+                    outputKatex.innerHTML = `<span class="text-rose-400">Error: Hipotenusa (c) harus lebih besar dari sisi alas (a).</span>`;
+                } else {
+                    const bVal = Math.sqrt(c * c - a * a);
+                    outputKatex.innerHTML = `Mencari Sisi Tegak ($b$):<br>
+                    $$b = \\sqrt{c^2 - a^2} = \\sqrt{${c}^2 - ${a}^2} = \\sqrt{${c*c} - ${a*a}} = \\sqrt{${c*c - a*a}} = ${bVal.toFixed(2)}$$`;
+                }
+            } else if (isNaN(a) && !isNaN(b) && !isNaN(c)) {
+                if (c <= b) {
+                    outputKatex.innerHTML = `<span class="text-rose-400">Error: Hipotenusa (c) harus lebih besar dari sisi tegak (b).</span>`;
+                } else {
+                    const aVal = Math.sqrt(c * c - b * b);
+                    outputKatex.innerHTML = `Mencari Sisi Alas ($a$):<br>
+                    $$a = \\sqrt{c^2 - b^2} = \\sqrt{${c}^2 - ${b}^2} = \\sqrt{${c*c} - ${b*b}} = \\sqrt{${c*c - b*b}} = ${aVal.toFixed(2)}$$`;
+                }
+            } else {
+                outputKatex.innerHTML = `<span class="text-amber-400">Isi TEPAT 2 buah input untuk mencari sisi sisanya!</span>`;
+            }
+
+            renderMathInElement(outputKatex, { delimiters: [{left: '$$', right: '$$', display: true}], throwOnError: false });
+        }
+
+        function runTriangleTest() {
+            const a = parseFloat(document.getElementById('test-a').value);
+            const b = parseFloat(document.getElementById('test-b').value);
+            const c = parseFloat(document.getElementById('test-c').value);
+
+            const resultDiv = document.getElementById('test-result');
+            const badge = document.getElementById('test-badge');
+            const outputKatex = document.getElementById('test-output-katex');
+            resultDiv.classList.remove('hidden');
+
+            if (isNaN(a) || isNaN(b) || isNaN(c)) {
+                badge.className = "px-3 py-1 bg-rose-500/20 text-rose-300 rounded-full font-bold";
+                badge.innerText = "Error";
+                outputKatex.innerText = "Harap masukkan ketiga panjang sisi segitiga!";
+                return;
+            }
+
+            // Find longest side
+            const sides = [a, b, c].sort((x, y) => x - y);
+            const [s1, s2, longest] = sides;
+
+            const sumSq = s1 * s1 + s2 * s2;
+            const longSq = longest * longest;
+
+            if (longSq === sumSq) {
+                badge.className = "px-3 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full font-bold";
+                badge.innerText = "Segitiga Siku-siku";
+                outputKatex.innerHTML = `Kuadrat sisi terpanjang ($c^2 = ${longSq}$) SAMA DENGAN jumlah kuadrat dua sisi lainnya ($a^2 + b^2 = ${sumSq}$).<br>$$${longest}^2 = ${s1}^2 + ${s2}^2 \\iff ${longSq} = ${sumSq}$$`;
+            } else if (longSq > sumSq) {
+                badge.className = "px-3 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-full font-bold";
+                badge.innerText = "Segitiga Tumpul";
+                outputKatex.innerHTML = `Kuadrat sisi terpanjang ($c^2 = ${longSq}$) LEBIH BESAR dari jumlah kuadrat dua sisi lainnya ($a^2 + b^2 = ${sumSq}$).<br>$$${longest}^2 > ${s1}^2 + ${s2}^2 \\iff ${longSq} > ${sumSq}$$`;
+            } else {
+                badge.className = "px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full font-bold";
+                badge.innerText = "Segitiga Lancip";
+                outputKatex.innerHTML = `Kuadrat sisi terpanjang ($c^2 = ${longSq}$) LEBIH KECIL dari jumlah kuadrat dua sisi lainnya ($a^2 + b^2 = ${sumSq}$).<br>$$${longest}^2 < ${s1}^2 + ${s2}^2 \\iff ${longSq} < ${sumSq}$$`;
+            }
+
+            renderMathInElement(outputKatex, { delimiters: [{left: '$$', right: '$$', display: true}], throwOnError: false });
+        }
+
+        // --- QUIZ DATA ENGINE ---
+        const quizList = [
+            { id: 1, q: "Diberikan segitiga dengan sisi $7\\text{ cm}$, $24\\text{ cm}$, dan $25\\text{ cm}$. Jenis segitiga tersebut adalah...", opts: ["Segitiga Lancip", "Segitiga Siku-siku", "Segitiga Tumpul", "Segitiga Sama Sisi"], ans: "Segitiga Siku-siku", exp: "$25^2 = 625$ dan $7^2 + 24^2 = 49 + 576 = 625$. Karena $c^2 = a^2 + b^2$, segitiga ini bersifat Siku-Siku." },
+            { id: 2, q: "Manakah di antara kelompok sisi berikut yang membentuk segitiga tumpul?", opts: ["$(6, 8, 10)$", "$(5, 12, 13)$", "$(4, 7, 9)$", "$(8, 15, 17)$"], ans: "$(4, 7, 9)$", exp: "Sisi terpanjang $9^2 = 81$. Sisi lain $4^2 + 7^2 = 16 + 49 = 65$. Karena $81 > 65$, maka merupakan Segitiga Tumpul." },
+            { id: 3, q: "Jika segitiga siku-siku sama kaki memiliki hipotenusa $10\\sqrt{2}\\text{ cm}$, panjang sisi penyikunya adalah...", opts: ["$5\\text{ cm}$", "$10\\text{ cm}$", "$20\\text{ cm}$", "$5\\sqrt{2}\\text{ cm}$"], ans: "$10\\text{ cm}$", exp: "Pada segitiga $45^\\circ-45^\\circ-90^\\circ$, perbandingan sisi $1 : 1 : \\sqrt{2}$. Jika $c = 10\\sqrt{2}$, maka sisi penyiku $= 10\\text{ cm}$." },
+            { id: 4, q: "Pada segitiga $30^\\circ-60^\\circ-90^\\circ$, jika panjang hipotenusa $= 16\\text{ cm}$, berapakah panjang sisi di depan sudut $30^\\circ$?", opts: ["$8\\text{ cm}$", "$8\\sqrt{3}\\text{ cm}$", "$4\\text{ cm}$", "$16\\sqrt{3}\\text{ cm}$"], ans: "$8\\text{ cm}$", exp: "Sisi di depan sudut $30^\\circ$ selalu setengah dari hipotenusa $\\frac{1}{2} \\times 16 = 8\\text{ cm}$." },
+            { id: 5, q: "Hitung jarak antara titik $P(-2, 1)$ dan $Q(4, 9)$ pada bidang Kartesius!", opts: ["$10\\text{ satuan}$", "$12\\text{ satuan}$", "$8\\text{ satuan}$", "$14\\text{ satuan}$"], ans: "$10\\text{ satuan}$", exp: "$\\Delta x = 4 - (-2) = 6$, $\\Delta y = 9 - 1 = 8$. Jarak $d = \\sqrt{6^2 + 8^2} = \\sqrt{100} = 10\\text{ satuan}$." },
+            { id: 6, q: "Jika jarak titik $A(x, 0)$ ke titik asal $O(0, 0)$ adalah $12$ dan titik $B(0, 5)$, berapakah jarak titik $A$ ke $B$?", opts: ["$13\\text{ satuan}$", "$17\\text{ satuan}$", "$15\\text{ satuan}$", "$11\\text{ satuan}$"], ans: "$13\\text{ satuan}$", exp: "Titik $A = (12, 0)$ dan $B = (0, 5)$. Jarak $AB = \\sqrt{12^2 + 5^2} = \\sqrt{169} = 13\\text{ satuan}$." },
+            { id: 7, q: "Sebuah kubus $ABCD.EFGH$ berrusuk $8\\text{ cm}$. Panjang diagonal ruang $AG$ adalah...", opts: ["$8\\sqrt{2}\\text{ cm}$", "$8\\sqrt{3}\\text{ cm}$", "$16\\text{ cm}$", "$12\\text{ cm}$"], ans: "$8\\sqrt{3}\\text{ cm}$", exp: "Diagonal ruang kubus $= s\\sqrt{3} = 8\\sqrt{3}\\text{ cm}$." },
+            { id: 8, q: "Panjang diagonal alas balok dengan $p = 12\\text{ cm}$ dan $l = 5\\text{ cm}$ serta $t = 12\\text{ cm}$ adalah...", opts: ["$13\\text{ cm}$", "$15\\text{ cm}$", "$\\sqrt{313}\\text{ cm}$", "$17\\text{ cm}$"], ans: "$13\\text{ cm}$", exp: "Diagonal alas $=\\sqrt{p^2 + l^2} = \\sqrt{12^2 + 5^2} = \\sqrt{169} = 13\\text{ cm}$." },
+            { id: 9, q: "Berapakah diagonal ruang balok pada soal nomor 8 ($p=12, l=5, t=12$)?", opts: ["$\\sqrt{313}\\text{ cm}$", "$13\\sqrt{2}\\text{ cm}$", "$\\sqrt{169}\\text{ cm}$", "$25\\text{ cm}$"], ans: "$\\sqrt{313}\\text{ cm}$", exp: "Diagonal ruang $=\\sqrt{p^2 + l^2 + t^2} = \\sqrt{12^2 + 5^2 + 12^2} = \\sqrt{144 + 25 + 144} = \\sqrt{313}\\text{ cm}$." },
+            { id: 10, q: "Suatu tangga sepanjang $10\\text{ meter}$ bersandar pada dinding gedung. Jarak alas tangga ke dinding $6\\text{ meter}$. Tinggi dinding yang dicapai tangga adalah...", opts: ["$8\\text{ meter}$", "$7\\text{ meter}$", "$9\\text{ meter}$", "$12\\text{ meter}$"], ans: "$8\\text{ meter}$", exp: "Tinggi $= \\sqrt{10^2 - 6^2} = \\sqrt{100 - 36} = \\sqrt{64} = 8\\text{ meter}$." },
+            { id: 11, q: "Dua mobil berangkat dari tempat yang sama. Mobil A ke timur sejauh $80\\text{ km}$ dan Mobil B ke utara sejauh $60\\text{ km}$. Jarak terdekat kedua mobil adalah...", opts: ["$100\\text{ km}$", "$140\\text{ km}$", "$120\\text{ km}$", "$90\\text{ km}$"], ans: "$100\\text{ km}$", exp: "Jarak $= \\sqrt{80^2 + 60^2} = \\sqrt{6400 + 3600} = \\sqrt{10000} = 100\\text{ km}$." },
+            { id: 12, q: "Luas permukaan kubus yang memiliki panjang diagonal ruang $6\\sqrt{3}\\text{ cm}$ adalah...", opts: ["$216\\text{ cm}^2$", "$144\\text{ cm}^2$", "$72\\text{ cm}^2$", "$288\\text{ cm}^2$"], ans: "$216\\text{ cm}^2$", exp: "Diagonal ruang $s\\sqrt{3} = 6\\sqrt{3} \\rightarrow s = 6\\text{ cm}$. Luas permukaan $= 6s^2 = 6 \\times 6^2 = 216\\text{ cm}^2$." }
+        ];
+
+        let userQuizScore = 0;
+
+        function renderQuizEngine() {
+            const host = document.getElementById('quiz-items-host');
+            if (!host) return;
+
+            host.innerHTML = '';
+            quizList.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = "p-5 bg-slate-950/70 rounded-2xl border border-slate-800 space-y-3 text-xs";
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="px-2.5 py-0.5 bg-blue-500/20 text-blue-300 font-bold rounded-md font-mono">Soal #${idx + 1}</span>
+                        <span id="quiz-status-${item.id}" class="text-slate-500 font-semibold">Belum Dijawab</span>
+                    </div>
+                    <p class="text-sm text-white font-semibold leading-relaxed">${item.q}</p>
+                    <div class="grid sm:grid-cols-2 gap-2" id="quiz-opts-${item.id}">
+                        ${item.opts.map(opt => `
+                            <button onclick="checkQuizItem(${item.id}, '${opt}', this)" 
+                                class="p-3 bg-slate-900 hover:bg-slate-800 text-left rounded-xl text-slate-300 border border-slate-800 transition font-medium">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div id="quiz-exp-${item.id}" class="hidden p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1"></div>
+                `;
+                host.appendChild(card);
+            });
+
+            renderMathInElement(host, { delimiters: [{left: '$', right: '$', display: false}], throwOnError: false });
+        }
+
+        function checkQuizItem(id, selectedOpt, btnEl) {
+            const item = quizList.find(q => q.id === id);
+            const container = document.getElementById(`quiz-opts-${id}`);
+            const buttons = container.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+
+            const expEl = document.getElementById(`quiz-exp-${id}`);
+            const statusEl = document.getElementById(`quiz-status-${id}`);
+            expEl.classList.remove('hidden');
+
+            if (selectedOpt === item.ans) {
+                userQuizScore++;
+                btnEl.className = "p-3 bg-emerald-600 text-white font-bold rounded-xl border border-emerald-500 text-left";
+                expEl.className = "p-3 rounded-xl bg-emerald-950/40 text-emerald-300 border border-emerald-800/60 mt-2";
+                expEl.innerHTML = ` <strong>Benar!</strong> ${item.exp}`;
+                statusEl.innerText = " Benar";
+                statusEl.className = "text-emerald-400 font-bold";
+            } else {
+                btnEl.className = "p-3 bg-rose-600 text-white font-bold rounded-xl border border-rose-500 text-left";
+                expEl.className = "p-3 rounded-xl bg-rose-950/40 text-rose-300 border border-rose-800/60 mt-2";
+                expEl.innerHTML = ` <strong>Kurang tepat.</strong> Jawaban benar: <strong>${item.ans}</strong>.<br>${item.exp}`;
+                statusEl.innerText = " Salah";
+                statusEl.className = "text-rose-400 font-bold";
+            }
+
+            document.getElementById('quiz-score').innerText = `${userQuizScore} / 12`;
+            renderMathInElement(expEl, { delimiters: [{left: '$', right: '$', display: false}], throwOnError: false });
+        }
+
+        // Onload Initialization
+        window.onload = function() {
+            update2DVisual();
+            renderQuizEngine();
+            initTripleCatalog();
+            generateEuclidTriple();
+
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+
+            window.addEventListener('resize', () => {
+                update2DVisual();
+                if (document.getElementById('view-kartesius').classList.contains('hidden') === false) {
+                    updateKartesius();
+                }
+            });
+        };
+
+        // --- TRIPLE PYTHAGORAS CATALOG & EUCLID ENGINE ---
+        const tripleData = [
+            { primary: [3, 4, 5], label: "Pasangan Dasar I", multiples: [[6,8,10], [9,12,15], [12,16,20], [15,20,25], [18,24,30]] },
+            { primary: [5, 12, 13], label: "Pasangan Dasar II", multiples: [[10,24,26], [15,36,39], [20,48,52], [25,60,65]] },
+            { primary: [7, 24, 25], label: "Pasangan Dasar III", multiples: [[14,48,50], [21,72,75], [28,96,100]] },
+            { primary: [8, 15, 17], label: "Pasangan Dasar IV", multiples: [[16,30,34], [24,45,51], [32,60,68]] },
+            { primary: [9, 40, 41], label: "Pasangan Tingkat Lanjut", multiples: [[18,80,82], [27,120,123]] },
+            { primary: [11, 60, 61], label: "Pasangan Tingkat Lanjut", multiples: [[22,120,122]] },
+            { primary: [12, 35, 37], label: "Pasangan Tingkat Lanjut", multiples: [[24,70,74]] },
+            { primary: [20, 21, 29], label: "Pasangan Khusus", multiples: [[40,42,58]] }
+        ];
+
+        let currentEuclidTriple = [5, 12, 13];
+
+        function initTripleCatalog() {
+            renderTripleCards(tripleData);
+        }
+
+        function renderTripleCards(list) {
+            const container = document.getElementById('triple-cards-container');
+            if (!container) return;
+
+            container.innerHTML = '';
+            if (list.length === 0) {
+                container.innerHTML = `<div class="col-span-2 text-center py-8 text-slate-500 text-xs">Tidak ada Triple Pythagoras yang cocok dengan pencarian.</div>`;
+                return;
+            }
+
+            list.forEach(item => {
+                const [p1, p2, p3] = item.primary;
+                const card = document.createElement('div');
+                card.className = "p-4 bg-slate-950/80 rounded-2xl border border-slate-800/80 space-y-2.5 hover:border-blue-500/40 transition";
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-md border border-blue-500/20">${item.label}</span>
+                        <button onclick="applyTripleTo2D(${p1}, ${p2})" class="text-[11px] font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition">
+                            Coba 2D ↗
+                        </button>
+                    </div>
+                    <div class="font-mono text-base font-bold text-white flex items-center gap-1.5">
+                        <span class="text-rose-400">${p1}</span> : <span class="text-emerald-400">${p2}</span> : <span class="text-cyan-300">${p3}</span>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="text-[10px] text-slate-400 font-semibold block">Kelipatan (K):</span>
+                        <div class="flex flex-wrap gap-1">
+                            ${item.multiples.map(m => `
+                                <button onclick="applyTripleTo2D(${m[0]}, ${m[1]})" title="Klik untuk coba (${m.join(',')})" class="px-2 py-0.5 bg-slate-900 hover:bg-slate-800 text-[10px] font-mono text-slate-300 rounded border border-slate-800 transition">
+                                    ${m.join(', ')}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterTriplesTable() {
+            const query = document.getElementById('search-triple').value.trim();
+            if (!query) {
+                renderTripleCards(tripleData);
+                return;
+            }
+
+            const filtered = tripleData.filter(item => {
+                const pMatch = item.primary.some(num => num.toString().includes(query));
+                const mMatch = item.multiples.some(m => m.some(num => num.toString().includes(query)));
+                return pMatch || mMatch;
+            });
+
+            renderTripleCards(filtered);
+        }
+
+        function generateEuclidTriple() {
+            let m = parseInt(document.getElementById('euclid-m').value);
+            let n = parseInt(document.getElementById('euclid-n').value);
+
+            const detailDiv = document.getElementById('euclid-calc-detail');
+            const tripleText = document.getElementById('euclid-triple-text');
+
+            if (isNaN(m) || isNaN(n) || m <= n || n <= 0) {
+                tripleText.innerText = "Input Tidak Valid";
+                tripleText.className = "text-rose-400 font-mono font-bold text-sm";
+                detailDiv.innerHTML = `<span class="text-rose-400">Syarat: Nilai $m$ harus lebih besar dari $n$, dan keduanya bilangan bulat positif ($m > n > 0$).</span>`;
+                renderMathInElement(detailDiv, { delimiters: [{left: '$', right: '$', display: false}], throwOnError: false });
+                return;
+            }
+
+            const a = m * m - n * n;
+            const b = 2 * m * n;
+            const c = m * m + n * n;
+
+            currentEuclidTriple = [a, b, c];
+
+            tripleText.innerText = `(${a}, ${b}, ${c})`;
+            tripleText.className = "text-cyan-300 font-mono font-bold text-base";
+
+            detailDiv.innerHTML = `
+                $a = ${m}^2 - ${n}^2 = ${m*m} - ${n*n} = ${a}$<br>
+                $b = 2(${m})(${n}) = ${b}$<br>
+                $c = ${m}^2 + ${n}^2 = ${m*m} + ${n*n} = ${c}$<br>
+                <span class="text-emerald-400">Pengujian: $${a}^2 + ${b}^2 = ${a*a} + ${b*b} = ${a*a + b*b} = ${c}^2$</span>
+            `;
+
+            renderMathInElement(detailDiv, { delimiters: [{left: '$', right: '$', display: false}], throwOnError: false });
+        }
+
+        function applyEuclidTo2D() {
+            if (currentEuclidTriple && currentEuclidTriple.length === 3) {
+                applyTripleTo2D(currentEuclidTriple[0], currentEuclidTriple[1]);
+            }
+        }
+
+        function applyTripleTo2D(a, b) {
+            set2DPreset(a, b);
+            switchTab('visual2d');
+        }
+    </script>
+</body>
+</html>
