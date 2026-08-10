@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warm-up Kelas: Teorema Pythagoras</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .katex { font-size: 1.1em; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between antialiased">
+
+    <!-- Header / Navbar -->
+    <header class="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white shadow-lg">
+        <div class="max-w-4xl mx-auto px-4 py-5 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/20 p-2 rounded-xl backdrop-blur-md">
+                    <svg class="w-7 h-7 text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold leading-tight">Warm-up Teorema Pythagoras</h1>
+                    <p class="text-xs text-indigo-100">Latihan Cepat Sebelum Kelas Dimulai</p>
+                </div>
+            </div>
+            <div id="timer-badge" class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/20 text-xs font-semibold flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span id="timer">00:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-3xl mx-auto px-4 py-8 w-full flex-grow">
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="space-y-6">
+            <!-- Progress Bar & Status -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80">
+                <div class="flex justify-between items-center mb-2">
+                    <span id="question-number" class="text-xs font-bold tracking-wider uppercase text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Soal 1 dari 10</span>
+                    <span id="score-display" class="text-xs font-semibold text-slate-500">Skor: <span class="text-slate-900 font-bold" id="current-score">0</span></span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="bg-indigo-600 h-full transition-all duration-300 ease-out" style="width: 10%;"></div>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200/80 space-y-6">
+                <!-- Question Header -->
+                <div class="space-y-3">
+                    <span id="difficulty-tag" class="inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                        Dasar
+                    </span>
+                    <h2 id="question-text" class="text-lg md:text-xl font-medium text-slate-800 leading-relaxed">
+                        <!-- Question content loaded via JS -->
+                    </h2>
+                </div>
+
+                <!-- Answer Options -->
+                <div id="options-container" class="grid grid-cols-1 gap-3">
+                    <!-- Options loaded via JS -->
+                </div>
+
+                <!-- Pembahasan / Explanation Box (Hidden by default) -->
+                <div id="explanation-box" class="hidden p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-sm">
+                    <div class="font-bold flex items-center gap-2" id="explanation-title">
+                        <!-- Correct/Incorrect badge -->
+                    </div>
+                    <div id="explanation-text" class="text-slate-600 leading-relaxed">
+                        <!-- Explanation loaded via JS -->
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="flex justify-end pt-2">
+                    <button id="next-btn" onclick="nextQuestion()" disabled class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-all shadow-sm flex items-center gap-2">
+                        <span>Lanjut</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Screen (Hidden by default) -->
+        <div id="result-screen" class="hidden space-y-6">
+            <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200/80 text-center space-y-6">
+                <div class="inline-flex p-4 rounded-full bg-indigo-50 text-indigo-600 mb-2">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">Warm-up Selesai!</h2>
+                    <p id="result-message" class="text-slate-500 text-sm mt-1">Kamu siap mengikuti materi pembelajaran kelas hari ini.</p>
+                </div>
+
+                <!-- Final Score Stats -->
+                <div class="grid grid-cols-3 gap-3 max-w-md mx-auto py-2">
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                        <span class="block text-xs text-slate-400 font-medium">Skor Akhir</span>
+                        <span id="final-score" class="text-2xl font-bold text-indigo-600">0</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                        <span class="block text-xs text-slate-400 font-medium">Benar</span>
+                        <span id="correct-count" class="text-2xl font-bold text-emerald-600">0</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                        <span class="block text-xs text-slate-400 font-medium">Waktu</span>
+                        <span id="final-time" class="text-2xl font-bold text-slate-700">00:00</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-center gap-3 pt-4">
+                    <button onclick="restartQuiz()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition-all">
+                        Coba Lagi
+                    </button>
+                    <button onclick="toggleSolutions()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-all">
+                        Review Pembahasan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Detailed Solutions Review (Hidden by default) -->
+            <div id="solutions-container" class="hidden space-y-4">
+                <h3 class="text-base font-bold text-slate-800 px-1">Review Seluruh Soal & Pembahasan</h3>
+                <div id="solutions-list" class="space-y-4">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-xs text-slate-400 border-t border-slate-200/60 bg-white">
+        Media Latihan Interaktif Teorema Pythagoras &copy; 2026
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        const questions = [
+            {
+                id: 1,
+                difficulty: "Dasar",
+                question: "Sisi tegak sebuah segitiga siku-siku adalah $3\\text{ cm}$ dan $4\\text{ cm}$. Berapakah panjang sisi miringnya ($c$)?",
+                options: ["$5\\text{ cm}$", "$6\\text{ cm}$", "$7\\text{ cm}$", "$25\\text{ cm}$"],
+                correct: 0,
+                explanation: "Gunakan rumus Teorema Pythagoras: $c = \\sqrt{a^2 + b^2} = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5\\text{ cm}$."
+            },
+            {
+                id: 2,
+                difficulty: "Dasar",
+                question: "Sebuah segitiga siku-siku memiliki sisi miring sepanjang $13\\text{ cm}$ dan salah satu sisi tegaknya $5\\text{ cm}$. Panjang sisi tegak lainnya adalah...",
+                options: ["$10\\text{ cm}$", "$11\\text{ cm}$", "$12\\text{ cm}$", "$14\\text{ cm}$"],
+                correct: 2,
+                explanation: "Menghitung sisi tegak: $b = \\sqrt{c^2 - a^2} = \\sqrt{13^2 - 5^2} = \\sqrt{169 - 25} = \\sqrt{144} = 12\\text{ cm}$."
+            },
+            {
+                id: 3,
+                difficulty: "Konsep",
+                question: "Manakah di antara kelompok bilangan berikut yang membentuk **Tripel Pythagoras**?",
+                options: ["$5, 8, 10$", "$7, 24, 25$", "$8, 12, 15$", "$9, 15, 18$"],
+                correct: 1,
+                explanation: "Periksa kelipatan kuadrat: $7^2 + 24^2 = 49 + 576 = 625 = 25^2$. Karena pas kuadratnya, kelompok $7, 24, 25$ adalah Tripel Pythagoras."
+            },
+            {
+                id: 4,
+                difficulty: "Penerapan",
+                question: "Sebuah tangga sepanjang $10\\text{ m}$ disandarkan pada tembok rumah. Jika jarak kaki tangga ke tembok adalah $6\\text{ m}$, berapa tinggi tembok yang dicapai tangga?",
+                options: ["$7\\text{ meter}$", "$8\\text{ meter}$", "$9\\text{ meter}$", "$16\\text{ meter}$"],
+                correct: 1,
+                explanation: "Tangga membentuk sisi miring ($c=10$), jarak ke tembok adalah alas ($a=6$). Tinggi tembok ($t$) $= \\sqrt{10^2 - 6^2} = \\sqrt{100 - 36} = \\sqrt{64} = 8\\text{ meter}$."
+            },
+            {
+                id: 5,
+                difficulty: "Geometri",
+                question: "Sebuah lapangan persegi panjang memiliki ukuran panjang $12\\text{ m}$ dan lebar $9\\text{ m}$. Panjang garis diagonal lapangan tersebut adalah...",
+                options: ["$13\\text{ m}$", "$15\\text{ m}$", "$18\\text{ m}$", "$21\\text{ m}$"],
+                correct: 1,
+                explanation: "Diagonal persegi panjang membentuk hipotenusa: $d = \\sqrt{12^2 + 9^2} = \\sqrt{144 + 81} = \\sqrt{225} = 15\\text{ m}$."
+            },
+            {
+                id: 6,
+                difficulty: "Penerapan",
+                question: "Seorang kapal berlayar ke arah Utara sejauh $8\\text{ km}$, kemudian berbelok ke arah Timur sejauh $15\\text{ km}$. Jarak terdekat kapal sekarang dari posisi awal adalah...",
+                options: ["$16\\text{ km}$", "$17\\text{ km}$", "$23\\text{ km}$", "$25\\text{ km}$"],
+                correct: 1,
+                explanation: "Perpindahan tegak lurus membentuk segitiga siku-siku: $s = \\sqrt{8^2 + 15^2} = \\sqrt{64 + 225} = \\sqrt{289} = 17\\text{ km}$."
+            },
+            {
+                id: 7,
+                difficulty: "Bentuk Akar",
+                question: "Panjang sisi siku-siku sebuah segitiga siku-siku sama kaki adalah $6\\text{ cm}$. Panjang sisi miring segitiga tersebut adalah...",
+                options: ["$6\\sqrt{2}\\text{ cm}$", "$12\\text{ cm}$", "$6\\sqrt{3}\\text{ cm}$", "$36\\text{ cm}$"],
+                correct: 0,
+                explanation: "Untuk segitiga siku-siku sama kaki ($a=b=6$): $c = \\sqrt{6^2 + 6^2} = \\sqrt{36 + 36} = \\sqrt{72} = \\sqrt{36 \\times 2} = 6\\sqrt{2}\\text{ cm}$."
+            },
+            {
+                id: 8,
+                difficulty: "Analisis Segitiga",
+                question: "Diketahui sebuah segitiga memiliki sisi-sisi sepanjang $6\\text{ cm}$, $8\\text{ cm}$, dan $11\\text{ cm}$. Jenis segitiga tersebut berdasarkan panjang sisinya adalah...",
+                options: ["Segitiga Siku-siku", "Segitiga Lancip", "Segitiga Tumpul", "Segitiga Sama Sisi"],
+                correct: 2,
+                explanation: "Bandingkan kuadrat sisi terpanjang ($11^2 = 121$) dengan jumlah kuadrat sisi lainnya ($6^2 + 8^2 = 36 + 64 = 100$). Karena $121 > 100$ ($c^2 > a^2 + b^2$), maka segitiga tersebut adalah **segitiga tumpul**."
+            },
+            {
+                id: 9,
+                difficulty: "Geometri",
+                question: "Segitiga sama kaki memiliki panjang alas $12\\text{ cm}$ dan panjang sisi miringnya masing-masing $10\\text{ cm}$. Tinggi segitiga tersebut adalah...",
+                options: ["$6\\text{ cm}$", "$8\\text{ cm}$", "$9\\text{ cm}$", "$10\\text{ cm}$"],
+                correct: 1,
+                explanation: "Garis tinggi membagi alas sama besar menjadi $6\\text{ cm}$. Tinggi segitiga $t = \\sqrt{10^2 - 6^2} = \\sqrt{100 - 36} = \\sqrt{64} = 8\\text{ cm}$."
+            },
+            {
+                id: 10,
+                difficulty: "Tantangan",
+                question: "Sebuah persegi memiliki panjang garis diagonal $10\\sqrt{2}\\text{ cm}$. Berapakah luas persegi tersebut?",
+                options: ["$50\\text{ cm}^2$", "$100\\text{ cm}^2$", "$144\\text{ cm}^2$", "$200\\text{ cm}^2$"],
+                correct: 1,
+                explanation: "Diagonal persegi $d = s\\sqrt{2} = 10\\sqrt{2} \\implies s = 10\\text{ cm}$. Luas persegi $= s^2 = 10^2 = 100\\text{ cm}^2$."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let secondsElapsed = 0;
+        let timerInterval = null;
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            startTimer();
+            loadQuestion();
+        });
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+                const secs = String(secondsElapsed % 60).padStart(2, '0');
+                document.getElementById('timer').innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestionIndex];
+            
+            // Update Headers
+            document.getElementById('question-number').innerText = `Soal ${currentQuestionIndex + 1} dari ${questions.length}`;
+            document.getElementById('progress-bar').style.width = `${((currentQuestionIndex + 1) / questions.length) * 100}%`;
+            document.getElementById('difficulty-tag').innerText = q.difficulty;
+            
+            // Set Question Text
+            const questionEl = document.getElementById('question-text');
+            questionEl.innerHTML = q.question;
+            
+            // Reset Explanation Box
+            const expBox = document.getElementById('explanation-box');
+            expBox.classList.add('hidden');
+
+            // Render Options
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const button = document.createElement('button');
+                button.className = `w-full text-left p-4 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-slate-50 font-medium text-slate-700 transition-all flex items-center justify-between group option-btn`;
+                button.setAttribute('data-index', idx);
+                button.onclick = () => selectOption(idx);
+
+                button.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg border border-slate-200 bg-slate-100 group-hover:border-indigo-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 text-xs font-bold flex items-center justify-center text-slate-500 transition-colors">
+                            ${String.fromCharCode(65 + idx)}
+                        </span>
+                        <span class="text-sm md:text-base">${opt}</span>
+                    </div>
+                    <div class="status-icon"></div>
+                `;
+                container.appendChild(button);
+            });
+
+            // Disable Next Button
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.disabled = true;
+            if(currentQuestionIndex === questions.length - 1) {
+                nextBtn.querySelector('span').innerText = 'Selesai';
+            } else {
+                nextBtn.querySelector('span').innerText = 'Lanjut';
+            }
+
+            // Render Math Equations with KaTeX
+            renderMath();
+        }
+
+        function selectOption(selectedIdx) {
+            const q = questions[currentQuestionIndex];
+            if (userAnswers[currentQuestionIndex] !== null) return; // Already answered
+
+            userAnswers[currentQuestionIndex] = selectedIdx;
+            const isCorrect = selectedIdx === q.correct;
+
+            if (isCorrect) score += 10;
+            document.getElementById('current-score').innerText = score;
+
+            // Highlight Options
+            const options = document.querySelectorAll('.option-btn');
+            options.forEach((optBtn, idx) => {
+                optBtn.disabled = true;
+                optBtn.classList.remove('hover:border-indigo-300', 'hover:bg-slate-50');
+
+                if (idx === q.correct) {
+                    optBtn.classList.add('border-emerald-500', 'bg-emerald-50/80', 'text-emerald-900');
+                    optBtn.querySelector('.status-icon').innerHTML = `
+                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>`;
+                } else if (idx === selectedIdx && !isCorrect) {
+                    optBtn.classList.add('border-rose-400', 'bg-rose-50/80', 'text-rose-900');
+                    optBtn.querySelector('.status-icon').innerHTML = `
+                        <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>`;
+                } else {
+                    optBtn.classList.add('opacity-50');
+                }
+            });
+
+            // Show Explanation Box
+            const expBox = document.getElementById('explanation-box');
+            const expTitle = document.getElementById('explanation-title');
+            const expText = document.getElementById('explanation-text');
+
+            expBox.classList.remove('hidden');
+            if (isCorrect) {
+                expTitle.className = "font-bold text-emerald-700 flex items-center gap-1.5";
+                expTitle.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/></svg>
+                    Jawaban Tepat!`;
+            } else {
+                expTitle.className = "font-bold text-rose-700 flex items-center gap-1.5";
+                expTitle.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Jawaban Kurang Tepat`;
+            }
+            expText.innerHTML = q.explanation;
+            renderMathInElement(expBox);
+
+            // Enable Next Button
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            clearInterval(timerInterval);
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const correctCount = userAnswers.filter((ans, idx) => ans === questions[idx].correct).length;
+            const finalScoreVal = score;
+            const timeStr = document.getElementById('timer').innerText;
+
+            document.getElementById('final-score').innerText = finalScoreVal;
+            document.getElementById('correct-count').innerText = `${correctCount}/${questions.length}`;
+            document.getElementById('final-time').innerText = timeStr;
+
+            const msgEl = document.getElementById('result-message');
+            if (correctCount === 10) {
+                msgEl.innerText = "Luar biasa! Kamu menguasai Teorema Pythagoras dengan sangat sempurna!";
+                confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+            } else if (correctCount >= 7) {
+                msgEl.innerText = "Bagus sekali! Pemahaman dasarmu sudah sangat siap untuk kelas hari ini.";
+                confetti({ particleCount: 50, spread: 50, origin: { y: 0.6 } });
+            } else {
+                msgEl.innerText = "Tetap semangat! Review pembahasan di bawah untuk memperdalam konsepmu.";
+            }
+
+            renderSolutionsList();
+        }
+
+        function renderSolutionsList() {
+            const listEl = document.getElementById('solutions-list');
+            listEl.innerHTML = '';
+
+            questions.forEach((q, idx) => {
+                const userAns = userAnswers[idx];
+                const isCorrect = userAns === q.correct;
+
+                const item = document.createElement('div');
+                item.className = `p-5 rounded-2xl bg-white border ${isCorrect ? 'border-slate-200' : 'border-rose-200'} shadow-sm space-y-3`;
+
+                item.innerHTML = `
+                    <div class="flex items-start justify-between gap-3">
+                        <span class="text-xs font-bold ${isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'} px-2.5 py-1 rounded-md">
+                            Soal ${idx + 1} • ${isCorrect ? 'Benar' : 'Salah'}
+                        </span>
+                        <span class="text-xs text-slate-400 font-medium">${q.difficulty}</span>
+                    </div>
+                    <p class="text-sm font-medium text-slate-800">${q.question}</p>
+                    <div class="text-xs space-y-1 text-slate-600">
+                        <p><span class="font-semibold">Jawaban Kamu:</span> ${userAns !== null ? q.options[userAns] : 'Tidak diisi'} ${isCorrect ? '✅' : '❌'}</p>
+                        ${!isCorrect ? `<p><span class="font-semibold text-emerald-700">Jawaban Benar:</span> ${q.options[q.correct]}</p>` : ''}
+                    </div>
+                    <div class="pt-2 border-t border-slate-100 text-xs text-slate-500 leading-relaxed">
+                        <span class="font-semibold text-slate-700">Pembahasan:</span> ${q.explanation}
+                    </div>
+                `;
+                listEl.appendChild(item);
+            });
+
+            renderMathInElement(listEl);
+        }
+
+        function toggleSolutions() {
+            const container = document.getElementById('solutions-container');
+            container.classList.toggle('hidden');
+            if(!container.classList.contains('hidden')) {
+                container.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            secondsElapsed = 0;
+            userAnswers.fill(null);
+
+            document.getElementById('current-score').innerText = '0';
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('solutions-container').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+
+            clearInterval(timerInterval);
+            startTimer();
+            loadQuestion();
+        }
+
+        function renderMath() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ],
+                throwOnError : false
+            });
+        }
+    </script>
+</body>
+</html>
