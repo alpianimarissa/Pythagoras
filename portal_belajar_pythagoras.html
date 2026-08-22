@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Pythagoras Interaktif</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .font-header {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #e2e8f0;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+<script>
+    // Web Audio Synthesizer untuk efek suara retro belajar
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let soundEnabled = true;
+
+    function playSound(type) {
+        if (!soundEnabled) return;
+        try {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            if (type === 'click') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } else if (type === 'correct') {
+                osc.type = 'sine';
+                const now = audioCtx.currentTime;
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+                osc.frequency.setValueAtTime(1046.50, now + 0.24); // C6
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start();
+                osc.stop(now + 0.4);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.25);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.25);
+            } else if (type === 'triumph') {
+                osc.type = 'square';
+                const now = audioCtx.currentTime;
+                osc.frequency.setValueAtTime(261.63, now); // C4
+                osc.frequency.setValueAtTime(329.63, now + 0.1); // E4
+                osc.frequency.setValueAtTime(392.00, now + 0.2); // G4
+                osc.frequency.setValueAtTime(523.25, now + 0.3); // C5
+                osc.frequency.setValueAtTime(1046.50, now + 0.5); // C6
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.85);
+                osc.start();
+                osc.stop(now + 0.85);
+            }
+        } catch(e) { console.warn("Audio Context Error: ", e); }
+    }
+</script>
+
+    <!-- HEADER -->
+    <header class="bg-white border-b border-slate-200 py-3.5 px-6 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 text-white p-2.5 rounded-2xl shadow-md shadow-indigo-500/20">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold font-header tracking-tight text-slate-900 flex items-center gap-2">
+                        Portal Belajar Pythagoras 🌟
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Algonova</p>
+                </div>
+            </div>
+
+            <!-- Global Dashboard -->
+            <div class="flex items-center space-x-3 text-sm">
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-2 flex items-center space-x-2">
+                    <span class="text-emerald-700 font-bold">✨ Progress Latihan:</span>
+                    <span id="globalProgressCounter" class="font-extrabold text-emerald-900 bg-white border border-emerald-300 px-3 py-1 rounded-lg shadow-sm text-sm">0 / 10</span>
+                </div>
+                <button onclick="soundEnabled = !soundEnabled; playSound('click');" class="bg-slate-100 hover:bg-slate-200 p-2.5 rounded-xl text-sm transition-all" title="Aktifkan/Matikan Suara">
+                    🔊
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- SLEEK PROGRESS BAR -->
+    <div class="w-full bg-slate-200 h-2.5 relative">
+        <div id="globalProgressBar" class="bg-indigo-600 h-full transition-all duration-300 w-0"></div>
+    </div>
+
+    <!-- MAIN PORTAL -->
+    <main class="max-w-6xl w-full mx-auto p-4 md:p-6 flex-grow flex flex-col justify-center gap-6">
+        
+        <!-- DISPLAY MATERI (FULL WIDTH) -->
+        <section id="moduleMainCard" class="w-full bg-white border border-slate-200 rounded-3xl p-6 md:p-10 shadow-md flex flex-col justify-between min-h-[460px] md:min-h-[500px]">
+            <!-- Header Halaman Dinamis -->
+            <div class="flex justify-between items-center border-b border-slate-100 pb-4 mb-4">
+                <span id="slideCategory" class="text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full bg-indigo-50 text-indigo-700">KATEGORI</span>
+                <span id="slidePageIndicator" class="text-sm font-bold text-slate-800">Halaman 1 dari 35</span>
+            </div>
+            
+            <!-- Tempat Konten Dinamis -->
+            <div id="moduleContent" class="flex-grow flex flex-col justify-center py-4">
+                <!-- Inner HTML dimuat dari JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER NAVIGASI UTAMA -->
+    <div class="max-w-6xl w-full mx-auto px-6 pb-6 flex justify-between items-center">
+        <button onclick="prevModule()" id="btnPrev" class="px-6 py-3 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition-all text-base font-semibold flex items-center space-x-2 shadow-sm disabled:opacity-50">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            <span>Sebelumnya</span>
+        </button>
+
+        <span id="pageProgressText" class="text-sm font-bold text-slate-500 font-header">Halaman 1 / 35</span>
+
+        <button onclick="nextModule()" id="btnNext" class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white transition-all text-base font-semibold flex items-center space-x-2 shadow-sm">
+            <span>Berikutnya</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- FLOATING ALERT WINDOW -->
+    <div id="alertBox" class="fixed bottom-4 right-4 z-50 max-w-sm w-full bg-white border border-slate-200 rounded-2xl shadow-lg p-4 transform translate-y-10 opacity-0 pointer-events-none transition-all duration-300 flex items-start space-x-3">
+        <div id="alertIconContainer" class="p-2 rounded-xl text-white"></div>
+        <div class="flex-grow">
+            <h4 id="alertTitle" class="font-bold text-sm text-slate-950">Status Jawaban</h4>
+            <p id="alertDesc" class="text-xs text-slate-500 mt-0.5">Deskripsi info.</p>
+        </div>
+        <button onclick="dismissAlert()" class="text-slate-400 hover:text-slate-600">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+    </div>
+
+    <!-- SYSTEM FOOTER -->
+    <footer class="bg-white text-slate-400 py-4 text-center text-[11px] border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <span>Sesi Belajar Interaktif Teorema Pythagoras</span>
+            <span class="text-slate-400">Platform Pendamping Belajar Digital Algonova</span>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE LOGIC SCRIPT -->
+    <script>
+        let currentModuleIndex = 0;
+        let slideStates = {};
+
+        // Inisialisasi state halaman agar tidak hilang
+        for (let i = 0; i < 35; i++) {
+            slideStates[i] = { answered: false, answer: null, sliderVal: 60 };
+        }
+
+        const modules = [
+            // HALAMAN 1: JUDUL & PEMBUKA
+            {
+                category: "1. JUDUL & PEMBUKA",
+                title: "Gerbang Petualangan Pythagoras 🚀",
+                render: () => `
+                    <div class="text-center space-y-6 max-w-3xl mx-auto py-6">
+                        <div class="relative inline-block">
+                            <svg class="w-52 h-52 sm:w-60 sm:h-60 mx-auto filter drop-shadow-[0_12px_20px_rgba(99,102,241,0.25)]" viewBox="0 0 200 200">
+                                <defs>
+                                    <linearGradient id="svgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#818cf8;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#4f46e5;stop-opacity:1" />
+                                    </linearGradient>
+                                    <linearGradient id="svgGrad3D" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#4338ca;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#312e81;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <path d="M 30 150 L 160 150 L 160 30 Z" fill="url(#svgGrad3D)" transform="translate(10, 10)" />
+                                <path d="M 30 150 L 160 150 L 160 30 Z" fill="url(#svgGrad)" />
+                                <rect x="145" y="135" width="15" height="15" fill="none" stroke="#ffffff" stroke-width="2"/>
+                                <text x="100" y="115" fill="#ffffff" font-weight="extrabold" font-size="9" transform="rotate(-43 100 115)">a² + b² = c²</text>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold font-header text-slate-900 tracking-tight">Selamat Datang di Dunia Pythagoras! 👋</h2>
+                    </div>
+                `
+            },
+
+            // HALAMAN 2: TUJUAN PEMBELAJARAN
+            {
+                category: "2. TUJUAN BELAJAR",
+                title: "Misi Kita & Kompetensi Belajar 🎯",
+                render: () => `
+                    <div class="space-y-6 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <span class="text-4xl">🎯</span>
+                            <h3 class="text-xl sm:text-2xl font-extrabold text-slate-800 font-header">Tujuan Pembelajaran:</h3>
+                        </div>
+                        <p class="text-slate-600 font-semibold leading-relaxed">
+                            Setelah menyelesaikan seluruh rangkaian petualangan ini, kita diharapkan mampu:
+                        </p>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-start space-x-3">
+                                <span class="text-emerald-600 font-bold text-xl">✓</span>
+                                <span class="font-medium text-slate-700">Mengidentifikasi unsur-unsur pembentuk segitiga siku-siku dengan akurat secara visual.</span>
+                            </div>
+                            <div class="p-4 bg-sky-50 border border-sky-100 rounded-2xl flex items-start space-x-3">
+                                <span class="text-sky-600 font-bold text-xl">✓</span>
+                                <span class="font-medium text-slate-700">Membuktikan kebenaran Teorema Pythagoras secara geometris & aljabar.</span>
+                            </div>
+                            <div class="p-4 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-start space-x-3">
+                                <span class="text-indigo-600 font-bold text-xl">✓</span>
+                                <span class="font-medium text-slate-700">Memanfaatkan pola Triple Pythagoras untuk menghitung cepat tanpa pengakaran rumit.</span>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            // HALAMAN 10: KONSEP/MATERI 1
+            {
+                category: "5. KONSEP/MATERI",
+                title: "Anatomi Segitiga Siku-siku 📐",
+                render: () => `
+                    <div class="space-y-6 text-base sm:text-lg max-w-4xl mx-auto">
+                        <p class="font-semibold text-slate-700 leading-relaxed">
+                            Mari kita bedah secara detail bagian-bagian krusial segitiga siku-siku:
+                        </p>
+                        <div class="space-y-3 font-medium text-slate-800">
+                            <div class="p-4 bg-indigo-50/70 border border-indigo-100 rounded-2xl flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 shadow-sm">
+                                <div class="flex items-center gap-3 sm:w-64 shrink-0">
+                                    <span class="text-2xl p-2 bg-indigo-100 rounded-xl">📐</span>
+                                    <strong class="text-indigo-950 text-base sm:text-lg">Sudut Siku-siku (90°)</strong>
+                                </div>
+                                <p class="text-slate-700 text-base sm:text-lg leading-relaxed flex-1">
+                                    Sudut penanda utama, digambarkan dengan simbol persegi kecil di sudut pertemuan sisi.
+                                </p>
+                            </div>
+
+                            <div class="p-4 bg-indigo-50/70 border border-indigo-100 rounded-2xl flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 shadow-sm">
+                                <div class="flex items-center gap-3 sm:w-64 shrink-0">
+                                    <span class="text-2xl p-2 bg-indigo-100 rounded-xl">🚀</span>
+                                    <strong class="text-indigo-950 text-base sm:text-lg">Hipotenusa (Sisi Miring)</strong>
+                                </div>
+                                <p class="text-slate-700 text-base sm:text-lg leading-relaxed flex-1">
+                                    Sisi paling panjang, posisinya tepat berhadapan dengan sudut siku-siku.
+                                </p>
+                            </div>
+
+                            <div class="p-4 bg-indigo-50/70 border border-indigo-100 rounded-2xl flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 shadow-sm">
+                                <div class="flex items-center gap-3 sm:w-64 shrink-0">
+                                    <span class="text-2xl p-2 bg-indigo-100 rounded-xl">🧱</span>
+                                    <strong class="text-indigo-950 text-base sm:text-lg">Sisi Penyiku ($a$ dan $b$)</strong>
+                                </div>
+                                <p class="text-slate-700 text-base sm:text-lg leading-relaxed flex-1">
+                                    Dua sisi yang menempel langsung membentuk sudut siku-siku.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl font-semibold text-slate-700 leading-relaxed">
+                            📌 <strong>Kunci Utama:</strong> Sisi miring (hipotenusa) selalu terletak di hadapan sudut siku-siku 90° dan merupakan sisi terpanjang di antara ketiga sisi segitiga tersebut.
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 11: KONSEP/MATERI 2 - KELOMPOK TRIPLE PYTHAGORAS
+            {
+                category: "5. KONSEP/MATERI",
+                title: "Tabel & Rahasia Deretan Triple Pythagoras ⚡",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <p class="font-semibold text-slate-700 leading-relaxed">
+                            <strong>Triple Pythagoras</strong> adalah tiga bilangan bulat positif $(a, b, c)$ yang tepat memenuhi persamaan $a^2 + b^2 = c^2$.
+                        </p>
+                        
+                        <!-- Grid Induk Triple Pythagoras -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Kelompok 1 -->
+                            <div class="bg-indigo-50/80 border border-indigo-200 p-4 rounded-2xl">
+                                <div class="font-bold text-indigo-900 flex justify-between items-center text-base">
+                                    <span>Tipe 1: (3, 4, 5)</span>
+                                    <span class="text-xs bg-indigo-200 text-indigo-800 px-2.5 py-1 rounded-md font-extrabold">Utama</span>
+                                </div>
+                                <p class="text-sm text-indigo-800 font-mono mt-2 leading-relaxed">
+                                    Kelipatan: (6, 8, 10), (9, 12, 15), (12, 16, 20), (15, 20, 25)
+                                </p>
+                            </div>
+
+                            <!-- Kelompok 2 -->
+                            <div class="bg-emerald-50/80 border border-emerald-200 p-4 rounded-2xl">
+                                <div class="font-bold text-emerald-900 flex justify-between items-center text-base">
+                                    <span>Tipe 2: (5, 12, 13)</span>
+                                    <span class="text-xs bg-emerald-200 text-emerald-800 px-2.5 py-1 rounded-md font-extrabold">Utama</span>
+                                </div>
+                                <p class="text-sm text-emerald-800 font-mono mt-2 leading-relaxed">
+                                    Kelipatan: (10, 24, 26), (15, 36, 39), (20, 48, 52)
+                                </p>
+                            </div>
+
+                            <!-- Kelompok 3 -->
+                            <div class="bg-amber-50/80 border border-amber-200 p-4 rounded-2xl">
+                                <div class="font-bold text-amber-900 flex justify-between items-center text-base">
+                                    <span>Tipe 3: (7, 24, 25)</span>
+                                    <span class="text-xs bg-amber-200 text-amber-800 px-2.5 py-1 rounded-md font-extrabold">Utama</span>
+                                </div>
+                                <p class="text-sm text-amber-900 font-mono mt-2 leading-relaxed">
+                                    Kelipatan: (14, 48, 50), (21, 72, 75)
+                                </p>
+                            </div>
+
+                            <!-- Kelompok 4 -->
+                            <div class="bg-rose-50/80 border border-rose-200 p-4 rounded-2xl">
+                                <div class="font-bold text-rose-900 flex justify-between items-center text-base">
+                                    <span>Tipe 4: (8, 15, 17)</span>
+                                    <span class="text-xs bg-rose-200 text-rose-800 px-2.5 py-1 rounded-md font-extrabold">Utama</span>
+                                </div>
+                                <p class="text-sm text-rose-900 font-mono mt-2 leading-relaxed">
+                                    Kelipatan: (16, 30, 34), (24, 45, 51)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 12: KONSEP/MATERI 3
+            {
+                category: "5. KONSEP/MATERI",
+                title: "Pembuktian Visual Luas Kotak 🟩",
+                render: () => `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="space-y-4">
+                            <p class="text-slate-700 font-semibold leading-relaxed">
+                                Teorema Pythagoras menyatakan bahwa jumlah luas persegi pada sisi penyiku sama dengan luas persegi pada sisi miring.
+                            </p>
+                            <div class="p-4 bg-indigo-50 border border-indigo-100 rounded-2xl text-indigo-900 font-mono font-bold text-center text-base sm:text-lg">
+                                Luas ($a^2$) + Luas ($b^2$) = Luas ($c^2$)
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 border p-6 rounded-2xl flex justify-center">
+                            <svg class="w-48 h-48 sm:w-56 sm:h-56" viewBox="0 0 200 200">
+                                <path d="M 60 110 L 110 110 L 110 70 Z" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+                                <rect x="110" y="70" width="40" height="40" fill="rgba(244, 63, 94, 0.15)" stroke="#f43f5e" stroke-width="1.5"/>
+                                <rect x="60" y="110" width="50" height="50" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 13: KONSEP/MATERI 4
+            {
+                category: "5. KONSEP/MATERI",
+                title: "Mencari Panjang Sisi Miring (c)",
+                render: () => `
+                    <div class="space-y-6 text-base sm:text-lg max-w-3xl mx-auto">
+                        <p class="font-semibold text-slate-700 leading-relaxed text-center sm:text-left">
+                            Untuk menghitung panjang sisi miring ($c$), kita menjumlahkan kuadrat sisi-sisi penyiku, lalu menarik akar kuadratnya:
+                        </p>
+                        <div class="bg-indigo-50/80 p-8 rounded-2xl border border-indigo-200 text-center font-mono font-bold text-indigo-900 text-2xl sm:text-3xl shadow-sm">
+                            $$c = \\sqrt{a^2 + b^2}$$
+                        </div>
+                        <p class="text-slate-600 font-medium leading-relaxed text-center sm:text-left text-sm sm:text-base">
+                            Hubungan ini berlaku secara mutlak di semua segitiga siku-siku. Untuk mencari sisi terpanjang, kita selalu menggunakan operasi penjumlahan kuadrat.
+                        </p>
+                    </div>
+                `
+            },
+
+            // HALAMAN 14: KONSEP/MATERI 5
+            {
+                category: "5. KONSEP/MATERI",
+                title: "Mencari Panjang Sisi Tegak (a)",
+                render: () => `
+                    <div class="space-y-6 text-base sm:text-lg max-w-3xl mx-auto">
+                        <p class="font-semibold text-slate-700 leading-relaxed text-center sm:text-left">
+                            Berdasarkan prinsip kesetaraan aljabar, jika kita ingin mencari salah satu sisi siku-siku tegak ($a$), kita mengurangkan kuadrat sisi miring dengan kuadrat sisi alasnya:
+                        </p>
+                        <div class="bg-indigo-50/80 p-8 rounded-2xl border border-indigo-200 text-center font-mono font-bold text-indigo-900 text-2xl sm:text-3xl shadow-sm">
+                            $$a = \\sqrt{c^2 - b^2}$$
+                        </div>
+                        <p class="text-slate-600 font-medium leading-relaxed text-center sm:text-left text-sm sm:text-base">
+                            Ingat hukum jembatan aljabar! Karena sisi miring ($c$) adalah sisi terpanjang, untuk mencari sisi penyiku yang lebih pendek, kita selalu menggunakan operasi pengurangan kuadrat.
+                        </p>
+                    </div>
+                `
+            },
+
+            // HALAMAN 15: KONSEP/MATERI 6
+            {
+                category: "5. KONSEP/MATERI",
+                title: "Mencari Panjang Sisi Alas (b)",
+                render: () => `
+                    <div class="space-y-6 text-base sm:text-lg max-w-3xl mx-auto">
+                        <p class="font-semibold text-slate-700 leading-relaxed text-center sm:text-left">
+                            Sama halnya dengan mencari sisi tegak, untuk mencari sisi alas ($b$), kita mengurangkan kuadrat sisi miring dengan kuadrat sisi tegaknya:
+                        </p>
+                        <div class="bg-indigo-50/80 p-8 rounded-2xl border border-indigo-200 text-center font-mono font-bold text-indigo-900 text-2xl sm:text-3xl shadow-sm">
+                            $$b = \\sqrt{c^2 - a^2}$$
+                        </div>
+                        <p class="text-slate-600 font-medium leading-relaxed text-center sm:text-left text-sm sm:text-base">
+                            Jangan sampai terbalik! Pengurangan selalu dimulai dari kuadrat sisi miring ($c^2$) dikurangi kuadrat sisi penyiku lainnya ($a^2$).
+                        </p>
+                    </div>
+                `
+            },
+
+            // HALAMAN 16: KONSEP/MATERI 7
+            {
+                category: "5. KONSEP/MATERI",
+                title: "Menentukan Jenis Segitiga secara Presisi 📐",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <p class="font-semibold text-slate-700 leading-relaxed">
+                            Kita menguji jenis segitiga dengan membandingkan kuadrat sisi terpanjang ($c^2$) dengan total kuadrat sisi-sisi penyiku ($a^2 + b^2$):
+                        </p>
+                        <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl font-medium space-y-3">
+                            <div class="flex items-start space-x-3">
+                                <span class="text-emerald-600 font-bold text-xl">✓</span>
+                                <span>Jika $c^2 = a^2 + b^2$, maka segitiga tersebut adalah <strong>Segitiga Siku-siku</strong>.</span>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <span class="text-sky-600 font-bold text-xl">✓</span>
+                                <span>Jika $c^2 < a^2 + b^2$, maka segitiga tersebut adalah <strong>Segitiga Lancip</strong>.</span>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <span class="text-rose-600 font-bold text-xl">✓</span>
+                                <span>Jika $c^2 > a^2 + b^2$, maka segitiga tersebut adalah <strong>Segitiga Tumpul</strong>.</span>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 17: KONSEP/MATERI 8
+            {
+                category: "5. KONSEP/MATERI",
+                title: "Segitiga Istimewa Sudut (45°-45°-90°) 📐",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <p class="font-semibold text-slate-700 leading-relaxed">
+                            Segitiga siku-siku sama kaki memiliki sudut lancip sebesar 45°. Hubungan perbandingan panjang sisi-sisinya bernilai konstan:
+                        </p>
+                        <div class="bg-indigo-50/80 p-5 rounded-2xl border border-indigo-200 text-center font-mono font-bold text-indigo-900 text-xl sm:text-2xl shadow-sm">
+                            Sisi Siku-Siku : Sisi Siku-Siku : Sisi Miring = $1 : 1 : \\sqrt{2}$
+                        </div>
+                        <div class="p-5 bg-slate-50 border rounded-2xl font-semibold text-slate-700 leading-relaxed">
+                            📌 <strong>Rumus Cepat:</strong> Jika panjang sisi siku-siku penyiku segitiga ini adalah $s$, maka panjang sisi miringnya langsung dapat ditulis $s\\sqrt{2}$.
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 18: KONSEP/MATERI 9
+            {
+                category: "5. KONSEP/MATERI",
+                title: "Segitiga Istimewa Sudut (30°-60°-90°) 📐",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <p class="font-semibold text-slate-700 leading-relaxed">
+                            Segitiga ini diperoleh dengan membagi segitiga sama sisi menjadi dua bagian sama besar secara simetris. Perbandingan panjang sisi-sisinya adalah:
+                        </p>
+                        <div class="bg-indigo-50/80 p-5 rounded-2xl border border-indigo-200 text-center font-mono font-bold text-indigo-900 text-xl sm:text-2xl shadow-sm">
+                            Sisi Terpendek : Sisi Sedang : Sisi Miring = $1 : \\sqrt{3} : 2$
+                        </div>
+                        <div class="p-5 bg-slate-50 border rounded-2xl font-semibold text-slate-700 leading-relaxed">
+                            📌 <strong>Kunci Ingat:</strong> Sisi terpendek terletak di depan sudut 30° (setengah dari sisi miring), dan sisi sedang di depan sudut 60° (sisi terpendek $\\times \\sqrt{3}$).
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 19: CONTOH SOAL 1
+            {
+                category: "6. CONTOH SOAL",
+                title: "Contoh 1: Menghitung Sisi Miring (Hipotenusa) 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-emerald-950 font-header text-lg sm:text-xl">📝 Soal:</h4>
+                            <p class="text-slate-800 font-medium leading-relaxed">Sebuah segitiga siku-siku memiliki sisi tegak $15\\text{ cm}$ dan sisi alas $20\\text{ cm}$. Hitunglah panjang sisi miringnya!</p>
+                        </div>
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 font-semibold space-y-3 text-slate-700 leading-relaxed">
+                            <p class="text-slate-900 font-bold">💡 Pembahasan Langkah Demi Langkah:</p>
+                            <div>1. Identifikasi variabel: $a = 15\\text{ cm}$ dan $b = 20\\text{ cm}$.</div>
+                            <div>2. Gunakan rumus mencari sisi miring: $c = \\sqrt{a^2 + b^2}$</div>
+                            <div>3. Masukkan angka: $c = \\sqrt{15^2 + 20^2} = \\sqrt{225 + 400} = \\sqrt{625} = 25\\text{ cm}$.</div>
+                            <div class="text-indigo-700 font-medium pt-1">✨ <strong>Tips Cepat Triple Pythagoras:</strong> $(15, 20, c)$ adalah kelipatan 5 dari $(3, 4, 5) \\implies 5 \\times 5 = 25\\text{ cm}$!</div>
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 20: CONTOH SOAL 2
+            {
+                category: "6. CONTOH SOAL",
+                title: "Contoh 2: Menghitung Sisi Siku-Siku (Penyiku) 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-sky-50 border border-sky-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-sky-950 font-header text-lg sm:text-xl">📝 Soal:</h4>
+                            <p class="text-slate-800 font-medium leading-relaxed">Panjang sisi miring sebuah segitiga adalah $17\\text{ cm}$ dan tinggi $15\\text{ cm}$. Cari panjang sisi alasnya!</p>
+                        </div>
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 font-semibold space-y-3 text-slate-700 leading-relaxed">
+                            <p class="text-slate-900 font-bold">💡 Pembahasan Langkah Demi Langkah:</p>
+                            <div>1. Identifikasi variabel: $c = 17\\text{ cm}$ (sisi miring) dan $a = 15\\text{ cm}$ (sisi tegak).</div>
+                            <div>2. Gunakan rumus mencari sisi alas: $b = \\sqrt{c^2 - a^2}$</div>
+                            <div>3. Masukkan angka: $b = \\sqrt{17^2 - 15^2} = \\sqrt{289 - 225} = \\sqrt{64} = 8\\text{ cm}$.</div>
+                            <div class="text-emerald-700 font-medium pt-1">✨ <strong>Sesuai Triple Pythagoras:</strong> Pasangan Induk $(8, 15, 17)$.</div>
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 21: CONTOH SOAL 3
+            {
+                category: "6. CONTOH SOAL",
+                title: "Contoh 3: Menguji dan Menentukan Jenis Segitiga 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-emerald-950 font-header text-lg sm:text-xl">📝 Soal:</h4>
+                            <p class="text-slate-800 font-medium leading-relaxed">Tentukan jenis segitiga yang memiliki ukuran panjang sisi-sisi $10\\text{ cm}$, $12\\text{ cm}$, dan $15\\text{ cm}$!</p>
+                        </div>
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 font-semibold space-y-3 text-slate-700 leading-relaxed">
+                            <p class="text-slate-900 font-bold">💡 Pembahasan Langkah Demi Langkah:</p>
+                            <div>1. Cari sisi terpanjang sebagai $c$: $c = 15\\text{ cm}$.</div>
+                            <div>2. Hitung kuadrat sisi terpanjang: $c^2 = 15^2 = 225$.</div>
+                            <div>3. Hitung jumlah kuadrat sisi penyiku: $a^2 + b^2 = 10^2 + 12^2 = 100 + 144 = 244$.</div>
+                            <div>4. Bandingkan nilai: Karena $225 < 244$ ($c^2 < a^2 + b^2$), maka jenisnya adalah <strong>Segitiga Lancip</strong>.</div>
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 22: CONTOH SOAL 4
+            {
+                category: "6. CONTOH SOAL",
+                title: "Contoh 4: Diagonal Bidang Persegi Panjang 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-sky-50 border border-sky-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-sky-950 font-header text-lg sm:text-xl">📝 Soal:</h4>
+                            <p class="text-slate-800 font-medium leading-relaxed">Sebuah lapangan olahraga persegi panjang berukuran panjang $24\\text{ m}$ dan lebar $10\\text{ m}$. Berapakah diagonalnya?</p>
+                        </div>
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 font-semibold space-y-3 text-slate-700 leading-relaxed">
+                            <p class="text-slate-900 font-bold">💡 Pembahasan Langkah Demi Langkah:</p>
+                            <div>1. Variabel: $p = 24\\text{ m}$ dan $l = 10\\text{ m}$.</div>
+                            <div>2. Hubungan diagonal d: $d = \\sqrt{p^2 + l^2}$</div>
+                            <div>3. Masukkan angka: $d = \\sqrt{24^2 + 10^2} = \\sqrt{576 + 100} = \\sqrt{676} = 26\\text{ m}$.</div>
+                            <div class="text-indigo-700 font-medium pt-1">✨ <strong>Tips Triple Pythagoras:</strong> Kelipatan 2 dari $(5, 12, 13) \\implies (10, 24, 26)$.</div>
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 23: CONTOH SOAL 5
+            {
+                category: "6. CONTOH SOAL",
+                title: "Contoh 5: Diagonal Ruang Balok (Dimensi Tiga) 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-emerald-950 font-header text-lg sm:text-xl">📝 Soal:</h4>
+                            <p class="text-slate-800 font-medium leading-relaxed">Sebuah balok kayu memiliki ukuran panjang $12\\text{ cm}$, lebar $9\\text{ cm}$, dan tinggi $8\\text{ cm}$. Berapakah diagonal ruang balok?</p>
+                        </div>
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 font-semibold space-y-3 text-slate-700 leading-relaxed">
+                            <p class="text-slate-900 font-bold">💡 Pembahasan Langkah Demi Langkah:</p>
+                            <div>1. Rumus perluasan Pythagoras 3D: $d_r = \\sqrt{p^2 + l^2 + t^2}$</div>
+                            <div>2. Hitung: $d_r = \\sqrt{12^2 + 9^2 + 8^2} = \\sqrt{144 + 81 + 64} = \\sqrt{289} = 17\\text{ cm}$.</div>
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 24: CONTOH SOAL 6
+            {
+                category: "6. CONTOH SOAL",
+                title: "Contoh 6: Jarak Antara Dua Titik Kartesius 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-sky-50 border border-sky-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-sky-950 font-header text-lg sm:text-xl">📝 Soal:</h4>
+                            <p class="text-slate-800 font-medium leading-relaxed">Hitunglah jarak terpendek antara titik koordinat $P(2, 3)$ dan $Q(8, 11)$ pada bidang Kartesius!</p>
+                        </div>
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 font-semibold space-y-3 text-slate-700 leading-relaxed">
+                            <p class="text-slate-900 font-bold">💡 Pembahasan Langkah Demi Langkah:</p>
+                            <div>1. Ambil koordinat: $x_1=2, y_1=3$ dan $x_2=8, y_2=11$.</div>
+                            <div>2. Rumus jarak: $d = \\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$</div>
+                            <div>3. Hitung selisih: $d = \\sqrt{(8-2)^2 + (11-3)^2} = \\sqrt{6^2 + 8^2} = \\sqrt{36+64} = \\sqrt{100} = 10\\text{ satuan}$.</div>
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 25: CONTOH SOAL 7
+            {
+                category: "6. CONTOH SOAL",
+                title: "Contoh 7: Hubungan Aljabar Kuadrat Pythagoras 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-emerald-950 font-header text-lg sm:text-xl">📝 Soal:</h4>
+                            <p class="text-slate-800 font-medium leading-relaxed">Sisi-sisi segitiga siku-siku dinyatakan dalam aljabar: $2x\\text{ cm}$, $(2x+2)\\text{ cm}$, dan sisi miring $(4x-2)\\text{ cm}$. Selesaikan nilai $x$!</p>
+                        </div>
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 font-semibold space-y-3 text-slate-700 leading-relaxed">
+                            <p class="text-slate-900 font-bold">💡 Pembahasan Langkah Demi Langkah:</p>
+                            <div>1. Hubungan Pythagoras: $(2x)^2 + (2x+2)^2 = (4x-2)^2$</div>
+                            <div>2. Jabarkan kuadrat: $4x^2 + (4x^2 + 8x + 4) = 16x^2 - 16x + 4$</div>
+                            <div>3. Gabungkan suku sejenis: $8x^2 + 8x + 4 = 16x^2 - 16x + 4$</div>
+                            <div>4. Sederhanakan ruas: $8x^2 - 24x = 0 \\implies 8x(x-3) = 0$</div>
+                            <div>5. Diperoleh: $x = 3$ (karena panjang dimensi fisik sisi segitiga harus bernilai positif).</div>
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 26: LATIHAN SOAL 1 (EASY)
+            {
+                category: "7. LATIHAN SOAL (EASY)",
+                title: "Latihan 1: Menghitung Panjang Hipotenusa 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-indigo-50 border border-indigo-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-indigo-950 font-header text-lg sm:text-xl">🔥 Pertanyaan:</h4>
+                            <p class="text-slate-800 font-semibold leading-relaxed">
+                                Sebuah segitiga siku-siku memiliki panjang sisi siku-siku tegak $9\\text{ cm}$ dan sisi alas $12\\text{ cm}$. Berapakah panjang sisi miring (hipotenusa) segitiga tersebut?
+                            </p>
+                        </div>
+                        <div class="pt-2">
+                            <p class="text-slate-800 font-bold mb-2">Pilih jawaban yang tepat:</p>
+                            ${renderQuizOptions(25, ["13 cm", "14 cm", "15 cm"], "15 cm", 1)}
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 27: LATIHAN SOAL 2 (EASY)
+            {
+                category: "7. LATIHAN SOAL (EASY)",
+                title: "Latihan 2: Menghitung Sisi Siku-Siku Tegak 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-indigo-50 border border-indigo-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-indigo-950 font-header text-lg sm:text-xl">🔥 Pertanyaan:</h4>
+                            <p class="text-slate-800 font-semibold leading-relaxed">
+                                Panjang sisi miring suatu segitiga siku-siku adalah $13\\text{ cm}$, dan salah satu sisi siku-sikunya adalah $5\\text{ cm}$. Berapakah panjang sisi siku-siku lainnya?
+                            </p>
+                        </div>
+                        <div class="pt-2">
+                            <p class="text-slate-800 font-bold mb-2">Pilih jawaban yang tepat:</p>
+                            ${renderQuizOptions(26, ["12 cm", "10 cm", "8 cm"], "12 cm", 1)}
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 28: LATIHAN SOAL 3 (EASY)
+            {
+                category: "7. LATIHAN SOAL (EASY)",
+                title: "Latihan 3: Mengidentifikasi Tripel Pythagoras 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-indigo-50 border border-indigo-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-indigo-950 font-header text-lg sm:text-xl">🔥 Pertanyaan:</h4>
+                            <p class="text-slate-800 font-semibold leading-relaxed">
+                                Manakah di antara kelompok ukuran tiga bilangan berikut yang memenuhi aturan baku Tripel Pythagoras dasar?
+                            </p>
+                        </div>
+                        <div class="pt-2">
+                            <p class="text-slate-800 font-bold mb-2">Pilih jawaban yang tepat:</p>
+                            ${renderQuizOptions(27, ["3, 4, 6", "5, 12, 13", "8, 12, 15"], "5, 12, 13", 1)}
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 29: LATIHAN SOAL 4 (MEDIUM)
+            {
+                category: "7. LATIHAN SOAL (MEDIUM)",
+                title: "Latihan 4: Menguji Jenis Segitiga 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-indigo-50 border border-indigo-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-indigo-950 font-header text-lg sm:text-xl">🔥 Pertanyaan:</h4>
+                            <p class="text-slate-800 font-semibold leading-relaxed">
+                                Sebuah segitiga sembarang memiliki panjang ukuran sisi-sisi $8\\text{ cm}$, $15\\text{ cm}$, dan $18\\text{ cm}$. Berdasarkan ukuran ini, apa jenis segitiga yang terbentuk?
+                            </p>
+                        </div>
+                        <div class="pt-2">
+                            <p class="text-slate-800 font-bold mb-2">Pilih jawaban yang tepat:</p>
+                            ${renderQuizOptions(28, ["Segitiga Lancip", "Segitiga Siku-siku", "Segitiga Tumpul"], "Segitiga Lancip", 1)}
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 30: LATIHAN SOAL 5 (MEDIUM)
+            {
+                category: "7. LATIHAN SOAL (MEDIUM)",
+                title: "Latihan 5: Panjang Diagonal Lapangan 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-indigo-50 border border-indigo-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-indigo-950 font-header text-lg sm:text-xl">🔥 Pertanyaan:</h4>
+                            <p class="text-slate-800 font-semibold leading-relaxed">
+                                Sebuah lapangan upacara berbentuk persegi panjang berukuran panjang $24\\text{ meter}$ dan lebar $10\\text{ meter}$. Berapakah panjang jalur diagonal lapangan tersebut?
+                            </p>
+                        </div>
+                        <div class="pt-2">
+                            <p class="text-slate-800 font-bold mb-2">Pilih jawaban yang tepat:</p>
+                            ${renderQuizOptions(29, ["26 meter", "28 meter", "30 meter"], "26 meter", 1)}
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 31: LATIHAN SOAL 6 (MEDIUM)
+            {
+                category: "7. LATIHAN SOAL (MEDIUM)",
+                title: "Latihan 6: Tinggi Tangga Bersandar 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-indigo-50 border border-indigo-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-indigo-950 font-header text-lg sm:text-xl">🔥 Pertanyaan:</h4>
+                            <p class="text-slate-800 font-semibold leading-relaxed">
+                                Sebuah tangga sepanjang $15\\text{ meter}$ disandarkan lurus pada dinding rumah. Jika jarak kaki bawah tangga ke dasar dinding adalah $9\\text{ meter}$, berapakah tinggi dinding yang dicapai oleh ujung tangga?
+                            </p>
+                        </div>
+                        <div class="pt-2">
+                            <p class="text-slate-800 font-bold mb-2">Pilih jawaban yang tepat:</p>
+                            ${renderQuizOptions(30, ["12 meter", "11 meter", "10 meter"], "12 meter", 1)}
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 32: LATIHAN SOAL 7 (MEDIUM)
+            {
+                category: "7. LATIHAN SOAL (MEDIUM)",
+                title: "Latihan 7: Segitiga Siku-siku Sudut Istimewa 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-indigo-50 border border-indigo-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-indigo-950 font-header text-lg sm:text-xl">🔥 Pertanyaan:</h4>
+                            <p class="text-slate-800 font-semibold leading-relaxed">
+                                Pada segitiga siku-siku dengan sudut istimewa 30°, 60°, dan 90°, jika panjang sisi miring (hipotenusa) adalah $20\\text{ cm}$, berapakah panjang sisi terpendek yang berada di depan sudut 30°?
+                            </p>
+                        </div>
+                        <div class="pt-2">
+                            <p class="text-slate-800 font-bold mb-2">Pilih jawaban yang tepat:</p>
+                            ${renderQuizOptions(31, ["10 cm", "10√3 cm", "5 cm"], "10 cm", 1)}
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 33: LATIHAN SOAL 8 (HARD)
+            {
+                category: "7. LATIHAN SOAL (HARD)",
+                title: "Latihan 8: Menghitung Jarak Dua Koordinat 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-indigo-50 border border-indigo-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-indigo-950 font-header text-lg sm:text-xl">🔥 Pertanyaan:</h4>
+                            <p class="text-slate-800 font-semibold leading-relaxed">
+                                Berapakah jarak terpendek antara titik koordinat Kartesius $A(2, 3)$ dan titik $B(8, 11)$?
+                            </p>
+                        </div>
+                        <div class="pt-2">
+                            <p class="text-slate-800 font-bold mb-2">Pilih jawaban yang tepat:</p>
+                            ${renderQuizOptions(32, ["10 satuan", "12 satuan", "15 satuan"], "10 satuan", 1)}
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 34: LATIHAN SOAL 9 (HARD)
+            {
+                category: "7. LATIHAN SOAL (HARD)",
+                title: "Latihan 9: Tinggi Segitiga Selimut Limas 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-indigo-50 border border-indigo-200 rounded-2xl space-y-2">
+                            <h4 class="font-bold text-indigo-950 font-header text-lg sm:text-xl">🔥 Pertanyaan:</h4>
+                            <p class="text-slate-800 font-semibold leading-relaxed">
+                                Sebuah limas tegak $T.ABCD$ dengan alas persegi memiliki panjang sisi alas $12\\text{ cm}$. Jika tinggi limas tersebut adalah $8\\text{ cm}$, hitunglah tinggi segitiga tegak selimut limas!
+                            </p>
+                        </div>
+                        <div class="pt-2">
+                            <p class="text-slate-800 font-bold mb-2">Pilih jawaban yang tepat:</p>
+                            ${renderQuizOptions(33, ["10 cm", "11 cm", "12 cm"], "10 cm", 1)}
+                        </div>
+                    </div>
+                `
+            },
+
+            // HALAMAN 35: LATIHAN SOAL 10 (HARD) - EVALUASI AKHIR
+            {
+                category: "7. LATIHAN SOAL (HARD)",
+                title: "Latihan 10: Tantangan Aljabar Final 📝",
+                render: () => `
+                    <div class="space-y-5 text-base sm:text-lg max-w-4xl mx-auto">
+                        <div class="p-5 bg-indigo-50 border border-indigo-200 rounded-2xl space-y-3">
+                            <h4 class="font-bold text-indigo-950 font-header text-lg sm:text-xl">🔥 Pertanyaan Evaluasi Akhir:</h4>
+                            <p class="text-slate-800 font-semibold leading-relaxed">
+                                Panjang sisi-sisi sebuah segitiga siku-siku berturut-turut dinyatakan dalam variabel: $2x\\text{ cm}$, $(2x+2)\\text{ cm}$, dan sisi miring $(4x-2)\\text{ cm}$. Carilah nilai $x$ yang memenuhi!
+                            </p>
+                            <div class="pt-2">
+                                ${renderQuizOptions(34, ["x = 3", "x = 4", "x = 5"], "x = 3", 1)}
+                            </div>
+                        </div>
+
+                        <div class="bg-emerald-50 border border-emerald-200 p-5 rounded-2xl text-center space-y-1">
+                            <p class="font-extrabold text-emerald-900 text-base sm:text-lg">🎉 Selamat! Anda telah menyelesaikan seluruh modul 35 halaman!</p>
+                            <p class="text-sm sm:text-base text-emerald-700 font-medium">Terus latih pemahaman geometri ini!</p>
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        function renderQuizOptions(slideIdx, options, correctOpt, points) {
+            const state = slideStates[slideIdx];
+            return `
+                <div class="grid grid-cols-1 gap-3.5 mt-4">
+                    ${options.map(opt => {
+                        let btnStyle = "bg-slate-50 border-slate-200 text-slate-800 hover:bg-slate-100 hover:border-indigo-300";
+                        if (state.answered) {
+                            if (opt === correctOpt) {
+                                btnStyle = "bg-emerald-100 border-emerald-400 text-emerald-900 font-bold";
+                            } else if (state.answer === opt) {
+                                btnStyle = "bg-rose-100 border-rose-400 text-rose-900 font-bold";
+                            } else {
+                                btnStyle = "bg-slate-50 border-slate-200 text-slate-400 opacity-60";
+                            }
+                        }
+                        const disabled = state.answered ? 'disabled' : '';
+                        const escapedOpt = opt.replace(/'/g, "\\'");
+                        const escapedCorrect = correctOpt.replace(/'/g, "\\'");
+                        return `
+                            <button onclick="checkAnswer(${slideIdx}, '${escapedOpt}', '${escapedCorrect}', ${points})" ${disabled} 
+                                class="p-4 rounded-xl border text-left text-base sm:text-lg transition-all flex items-center justify-between ${btnStyle}">
+                                <span>${opt}</span>
+                                ${state.answered && opt === correctOpt ? '<span class="text-emerald-600 font-bold">✓ Benar</span>' : ''}
+                                ${state.answered && state.answer === opt && opt !== correctOpt ? '<span class="text-rose-600 font-bold">✕ Salah</span>' : ''}
+                            </button>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function checkAnswer(slideIdx, selectedOpt, correctOpt, points) {
+            if (slideStates[slideIdx].answered) return;
+            
+            const isCorrect = selectedOpt === correctOpt;
+            slideStates[slideIdx].answered = true;
+            slideStates[slideIdx].answer = selectedOpt;
+
+            if (isCorrect) {
+                playSound('correct');
+                showAlert('Jawaban Tepat! 🎉', 'Luar biasa, pemahaman matematika kamu makin tajam!', 'success');
+            } else {
+                playSound('wrong');
+                showAlert('Belum Tepat 💡', `Jawaban yang benar adalah: ${correctOpt}. Tetap semangat!`, 'error');
+            }
+
+            updateGlobalProgress();
+            renderModule();
+        }
+
+        function showAlert(title, desc, type) {
+            const box = document.getElementById('alertBox');
+            const titleEl = document.getElementById('alertTitle');
+            const descEl = document.getElementById('alertDesc');
+            const iconContainer = document.getElementById('alertIconContainer');
+
+            if (!box || !titleEl || !descEl || !iconContainer) return;
+
+            titleEl.innerText = title;
+            descEl.innerText = desc;
+
+            if (type === 'success') {
+                iconContainer.className = 'p-2 rounded-xl text-white bg-emerald-500';
+                iconContainer.innerHTML = '✓';
+            } else {
+                iconContainer.className = 'p-2 rounded-xl text-white bg-rose-500';
+                iconContainer.innerHTML = '✕';
+            }
+
+            box.classList.remove('translate-y-10', 'opacity-0', 'pointer-events-none');
+            box.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                dismissAlert();
+            }, 3500);
+        }
+
+        function dismissAlert() {
+            const box = document.getElementById('alertBox');
+            if (box) {
+                box.classList.remove('translate-y-0', 'opacity-100');
+                box.classList.add('translate-y-10', 'opacity-0', 'pointer-events-none');
+            }
+        }
+
+        function updateGlobalProgress() {
+            let answeredCount = 0;
+            const totalQuizCount = 10;
+            for (let i = 25; i < 35; i++) {
+                if (slideStates[i] && slideStates[i].answered) {
+                    answeredCount++;
+                }
+            }
+
+            const counter = document.getElementById('globalProgressCounter');
+            if (counter) counter.innerText = `${answeredCount} / ${totalQuizCount}`;
+
+            const bar = document.getElementById('globalProgressBar');
+            if (bar) {
+                const percent = ((currentModuleIndex + 1) / modules.length) * 100;
+                bar.style.width = `${percent}%`;
+            }
+        }
+
+        function renderModule() {
+            const mod = modules[currentModuleIndex];
+            document.getElementById('slideCategory').innerText = mod.category;
+            document.getElementById('slidePageIndicator').innerText = `Halaman ${currentModuleIndex + 1} dari ${modules.length}`;
+            document.getElementById('pageProgressText').innerText = `Halaman ${currentModuleIndex + 1} / ${modules.length}`;
+
+            const contentDiv = document.getElementById('moduleContent');
+            contentDiv.innerHTML = mod.render();
+
+            document.getElementById('btnPrev').disabled = (currentModuleIndex === 0);
+            document.getElementById('btnNext').disabled = (currentModuleIndex === modules.length - 1);
+
+            updateGlobalProgress();
+
+            // Format formula matematika KaTeX
+            if (window.renderMathInElement) {
+                renderMathInElement(contentDiv, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        function nextModule() {
+            if (currentModuleIndex < modules.length - 1) {
+                currentModuleIndex++;
+                playSound('click');
+                renderModule();
+            }
+        }
+
+        function prevModule() {
+            if (currentModuleIndex > 0) {
+                currentModuleIndex--;
+                playSound('click');
+                renderModule();
+            }
+        }
+
+        window.onload = function() {
+            renderModule();
+        };
+    </script>
+</body>
+</html>
