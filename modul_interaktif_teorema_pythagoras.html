@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Interaktif Teorema Pythagoras</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- MathJax for rendering LaTeX formulas -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+    <style>
+        .gradient-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0284c7 100%);
+        }
+        .tab-btn.active {
+            border-bottom: 3px solid #38bdf8;
+            color: #38bdf8;
+            font-weight: 700;
+        }
+        .step-box {
+            transition: all 0.3s ease;
+        }
+        .step-box.hidden-step {
+            display: none;
+            opacity: 0;
+        }
+        .step-box.visible-step {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <!-- HEADER / HERO -->
+    <header class="gradient-header text-white shadow-xl sticky top-0 z-50 border-b border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-sky-500/20 p-2.5 rounded-xl border border-sky-400/30 backdrop-blur-md">
+                    <i data-lucide="triangle" class="w-7 h-7 text-sky-400 transform rotate-90"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black tracking-tight text-white">E-Modul Teorema Pythagoras</h1>
+                    <p class="text-xs sm:text-sm text-sky-200">Visual, Formula Kilat & Terbimbing</p>
+                </div>
+            </div>
+            
+            <!-- Navigation Tabs -->
+            <nav class="flex flex-wrap justify-center gap-1 sm:gap-2 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700 backdrop-blur-md text-xs sm:text-sm font-medium">
+                <button onclick="switchTab('tujuan')" id="tab-tujuan" class="nav-btn px-3 py-1.5 rounded-lg transition hover:bg-slate-700 text-slate-300">Tujuan</button>
+                <button onclick="switchTab('warmup')" id="tab-warmup" class="nav-btn px-3 py-1.5 rounded-lg transition hover:bg-slate-700 text-slate-300">Warm-Up</button>
+                <button onclick="switchTab('koneksi')" id="tab-koneksi" class="nav-btn px-3 py-1.5 rounded-lg transition hover:bg-slate-700 text-slate-300">Koneksi Nyata</button>
+                <button onclick="switchTab('materi')" id="tab-materi" class="nav-btn px-3 py-1.5 rounded-lg transition hover:bg-slate-700 text-slate-300">Materi & Trik Kilat</button>
+                <button onclick="switchTab('latihan')" id="tab-latihan" class="nav-btn px-3 py-1.5 rounded-lg transition hover:bg-slate-700 text-slate-300">Latihan Terbimbing</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- ================= SECTION 1: TUJUAN PEMBELAJARAN ================= -->
+        <section id="sec-tujuan" class="tab-content">
+            <div class="bg-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-lg border border-slate-700 mb-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-3 bg-sky-500/20 text-sky-400 rounded-xl border border-sky-500/30">
+                        <i data-lucide="target" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Tujuan Pembelajaran</h2>
+                        <p class="text-sm text-slate-400">Capaian yang akan kamu kuasai setelah mempelajari e-modul ini</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="p-4 rounded-xl border border-slate-700 bg-slate-800/50 hover:border-sky-500/50 transition">
+                        <div class="flex items-start gap-3">
+                            <span class="w-7 h-7 bg-sky-600 text-white rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">1</span>
+                            <div>
+                                <h3 class="font-semibold text-white text-base">Triple Pythagoras</h3>
+                                <p class="text-xs text-slate-400 mt-1">Mengidentifikasi dan menentukan kelompok tiga bilangan bulat yang memenuhi persamaan Pythagoras.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-700 bg-slate-800/50 hover:border-sky-500/50 transition">
+                        <div class="flex items-start gap-3">
+                            <span class="w-7 h-7 bg-sky-600 text-white rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">2</span>
+                            <div>
+                                <h3 class="font-semibold text-white text-base">Bentuk Segitiga</h3>
+                                <p class="text-xs text-slate-400 mt-1">Membandingkan kuadrat sisi terpanjang dengan jumlah kuadrat sisi lainnya untuk menentukan jenis segitiga (siku-siku, lancip, tumpul).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-700 bg-slate-800/50 hover:border-sky-500/50 transition">
+                        <div class="flex items-start gap-3">
+                            <span class="w-7 h-7 bg-sky-600 text-white rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">3</span>
+                            <div>
+                                <h3 class="font-semibold text-white text-base">Rasio Sudut $45^\circ - 45^\circ - 90^\circ$</h3>
+                                <p class="text-xs text-slate-400 mt-1">Menggunakan perbandingan perbandingan sisi $1 : 1 : \sqrt{2}$ pada segitiga siku-siku sama kaki.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-700 bg-slate-800/50 hover:border-sky-500/50 transition">
+                        <div class="flex items-start gap-3">
+                            <span class="w-7 h-7 bg-sky-600 text-white rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">4</span>
+                            <div>
+                                <h3 class="font-semibold text-white text-base">Rasio Sudut $30^\circ - 60^\circ - 90^\circ$</h3>
+                                <p class="text-xs text-slate-400 mt-1">Mengaplikasikan perbandingan sisi $1 : \sqrt{3} : 2$ untuk menyelesaikan persoalan segitiga siku-siku khusus.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-700 bg-slate-800/50 hover:border-sky-500/50 transition">
+                        <div class="flex items-start gap-3">
+                            <span class="w-7 h-7 bg-sky-600 text-white rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">5</span>
+                            <div>
+                                <h3 class="font-semibold text-white text-base">Trik Cepat Sisi Bentuk Akar</h3>
+                                <p class="text-xs text-slate-400 mt-1">Menggunakan trik kilat $a\sqrt{x} \pm a\sqrt{y}$ untuk menghitung sisi miring atau sisi tegak tanpa pengkuadratan rumit.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-700 bg-slate-800/50 hover:border-sky-500/50 transition">
+                        <div class="flex items-start gap-3">
+                            <span class="w-7 h-7 bg-sky-600 text-white rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">6</span>
+                            <div>
+                                <h3 class="font-semibold text-white text-base">Diagonal Bidang & Ruang</h3>
+                                <p class="text-xs text-slate-400 mt-1">Penerapan Teorema Pythagoras pada bangun ruang 3 dimensi (kubus dan balok) dengan rumus cepat.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call to action -->
+                <div class="mt-8 p-4 bg-gradient-to-r from-sky-950/80 to-indigo-950/80 rounded-xl border border-sky-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="sparkles" class="w-6 h-6 text-sky-400"></i>
+                        <span class="text-sm font-medium text-slate-200">Sudah siap belajar? Mari mulai dari pemanasan singkat berikut ini!</span>
+                    </div>
+                    <button onclick="switchTab('warmup')" class="px-5 py-2.5 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold rounded-xl text-sm transition shadow-md flex items-center gap-2">
+                        Mulai Warm-Up <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 2: WARM-UP (4 SOAL) ================= -->
+        <section id="sec-warmup" class="tab-content hidden">
+            <div class="bg-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-lg border border-slate-700 mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-sky-400 bg-sky-500/10 px-3 py-1 rounded-full border border-sky-500/20">Pemanasan</span>
+                        <h2 class="text-2xl font-bold text-white mt-2">4 Soal Kuis Pemanasan</h2>
+                        <p class="text-sm text-slate-400">Uji ingatan dasarmu mengenai konsep kuadrat, akar, dan segitiga siku-siku.</p>
+                    </div>
+                    <div id="warmup-score" class="text-right hidden">
+                        <span class="text-xs text-slate-400">Skor Kamu:</span>
+                        <div class="text-2xl font-extrabold text-sky-400" id="warmup-score-val">0 / 4</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Warmup Q1 -->
+                    <div class="p-5 border border-slate-700 rounded-xl bg-slate-800/50 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-slate-500 uppercase">Soal 1</span>
+                            <h3 class="font-medium text-slate-200 mt-1 mb-3">Berapakah hasil dari $6^2 + 8^2$?</h3>
+                            <div class="space-y-2" id="q1-options">
+                                <button onclick="checkWarmup(1, 100, this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">A. 100</button>
+                                <button onclick="checkWarmup(1, 28, this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">B. 28</button>
+                                <button onclick="checkWarmup(1, 14, this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">C. 14</button>
+                                <button onclick="checkWarmup(1, 196, this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">D. 196</button>
+                            </div>
+                        </div>
+                        <div id="q1-feedback" class="mt-3 text-xs p-2.5 rounded-lg hidden"></div>
+                    </div>
+
+                    <!-- Warmup Q2 -->
+                    <div class="p-5 border border-slate-700 rounded-xl bg-slate-800/50 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-slate-500 uppercase">Soal 2</span>
+                            <h3 class="font-medium text-slate-200 mt-1 mb-3">Berapakah nilai dari $\sqrt{169}$?</h3>
+                            <div class="space-y-2" id="q2-options">
+                                <button onclick="checkWarmup(2, 12, this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">A. 12</button>
+                                <button onclick="checkWarmup(2, 13, this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">B. 13</button>
+                                <button onclick="checkWarmup(2, 14, this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">C. 14</button>
+                                <button onclick="checkWarmup(2, 16, this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">D. 16</button>
+                            </div>
+                        </div>
+                        <div id="q2-feedback" class="mt-3 text-xs p-2.5 rounded-lg hidden"></div>
+                    </div>
+
+                    <!-- Warmup Q3 -->
+                    <div class="p-5 border border-slate-700 rounded-xl bg-slate-800/50 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-slate-500 uppercase">Soal 3</span>
+                            <h3 class="font-medium text-slate-200 mt-1 mb-3">Manakah bentuk umum Teorema Pythagoras untuk segitiga siku-siku dengan hipotenusa $c$?</h3>
+                            <div class="space-y-2" id="q3-options">
+                                <button onclick="checkWarmup(3, 'a', this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">A. $a^2 + b^2 = c^2$</button>
+                                <button onclick="checkWarmup(3, 'b', this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">B. $a + b = c$</button>
+                                <button onclick="checkWarmup(3, 'c', this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">C. $a^2 - b^2 = c^2$</button>
+                                <button onclick="checkWarmup(3, 'd', this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">D. $a^2 + c^2 = b^2$</button>
+                            </div>
+                        </div>
+                        <div id="q3-feedback" class="mt-3 text-xs p-2.5 rounded-lg hidden"></div>
+                    </div>
+
+                    <!-- Warmup Q4 -->
+                    <div class="p-5 border border-slate-700 rounded-xl bg-slate-800/50 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-slate-500 uppercase">Soal 4</span>
+                            <h3 class="font-medium text-slate-200 mt-1 mb-3">Sisi miring pada segitiga siku-siku disebut juga dengan istilah...</h3>
+                            <div class="space-y-2" id="q4-options">
+                                <button onclick="checkWarmup(4, 'katenusa', this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">A. Katenusa</button>
+                                <button onclick="checkWarmup(4, 'hipotenusa', this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">B. Hipotenusa</button>
+                                <button onclick="checkWarmup(4, 'diagonal', this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">C. Diagonal</button>
+                                <button onclick="checkWarmup(4, 'ordinat', this)" class="w-full text-left p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 transition text-sm text-slate-200">D. Ordinat</button>
+                            </div>
+                        </div>
+                        <div id="q4-feedback" class="mt-3 text-xs p-2.5 rounded-lg hidden"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 3: KONEKSI NYATA ================= -->
+        <section id="sec-koneksi" class="tab-content hidden">
+            <div class="bg-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-lg border border-slate-700 mb-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-3 bg-cyan-500/20 text-cyan-400 rounded-xl border border-cyan-500/30">
+                        <i data-lucide="compass" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Koneksi dalam Kehidupan Nyata</h2>
+                        <p class="text-sm text-slate-400">Mengapa Teorema Pythagoras begitu penting di dunia nyata?</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Case 1 -->
+                    <div class="bg-slate-800/70 p-6 rounded-2xl border border-slate-700 hover:border-sky-500/50 transition">
+                        <div class="w-12 h-12 bg-sky-600/30 text-sky-400 rounded-xl flex items-center justify-center mb-4 border border-sky-500/30">
+                            <i data-lucide="wrench" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-lg mb-2">Konstruksi & Tukang Bangunan</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Tukang kayu dan insinyur bangunan menguji sudut siku-siku fondasi rumah dengan teknik <strong>Metode 3-4-5</strong>. Jika segitiga yang diukur bersisi 3 meter, 4 meter, dan miringnya 5 meter, dipastikan sudutnya $90^\circ$ sempurna!
+                        </p>
+                    </div>
+
+                    <!-- Case 2 -->
+                    <div class="bg-slate-800/70 p-6 rounded-2xl border border-slate-700 hover:border-teal-500/50 transition">
+                        <div class="w-12 h-12 bg-teal-600/30 text-teal-400 rounded-xl flex items-center justify-center mb-4 border border-teal-500/30">
+                            <i data-lucide="navigation" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-lg mb-2">Navigasi & Jarak Terpendek</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Sistem GPS (Global Positioning System) dan kapal laut menghitung jarak lurus (garis lurus / <em>displacement</em>) antar dua koordinat lokasi di peta menggunakan kalkulasi Pythagoras.
+                        </p>
+                    </div>
+
+                    <!-- Case 3 -->
+                    <div class="bg-slate-800/70 p-6 rounded-2xl border border-slate-700 hover:border-indigo-500/50 transition">
+                        <div class="w-12 h-12 bg-indigo-600/30 text-indigo-400 rounded-xl flex items-center justify-center mb-4 border border-indigo-500/30">
+                            <i data-lucide="tv" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-lg mb-2">Ukuran Layar Gadget & TV</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Ukuran layar TV (misalnya 55 inci atau 24 inci) tidak diukur dari lebar atau tingginya, melainkan dari <strong>panjang diagonal bidang layar</strong> dengan menerapkan Teorema Pythagoras.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Interactive Mini-Simulation Real World -->
+                <div class="mt-8 bg-slate-950 text-white p-6 rounded-2xl border border-slate-800 relative overflow-hidden">
+                    <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-sky-400 font-bold">Simulasi Nyata</span>
+                            <h3 class="text-xl font-bold mt-1 mb-2">Keamanan Keselamatan Tangga Menyandar</h3>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                                Sebuah tangga disandarkan pada dinding tinggi. Sudut aman adalah ketika kaki tangga berjarak tertentu dari dinding. Hitung tinggi dinding yang dapat dicapai tangga!
+                            </p>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="text-xs text-slate-300 flex justify-between mb-1">
+                                        <span>Panjang Tangga ($c$):</span>
+                                        <span id="ladder-c-val" class="font-bold text-sky-400">5 meter</span>
+                                    </label>
+                                    <input type="range" id="ladder-c" min="3" max="10" value="5" step="0.5" oninput="updateLadderSim()" class="w-full accent-sky-400">
+                                </div>
+                                <div>
+                                    <label class="text-xs text-slate-300 flex justify-between mb-1">
+                                        <span>Jarak Kaki Tangga ke Dinding ($a$):</span>
+                                        <span id="ladder-a-val" class="font-bold text-sky-400">3 meter</span>
+                                    </label>
+                                    <input type="range" id="ladder-a" min="1" max="8" value="3" step="0.5" oninput="updateLadderSim()" class="w-full accent-sky-400">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Graphic Canvas / Visual -->
+                        <div class="bg-slate-900 p-4 rounded-xl flex flex-col items-center justify-center border border-slate-800">
+                            <svg id="ladder-svg" width="240" height="200" viewBox="0 0 240 200" class="overflow-visible">
+                                <line x1="40" y1="20" x2="40" y2="170" stroke="#94a3b8" stroke-width="6" />
+                                <line x1="20" y1="170" x2="220" y2="170" stroke="#64748b" stroke-width="4" />
+                                <polygon id="ladder-poly" points="40,170 40,50 160,170" fill="rgba(56, 189, 248, 0.15)" stroke="none" />
+                                <line id="ladder-line" x1="160" y1="170" x2="40" y2="50" stroke="#f59e0b" stroke-width="5" stroke-dasharray="6,2"/>
+                                <line id="ladder-h-line" x1="40" y1="170" x2="40" y2="50" stroke="#38bdf8" stroke-width="4"/>
+                                <text x="25" y="110" fill="#38bdf8" font-size="12" font-weight="bold" id="label-h">t = 4m</text>
+                                <text x="90" y="190" fill="#94a3b8" font-size="12" id="label-a">a = 3m</text>
+                                <text x="110" y="100" fill="#f59e0b" font-size="12" font-weight="bold" id="label-c">c = 5m</text>
+                            </svg>
+                            <div id="ladder-result" class="mt-2 text-center text-xs font-semibold text-sky-300 bg-sky-950/60 px-4 py-2 rounded-lg border border-sky-800/50">
+                                Tinggi dinding yang dicapai ($b$) = $\sqrt{5^2 - 3^2} = 4.00$ meter
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 4: MATERI LENGKAP & SIMULASI INTERAKTIF ================= -->
+        <section id="sec-materi" class="tab-content hidden">
+            <!-- Sub-tab selection for materi -->
+            <div class="flex overflow-x-auto gap-2 mb-6 pb-2 scrollbar-none">
+                <button onclick="switchSubMateri('triple')" id="subtab-triple" class="submateri-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap bg-sky-500 text-slate-950 shadow-sm font-bold">1. Triple Pythagoras</button>
+                <button onclick="switchSubMateri('bentuk')" id="subtab-bentuk" class="submateri-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700">2. Bentuk Segitiga</button>
+                <button onclick="switchSubMateri('rasio45')" id="subtab-rasio45" class="submateri-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700">3. Sudut $45^\circ-45^\circ-90^\circ$</button>
+                <button onclick="switchSubMateri('rasio30')" id="subtab-rasio30" class="submateri-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700">4. Sudut $30^\circ-60^\circ-90^\circ$</button>
+                <button onclick="switchSubMateri('akar')" id="subtab-akar" class="submateri-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700">5. Trik Cepat Sisi Akar</button>
+                <button onclick="switchSubMateri('3d')" id="subtab-3d" class="submateri-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700">6. Diagonal Bidang & Ruang</button>
+            </div>
+
+            <!-- SUB-TOPIC 1: TRIPLE PYTHAGORAS -->
+            <div id="materi-triple" class="submateri-content bg-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-lg border border-slate-700">
+                <div class="flex flex-col lg:flex-row gap-6 items-start justify-between mb-6">
+                    <div class="flex-1">
+                        <h2 class="text-xl sm:text-2xl font-bold text-white mb-3">1. Triple Pythagoras</h2>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            <strong>Triple Pythagoras</strong> adalah tiga bilangan bulat positif $(a, b, c)$ yang memenuhi persamaan $a^2 + b^2 = c^2$, di mana $c$ adalah bilangan terbesar (hipotenusa).
+                        </p>
+                    </div>
+
+                    <!-- SVG Illustration 1: Triple Pythagoras Grid -->
+                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 flex flex-col items-center shrink-0 w-full lg:w-72">
+                        <span class="text-xs text-sky-400 font-bold mb-2">Visualisasi Pembuktian $3^2 + 4^2 = 5^2$</span>
+                        <svg width="200" height="180" viewBox="-10 -10 220 200" class="overflow-visible">
+                            <!-- Triangle -->
+                            <polygon points="40,140 160,140 40,50" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+                            <!-- Right angle marker -->
+                            <rect x="40" y="125" width="15" height="15" fill="none" stroke="#38bdf8" stroke-width="1.5"/>
+                            <!-- Labels -->
+                            <text x="100" y="158" fill="#e2e8f0" font-size="12" text-anchor="middle" font-weight="bold">a = 4 (16 kotak)</text>
+                            <text x="20" y="95" fill="#e2e8f0" font-size="12" text-anchor="middle" font-weight="bold">b = 3 (9)</text>
+                            <text x="110" y="85" fill="#f59e0b" font-size="12" text-anchor="middle" font-weight="bold">c = 5 (25 kotak)</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Key Families -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-slate-200 text-sm mb-3">Kelompok Utama yang Sering Muncul:</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div class="p-3 rounded-xl bg-sky-950/60 border border-sky-800/50 text-center">
+                            <span class="text-xs text-sky-400 font-semibold block">Tipe 1</span>
+                            <span class="text-lg font-black text-sky-200">3, 4, 5</span>
+                            <span class="text-[10px] text-sky-400 block mt-1">Kelipatan: (6,8,10), (9,12,15)</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-emerald-950/60 border border-emerald-800/50 text-center">
+                            <span class="text-xs text-emerald-400 font-semibold block">Tipe 2</span>
+                            <span class="text-lg font-black text-emerald-200">5, 12, 13</span>
+                            <span class="text-[10px] text-emerald-400 block mt-1">Kelipatan: (10,24,26), ...</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-amber-950/60 border border-amber-800/50 text-center">
+                            <span class="text-xs text-amber-400 font-semibold block">Tipe 3</span>
+                            <span class="text-lg font-black text-amber-200">7, 24, 25</span>
+                            <span class="text-[10px] text-amber-400 block mt-1">Kelipatan: (14,48,50), ...</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-purple-950/60 border border-purple-800/50 text-center">
+                            <span class="text-xs text-purple-400 font-semibold block">Tipe 4</span>
+                            <span class="text-lg font-black text-purple-200">8, 15, 17</span>
+                            <span class="text-[10px] text-purple-400 block mt-1">Kelipatan: (16,30,34), ...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Triple Tester -->
+                <div class="p-5 bg-slate-900 text-white rounded-xl border border-slate-700">
+                    <h3 class="font-bold text-sky-400 text-sm mb-2 flex items-center gap-2">
+                        <i data-lucide="calculator" class="w-4 h-4"></i> Uji Coba Triple Pythagoras Interaktif
+                    </h3>
+                    <p class="text-xs text-slate-300 mb-4">Masukkan 3 bilangan untuk mengecek apakah merupakan Triple Pythagoras:</p>
+                    <div class="flex flex-wrap items-center gap-3 mb-4">
+                        <input type="number" id="triple-a" value="9" placeholder="a" class="w-20 px-3 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 text-center text-sm">
+                        <span class="text-slate-400 font-bold">+</span>
+                        <input type="number" id="triple-b" value="12" placeholder="b" class="w-20 px-3 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 text-center text-sm">
+                        <span class="text-slate-400 font-bold">=</span>
+                        <input type="number" id="triple-c" value="15" placeholder="c" class="w-20 px-3 py-2 bg-slate-800 text-white rounded-lg border border-slate-700 text-center text-sm">
+                        <button onclick="checkTripleInteractive()" class="px-4 py-2 bg-sky-500 text-slate-950 font-bold rounded-lg hover:bg-sky-400 text-xs transition">Cek Sekarang</button>
+                    </div>
+                    <div id="triple-result" class="text-xs p-3 rounded-lg bg-slate-800 border border-slate-700 text-slate-200"></div>
+                </div>
+
+                <!-- Contoh Soal & Pembahasan -->
+                <div class="mt-6 border-t border-slate-700 pt-6">
+                    <h3 class="font-bold text-slate-200 text-base mb-2">Contoh Soal & Pembahasan:</h3>
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 text-xs sm:text-sm leading-relaxed">
+                        <p class="font-semibold text-sky-300">Soal:</p>
+                        <p class="text-slate-200">Apakah kelompok bilangan $9, 40, 41$ merupakan kelompok Triple Pythagoras?</p>
+                        <p class="font-semibold text-sky-300 mt-3">Pembahasan:</p>
+                        <ol class="list-decimal list-inside text-slate-300 space-y-1 mt-1">
+                            <li>Pilih bilangan terbesar sebagai hipotenusa: $c = 41$.</li>
+                            <li>Hitung kuadrat $c$: $41^2 = 1681$.</li>
+                            <li>Hitung jumlah kuadrat dua sisi lainnya: $9^2 + 40^2 = 81 + 1600 = 1681$.</li>
+                            <li>Karena $9^2 + 40^2 = 41^2$ ($1681 = 1681$), maka <strong>9, 40, 41 ADALAH Triple Pythagoras</strong>.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TOPIC 2: BENTUK SEGITIGA -->
+            <div id="materi-bentuk" class="submateri-content bg-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-lg border border-slate-700 hidden">
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-3">2. Penentuan Jenis Bentuk Segitiga</h2>
+                <p class="text-sm text-slate-300 mb-6 leading-relaxed">
+                    Misalkan sisi-sisi suatu segitiga adalah $a, b, c$ dengan $c$ sebagai <strong>sisi terpanjang</strong>. Jenis segitiga ditentukan berdasarkan perbandingan $c^2$ dengan $(a^2 + b^2)$:
+                </p>
+
+                <!-- SVG Illustration 2: 3 Types of Triangles -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="p-4 rounded-xl bg-slate-900 border border-slate-700 text-center flex flex-col items-center">
+                        <h3 class="font-bold text-sky-400 text-sm mb-1">1. Segitiga Siku-Siku</h3>
+                        <p class="text-xs font-mono text-sky-300 font-bold mb-3">$c^2 = a^2 + b^2$</p>
+                        <svg width="140" height="100" viewBox="0 0 140 100">
+                            <polygon points="20,80 120,80 20,20" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+                            <rect x="20" y="68" width="12" height="12" fill="none" stroke="#38bdf8" stroke-width="1.5"/>
+                        </svg>
+                        <p class="text-[11px] text-slate-400 mt-2">Sudut di depan $c$ tepat $90^\circ$.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-900 border border-slate-700 text-center flex flex-col items-center">
+                        <h3 class="font-bold text-emerald-400 text-sm mb-1">2. Segitiga Lancip</h3>
+                        <p class="text-xs font-mono text-emerald-300 font-bold mb-3">$c^2 < a^2 + b^2$</p>
+                        <svg width="140" height="100" viewBox="0 0 140 100">
+                            <polygon points="20,80 120,80 55,15" fill="rgba(52, 211, 153, 0.2)" stroke="#34d399" stroke-width="2"/>
+                        </svg>
+                        <p class="text-[11px] text-slate-400 mt-2">Semua sudut kurang dari $90^\circ$.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-900 border border-slate-700 text-center flex flex-col items-center">
+                        <h3 class="font-bold text-rose-400 text-sm mb-1">3. Segitiga Tumpul</h3>
+                        <p class="text-xs font-mono text-rose-300 font-bold mb-3">$c^2 > a^2 + b^2$</p>
+                        <svg width="140" height="100" viewBox="0 0 140 100">
+                            <polygon points="50,80 130,80 15,35" fill="rgba(251, 113, 133, 0.2)" stroke="#fb7185" stroke-width="2"/>
+                        </svg>
+                        <p class="text-[11px] text-slate-400 mt-2">Salah satu sudut lebih dari $90^\circ$.</p>
+                    </div>
+                </div>
+
+                <!-- Interactive Visualizer -->
+                <div class="p-5 bg-slate-900 text-white rounded-xl border border-slate-700 mb-6">
+                    <h3 class="font-bold text-sky-400 text-sm mb-3">Simulasi Interaktif Bentuk Segitiga</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-xs text-slate-300">Sisi a: <span id="val-a-bent" class="font-bold text-sky-400">6</span></label>
+                                <input type="range" id="range-a-bent" min="3" max="15" value="6" oninput="updateBentukSim()" class="w-full accent-sky-400">
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-300">Sisi b: <span id="val-b-bent" class="font-bold text-sky-400">8</span></label>
+                                <input type="range" id="range-b-bent" min="3" max="15" value="8" oninput="updateBentukSim()" class="w-full accent-sky-400">
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-300">Sisi Terpanjang c: <span id="val-c-bent" class="font-bold text-sky-400">10</span></label>
+                                <input type="range" id="range-c-bent" min="3" max="25" value="10" oninput="updateBentukSim()" class="w-full accent-sky-400">
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800 p-4 rounded-xl text-center border border-slate-700">
+                            <div id="bent-calc-details" class="text-xs text-slate-300 mb-3 font-mono"></div>
+                            <div id="bent-badge" class="inline-block px-4 py-1.5 rounded-full text-sm font-bold bg-sky-500 text-slate-950">
+                                Segitiga Siku-siku
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contoh Soal -->
+                <div class="border-t border-slate-700 pt-6">
+                    <h3 class="font-bold text-slate-200 text-base mb-2">Contoh Soal & Pembahasan:</h3>
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 text-xs sm:text-sm leading-relaxed">
+                        <p class="font-semibold text-sky-300">Soal:</p>
+                        <p class="text-slate-200">Tentukan jenis segitiga dengan panjang sisi-sisi $7\text{ cm}, 10\text{ cm}$, dan $12\text{ cm}$!</p>
+                        <p class="font-semibold text-sky-300 mt-3">Pembahasan:</p>
+                        <ul class="list-disc list-inside text-slate-300 space-y-1 mt-1">
+                            <li>Sisi terpanjang $c = 12 \rightarrow c^2 = 12^2 = 144$.</li>
+                            <li>Dua sisi lainnya $a = 7$ dan $b = 10 \rightarrow a^2 + b^2 = 7^2 + 10^2 = 49 + 100 = 149$.</li>
+                            <li>Bandingkan: $c^2 = 144$ dan $a^2 + b^2 = 149$. Karena $144 < 149$ ($c^2 < a^2 + b^2$), maka segitiga tersebut adalah <strong>Segitiga Lancip</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TOPIC 3: SEGITIGA 45-45-90 -->
+            <div id="materi-rasio45" class="submateri-content bg-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-lg border border-slate-700 hidden">
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-3">3. Rasio Sudut Istimewa $45^\circ - 45^\circ - 90^\circ$</h2>
+                <p class="text-sm text-slate-300 mb-6 leading-relaxed">
+                    Segitiga siku-siku dengan sudut $45^\circ - 45^\circ - 90^\circ$ merupakan <strong>Segitiga Siku-Siku Sama Kaki</strong>. Panjang kedua sisi penyikunya selalu sama.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center mb-6">
+                    <div class="bg-slate-900 p-5 rounded-2xl border border-slate-700">
+                        <h3 class="font-bold text-indigo-400 text-base mb-2">Perbandingan Panjang Sisi:</h3>
+                        <div class="text-center bg-slate-800 p-4 rounded-xl border border-indigo-500/30 shadow-sm mb-4">
+                            <span class="text-xs text-indigo-300 font-semibold block">Sisi A : Sisi B : Hipotenusa</span>
+                            <div class="text-2xl font-black text-indigo-400 mt-1">1 : 1 : √2</div>
+                            <span class="text-xs text-slate-400 font-mono">x : x : x√2</span>
+                        </div>
+
+                        <!-- SVG Illustration 3: 45-45-90 -->
+                        <div class="flex justify-center my-3">
+                            <svg width="180" height="130" viewBox="0 0 180 130">
+                                <polygon points="30,110 140,110 30,15" fill="rgba(129, 140, 248, 0.2)" stroke="#818cf8" stroke-width="2"/>
+                                <rect x="30" y="98" width="12" height="12" fill="none" stroke="#818cf8" stroke-width="1.5"/>
+                                <text x="85" y="125" fill="#e2e8f0" font-size="12" text-anchor="middle">x</text>
+                                <text x="18" y="65" fill="#e2e8f0" font-size="12" text-anchor="middle">x</text>
+                                <text x="100" y="55" fill="#818cf8" font-size="12" font-weight="bold">x√2</text>
+                                <text x="45" y="102" fill="#38bdf8" font-size="10">45°</text>
+                                <text x="110" y="105" fill="#38bdf8" font-size="10">45°</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Calculator Interaktif -->
+                    <div class="bg-slate-900 text-white p-5 rounded-2xl border border-slate-700">
+                        <h3 class="font-bold text-sky-400 text-sm mb-3">Kalkulator Segitiga $45^\circ-45^\circ-90^\circ$</h3>
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <label class="text-slate-300 block mb-1">Panjang Sisi Penyiku ($x$):</label>
+                                <input type="number" id="input-sisi45" value="5" oninput="calc45()" class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-bold">
+                            </div>
+                            <div class="p-3 bg-slate-800 rounded-lg border border-slate-700">
+                                <div class="text-slate-400">Hasil Perhitungan:</div>
+                                <div class="text-sky-300 font-mono mt-1" id="res-45">
+                                    Sisi Penyiku 1 = 5<br>
+                                    Sisi Penyiku 2 = 5<br>
+                                    Hipotenusa = 5√2 ≈ 7.07
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contoh Soal -->
+                <div class="border-t border-slate-700 pt-6">
+                    <h3 class="font-bold text-slate-200 text-base mb-2">Contoh Soal & Pembahasan:</h3>
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 text-xs sm:text-sm leading-relaxed">
+                        <p class="font-semibold text-sky-300">Soal:</p>
+                        <p class="text-slate-200">Diketahui sebuah segitiga siku-siku sama kaki memiliki hipotenusa sepanjang $10\sqrt{2}\text{ cm}$. Berapakah panjang sisi penyikunya?</p>
+                        <p class="font-semibold text-sky-300 mt-3">Pembahasan:</p>
+                        <ol class="list-decimal list-inside text-slate-300 space-y-1 mt-1">
+                            <li>Gunakan perbandingan $x : x : x\sqrt{2}$.</li>
+                            <li>Hipotenusa $= x\sqrt{2} = 10\sqrt{2}$.</li>
+                            <li>Bagi kedua ruas dengan $\sqrt{2}$, diperoleh $x = 10$.</li>
+                            <li>Jadi, panjang masing-masing sisi penyiku adalah <strong>10 cm</strong>.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TOPIC 4: SEGITIGA 30-60-90 -->
+            <div id="materi-rasio30" class="submateri-content bg-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-lg border border-slate-700 hidden">
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-3">4. Rasio Sudut Istimewa $30^\circ - 60^\circ - 90^\circ$</h2>
+                <p class="text-sm text-slate-300 mb-6 leading-relaxed">
+                    Segitiga siku-siku ini dihasilkan dari memotong segitiga sama sisi menjadi dua bagian sama besar.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center mb-6">
+                    <div class="bg-slate-900 p-5 rounded-2xl border border-slate-700">
+                        <h3 class="font-bold text-teal-400 text-base mb-2">Perbandingan Panjang Sisi:</h3>
+                        <div class="text-center bg-slate-800 p-4 rounded-xl border border-teal-500/30 shadow-sm mb-4">
+                            <span class="text-xs text-slate-400 font-semibold block">Depan 30° : Depan 60° : Hipotenusa (90°)</span>
+                            <div class="text-2xl font-black text-teal-400 mt-1">1 : √3 : 2</div>
+                            <span class="text-xs text-slate-400 font-mono">x : x√3 : 2x</span>
+                        </div>
+
+                        <!-- SVG Illustration 4: 30-60-90 -->
+                        <div class="flex justify-center my-3">
+                            <svg width="190" height="120" viewBox="0 0 190 120">
+                                <polygon points="30,100 160,100 30,20" fill="rgba(45, 212, 191, 0.2)" stroke="#2dd4bf" stroke-width="2"/>
+                                <rect x="30" y="88" width="12" height="12" fill="none" stroke="#2dd4bf" stroke-width="1.5"/>
+                                <text x="95" y="115" fill="#e2e8f0" font-size="12" text-anchor="middle">x√3 (depan 60°)</text>
+                                <text x="18" y="60" fill="#e2e8f0" font-size="12" text-anchor="middle">x</text>
+                                <text x="110" y="50" fill="#2dd4bf" font-size="12" font-weight="bold">2x (miring)</text>
+                                <text x="40" y="40" fill="#f59e0b" font-size="10">30°</text>
+                                <text x="130" y="95" fill="#f59e0b" font-size="10">60°</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Calculator -->
+                    <div class="bg-slate-900 text-white p-5 rounded-2xl border border-slate-700">
+                        <h3 class="font-bold text-teal-400 text-sm mb-3">Kalkulator Segitiga $30^\circ-60^\circ-90^\circ$</h3>
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <label class="text-slate-300 block mb-1">Panjang Sisi Terpendek ($x$ - depan 30°):</label>
+                                <input type="number" id="input-sisi30" value="4" oninput="calc30()" class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-bold">
+                            </div>
+                            <div class="p-3 bg-slate-800 rounded-lg border border-slate-700">
+                                <div class="text-slate-400">Hasil Perhitungan Sisi Lain:</div>
+                                <div class="text-teal-300 font-mono mt-1" id="res-30">
+                                    Sisi Sedang (depan 60°) = 4√3 ≈ 6.93<br>
+                                    Hipotenusa (depan 90°) = 8
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contoh Soal -->
+                <div class="border-t border-slate-700 pt-6">
+                    <h3 class="font-bold text-slate-200 text-base mb-2">Contoh Soal & Pembahasan:</h3>
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 text-xs sm:text-sm leading-relaxed">
+                        <p class="font-semibold text-sky-300">Soal:</p>
+                        <p class="text-slate-200">Panjang hipotenusa sebuah segitiga siku-siku dengan sudut $30^\circ$ dan $60^\circ$ adalah $16\text{ cm}$. Tentukan panjang sisi di depan sudut $60^\circ$!</p>
+                        <p class="font-semibold text-sky-300 mt-3">Pembahasan:</p>
+                        <ol class="list-decimal list-inside text-slate-300 space-y-1 mt-1">
+                            <li>Hipotenusa $= 2x = 16 \rightarrow x = 8\text{ cm}$ (sisi terpendek di depan $30^\circ$).</li>
+                            <li>Sisi di depan sudut $60^\circ$ adalah $x\sqrt{3}$.</li>
+                            <li>Substitusi $x = 8 \rightarrow$ panjang sisi $= 8\sqrt{3}\text{ cm}$.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TOPIC 5: SISI BENTUK AKAR (TRIK KILAT RUMUS CEPAT) -->
+            <div id="materi-akar" class="submateri-content bg-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-lg border border-slate-700 hidden">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">Trik Kilat SMA & SMP</span>
+                        <h2 class="text-xl sm:text-2xl font-bold text-white mt-2">5. Formulasi Kilat Sisi Bentuk Akar</h2>
+                    </div>
+                </div>
+
+                <p class="text-sm text-slate-300 mb-6 leading-relaxed">
+                    Jika kedua sisi penyiku atau sisi miring memiliki pengali konstanta yang sama ($a$), kamu <strong>tidak perlu mengkuadratkan angka besar</strong>! Cukup operasikan bilangan di dalam akarnya secara langsung.
+                </p>
+
+                <!-- VISUAL CARDS FOR FORMULA (Matching User Uploaded Image Structure) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Card 1: Mencari Sisi Miring -->
+                    <div class="bg-slate-950 p-6 rounded-2xl border border-sky-500/40 shadow-md">
+                        <span class="text-[11px] font-bold uppercase px-2.5 py-1 bg-sky-500/20 text-sky-400 rounded-md border border-sky-500/30">Mencari Sisi Miring (Hipotenusa)</span>
+                        <div class="my-5 text-center bg-slate-900 p-4 rounded-xl border border-slate-800">
+                            <div class="text-xl sm:text-2xl font-bold text-sky-400 font-serif">
+                                $a\sqrt{x} + a\sqrt{y} \rightarrow \text{Miring} = a\sqrt{x + y}$
+                            </div>
+                        </div>
+
+                        <!-- SVG Graphic Illustration -->
+                        <div class="flex justify-center my-4">
+                            <svg width="220" height="130" viewBox="0 0 220 130">
+                                <polygon points="30,110 170,110 30,20" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="2"/>
+                                <rect x="30" y="98" width="12" height="12" fill="none" stroke="#38bdf8" stroke-width="1.5"/>
+                                <text x="100" y="125" fill="#e2e8f0" font-size="11" text-anchor="middle">a√y</text>
+                                <text x="18" y="65" fill="#e2e8f0" font-size="11" text-anchor="middle">a√x</text>
+                                <text x="115" y="55" fill="#38bdf8" font-size="12" font-weight="bold">Miring = a√(x + y)</text>
+                            </svg>
+                        </div>
+
+                        <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-2">
+                            <p class="font-semibold text-sky-300">Contoh:</p>
+                            <p>Sisi penyikunya $3\sqrt{5}$ dan $3\sqrt{11}$. Maka sisi miringnya:</p>
+                            <div class="p-2 bg-slate-950 rounded text-center font-bold text-sky-400 text-sm border border-slate-800 font-serif">
+                                $\text{Miring} = 3\sqrt{5 + 11} = 3\sqrt{16} = 3 \times 4 = 12$
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Mencari Sisi Siku-siku Lain -->
+                    <div class="bg-slate-950 p-6 rounded-2xl border border-emerald-500/40 shadow-md">
+                        <span class="text-[11px] font-bold uppercase px-2.5 py-1 bg-emerald-500/20 text-emerald-400 rounded-md border border-emerald-500/30">Mencari Sisi Siku-Siku Lain</span>
+                        <div class="my-5 text-center bg-slate-900 p-4 rounded-xl border border-slate-800">
+                            <div class="text-xl sm:text-2xl font-bold text-emerald-400 font-serif">
+                                $a\sqrt{x} - a\sqrt{y} \rightarrow \text{Sisi} = a\sqrt{x - y}$
+                            </div>
+                        </div>
+
+                        <!-- SVG Graphic Illustration -->
+                        <div class="flex justify-center my-4">
+                            <svg width="220" height="130" viewBox="0 0 220 130">
+                                <polygon points="30,110 170,110 30,20" fill="rgba(52, 211, 153, 0.15)" stroke="#34d399" stroke-width="2"/>
+                                <rect x="30" y="98" width="12" height="12" fill="none" stroke="#34d399" stroke-width="1.5"/>
+                                <text x="100" y="125" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle">Sisi = a√(x - y)</text>
+                                <text x="18" y="65" fill="#e2e8f0" font-size="11" text-anchor="middle">a√y</text>
+                                <text x="115" y="55" fill="#e2e8f0" font-size="11">Miring = a√x</text>
+                            </svg>
+                        </div>
+
+                        <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-2">
+                            <p class="font-semibold text-emerald-300">Contoh:</p>
+                            <p>Sisi miring $10\sqrt{6}$ dan sisi tegak $10\sqrt{2}$. Sisi tegak lainnya:</p>
+                            <div class="p-2 bg-slate-950 rounded text-center font-bold text-emerald-400 text-sm border border-slate-800 font-serif">
+                                $\text{Sisi} = 10\sqrt{6 - 2} = 10\sqrt{4} = 10 \times 2 = 20$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Root Calculator using the Fast Shortcut -->
+                <div class="bg-slate-900 text-white p-5 rounded-2xl border border-slate-700">
+                    <h3 class="font-bold text-amber-400 text-sm mb-3">Kalkulator Trik Kilat $a\sqrt{x} \pm a\sqrt{y}$</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs mb-4">
+                        <div>
+                            <label class="text-slate-300 block mb-1">Nilai Konstanta ($a$):</label>
+                            <input type="number" id="fast-a" value="3" min="1" oninput="calcFastRootSim()" class="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded text-white font-bold">
+                        </div>
+                        <div>
+                            <label class="text-slate-300 block mb-1">Nilai Akar 1 ($x$):</label>
+                            <input type="number" id="fast-x" value="5" min="1" oninput="calcFastRootSim()" class="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded text-white font-bold">
+                        </div>
+                        <div>
+                            <label class="text-slate-300 block mb-1">Nilai Akar 2 ($y$):</label>
+                            <input type="number" id="fast-y" value="11" min="1" oninput="calcFastRootSim()" class="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded text-white font-bold">
+                        </div>
+                        <div>
+                            <label class="text-slate-300 block mb-1">Mode Cari:</label>
+                            <select id="fast-mode" onchange="calcFastRootSim()" class="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded text-white font-bold">
+                                <option value="miring">Sisi Miring (x + y)</option>
+                                <option value="tegak">Sisi Tegak (x - y)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="fast-root-res" class="p-4 bg-slate-950 rounded-xl text-xs font-mono border border-slate-800 text-amber-300">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TOPIC 6: DIAGONAL BIDANG DAN RUANG -->
+            <div id="materi-3d" class="submateri-content bg-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-lg border border-slate-700 hidden">
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-3">6. Formulasi Kilat Diagonal Kubus & Balok</h2>
+                <p class="text-sm text-slate-300 mb-6 leading-relaxed">
+                    Gunakan rumus cepat ini untuk menghemat waktu pengerjaan soal Geometri Ruang (Dimensi Tiga).
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- Kubus Card with Isometric SVG -->
+                    <div class="p-5 rounded-2xl bg-slate-900 border border-purple-500/40">
+                        <span class="px-2.5 py-1 bg-purple-500/20 text-purple-400 text-xs font-bold rounded-md uppercase border border-purple-500/30">Kubus Rusuk $s$</span>
+                        <div class="my-4 space-y-2 text-xs">
+                            <div class="p-3 bg-slate-800 rounded-lg border border-slate-700 flex justify-between items-center">
+                                <span class="text-slate-300">Diagonal Bidang ($AC, EG, \text{dll}$):</span>
+                                <span class="font-mono font-bold text-purple-400 text-sm">$s\sqrt{2}$</span>
+                            </div>
+                            <div class="p-3 bg-slate-800 rounded-lg border border-slate-700 flex justify-between items-center">
+                                <span class="text-slate-300">Diagonal Ruang ($AG, HB, \text{dll}$):</span>
+                                <span class="font-mono font-bold text-purple-400 text-sm">$s\sqrt{3}$</span>
+                            </div>
+                        </div>
+
+                        <!-- SVG Isometric Cube Illustration -->
+                        <div class="flex justify-center my-3">
+                            <svg width="180" height="130" viewBox="0 0 180 130">
+                                <!-- Front Face -->
+                                <polygon points="30,50 90,50 90,110 30,110" fill="none" stroke="#64748b" stroke-width="1.5"/>
+                                <!-- Back Face -->
+                                <polygon points="70,20 130,20 130,80 70,80" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="3,3"/>
+                                <!-- Connecting Lines -->
+                                <line x1="30" y1="50" x2="70" y2="20" stroke="#64748b" stroke-width="1.5"/>
+                                <line x1="90" y1="50" x2="130" y2="20" stroke="#64748b" stroke-width="1.5"/>
+                                <line x1="90" y1="110" x2="130" y2="80" stroke="#64748b" stroke-width="1.5"/>
+                                <line x1="30" y1="110" x2="70" y2="80" stroke="#475569" stroke-width="1.5" stroke-dasharray="3,3"/>
+                                <!-- Diagonal Bidang (Face Diagonal) -->
+                                <line x1="30" y1="110" x2="90" y2="50" stroke="#c084fc" stroke-width="2"/>
+                                <!-- Diagonal Ruang (Space Diagonal) -->
+                                <line x1="30" y1="110" x2="130" y2="20" stroke="#f59e0b" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Balok Card -->
+                    <div class="p-5 rounded-2xl bg-slate-900 border border-indigo-500/40">
+                        <span class="px-2.5 py-1 bg-indigo-500/20 text-indigo-400 text-xs font-bold rounded-md uppercase border border-indigo-500/30">Balok ($p, l, t$)</span>
+                        <div class="my-4 space-y-2 text-xs">
+                            <div class="p-3 bg-slate-800 rounded-lg border border-slate-700 flex justify-between items-center">
+                                <span class="text-slate-300">Diagonal Alas:</span>
+                                <span class="font-mono font-bold text-indigo-400 text-sm">$\sqrt{p^2 + l^2}$</span>
+                            </div>
+                            <div class="p-3 bg-slate-800 rounded-lg border border-slate-700 flex justify-between items-center">
+                                <span class="text-slate-300">Diagonal Ruang:</span>
+                                <span class="font-mono font-bold text-indigo-400 text-sm">$\sqrt{p^2 + l^2 + t^2}$</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive 3D/Cube Calculator -->
+                <div class="bg-slate-900 text-white p-5 rounded-2xl border border-slate-700 mb-6">
+                    <h3 class="font-bold text-purple-400 text-sm mb-3">Kalkulator Diagonal Kubus & Balok</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs mb-4">
+                        <div>
+                            <label class="text-slate-300">Panjang ($p$):</label>
+                            <input type="number" id="3d-p" value="6" min="1" oninput="calc3DSim()" class="w-full mt-1 px-3 py-1.5 bg-slate-800 border border-slate-700 rounded text-white">
+                        </div>
+                        <div>
+                            <label class="text-slate-300">Lebar ($l$):</label>
+                            <input type="number" id="3d-l" value="6" min="1" oninput="calc3DSim()" class="w-full mt-1 px-3 py-1.5 bg-slate-800 border border-slate-700 rounded text-white">
+                        </div>
+                        <div>
+                            <label class="text-slate-300">Tinggi ($t$):</label>
+                            <input type="number" id="3d-t" value="6" min="1" oninput="calc3DSim()" class="w-full mt-1 px-3 py-1.5 bg-slate-800 border border-slate-700 rounded text-white">
+                        </div>
+                    </div>
+                    <div id="3d-res" class="p-3 bg-slate-800 rounded-lg text-xs font-mono text-purple-300 border border-slate-700"></div>
+                </div>
+
+                <!-- Contoh Soal -->
+                <div class="border-t border-slate-700 pt-6">
+                    <h3 class="font-bold text-slate-200 text-base mb-2">Contoh Soal & Pembahasan:</h3>
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 text-xs sm:text-sm leading-relaxed">
+                        <p class="font-semibold text-sky-300">Soal:</p>
+                        <p class="text-slate-200">Sebuah kubus memiliki panjang rusuk $8\text{ cm}$. Hitunglah panjang diagonal bidang dan diagonal ruang kubus tersebut!</p>
+                        <p class="font-semibold text-sky-300 mt-3">Pembahasan:</p>
+                        <ul class="list-disc list-inside text-slate-300 space-y-1 mt-1">
+                            <li>Diagonal Bidang $= s\sqrt{2} = 8\sqrt{2}\text{ cm}$.</li>
+                            <li>Diagonal Ruang $= s\sqrt{3} = 8\sqrt{3}\text{ cm}$.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 5: LATIHAN SOAL TERBIMBING ================= -->
+        <section id="sec-latihan" class="tab-content hidden">
+            <div class="bg-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-lg border border-slate-700 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">Latihan Mandiri Interaktif</span>
+                        <h2 class="text-2xl font-bold text-white mt-2">Latihan Soal Terbimbing Step-by-Step</h2>
+                        <p class="text-sm text-slate-400">Ikuti petunjuk langkah demi langkah untuk menyelesaikan soal dengan benar!</p>
+                    </div>
+                </div>
+
+                <!-- Exercise Cards Container -->
+                <div class="space-y-8">
+                    
+                    <!-- Latihan 1: Triple Pythagoras -->
+                    <div class="p-6 border border-slate-700 rounded-2xl bg-slate-900/50">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2.5 py-1 bg-sky-500/20 text-sky-400 text-xs font-bold rounded-md border border-sky-500/30">Soal 1</span>
+                            <span class="text-xs text-slate-400">Sub-topik: Triple Pythagoras</span>
+                        </div>
+                        <h3 class="font-semibold text-white text-base mb-4">
+                            Jika $(12, x, 13)$ membentuk Triple Pythagoras dengan $13$ sebagai sisi miring, berapakah nilai $x$?
+                        </h3>
+
+                        <!-- Guided Step 1 -->
+                        <div id="ex1-step1" class="step-box visible-step bg-slate-800 p-4 rounded-xl border border-slate-700 mb-3">
+                            <p class="text-xs font-bold text-slate-300 mb-2">Langkah 1: Tuliskan persamaan Pythagoras yang sesuai</p>
+                            <div class="flex items-center gap-2 text-xs text-slate-200">
+                                <span>$12^2 + x^2 = $</span>
+                                <input type="number" id="ex1-in1" placeholder="c²" class="w-20 px-2 py-1 bg-slate-900 border border-slate-700 rounded text-center text-white">
+                            </div>
+                            <button onclick="checkEx1Step1()" class="mt-3 px-3 py-1.5 bg-sky-500 text-slate-950 font-bold rounded-lg text-xs">Cek Langkah 1</button>
+                            <div id="ex1-fb1" class="mt-2 text-xs font-semibold hidden"></div>
+                        </div>
+
+                        <!-- Guided Step 2 -->
+                        <div id="ex1-step2" class="step-box hidden-step bg-slate-800 p-4 rounded-xl border border-slate-700 mb-3">
+                            <p class="text-xs font-bold text-slate-300 mb-2">Langkah 2: Hitung kuadratnya ($144 + x^2 = 169$) lalu cari $x^2$</p>
+                            <div class="flex items-center gap-2 text-xs text-slate-200">
+                                <span>$x^2 = 169 - 144 =$</span>
+                                <input type="number" id="ex1-in2" placeholder="..." class="w-20 px-2 py-1 bg-slate-900 border border-slate-700 rounded text-center text-white">
+                            </div>
+                            <button onclick="checkEx1Step2()" class="mt-3 px-3 py-1.5 bg-sky-500 text-slate-950 font-bold rounded-lg text-xs">Cek Langkah 2</button>
+                            <div id="ex1-fb2" class="mt-2 text-xs font-semibold hidden"></div>
+                        </div>
+
+                        <!-- Guided Step 3 -->
+                        <div id="ex1-step3" class="step-box hidden-step bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <p class="text-xs font-bold text-slate-300 mb-2">Langkah 3: Akarkan $x^2$ untuk mendapat nilai akhir $x$</p>
+                            <div class="flex items-center gap-2 text-xs text-slate-200">
+                                <span>$x = \sqrt{25} =$</span>
+                                <input type="number" id="ex1-in3" placeholder="x" class="w-20 px-2 py-1 bg-slate-900 border border-slate-700 rounded text-center text-white">
+                            </div>
+                            <button onclick="checkEx1Step3()" class="mt-3 px-3 py-1.5 bg-emerald-500 text-slate-950 font-bold rounded-lg text-xs">Selesaikan Soal 1</button>
+                            <div id="ex1-fb3" class="mt-2 text-xs font-semibold hidden"></div>
+                        </div>
+                    </div>
+
+
+                    <!-- Latihan 2: Trik Cepat Sisi Akar (Updated to match User Concept!) -->
+                    <div class="p-6 border border-slate-700 rounded-2xl bg-slate-900/50">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2.5 py-1 bg-amber-500/20 text-amber-400 text-xs font-bold rounded-md border border-amber-500/30">Soal 2</span>
+                            <span class="text-xs text-slate-400">Sub-topik: Trik Cepat Sisi Akar ($a\sqrt{x} \pm a\sqrt{y}$)</span>
+                        </div>
+                        <h3 class="font-semibold text-white text-base mb-4">
+                            Dua sisi tegak suatu segitiga siku-siku masing-masing bernilai $3\sqrt{1}$ dan $3\sqrt{3}$. Menggunakan trik kilat, tentukan panjang sisi miringnya!
+                        </h3>
+
+                        <div id="ex2-step1" class="step-box visible-step bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <p class="text-xs font-bold text-slate-300 mb-2">Gunakan Rumus Cepat: $\text{Miring} = a\sqrt{x + y}$</p>
+                            <div class="flex flex-wrap items-center gap-2 text-xs text-slate-200">
+                                <span>$\text{Miring} = 3\sqrt{1 + 3} = 3\sqrt{4} = 3 \times $</span>
+                                <input type="number" id="ex2-in1" placeholder="akar 4" class="w-20 px-2 py-1 bg-slate-900 border border-slate-700 rounded text-center text-white">
+                                <span>=</span>
+                                <input type="number" id="ex2-in2" placeholder="Hasil akhir" class="w-24 px-2 py-1 bg-slate-900 border border-slate-700 rounded text-center text-white">
+                            </div>
+                            <button onclick="checkEx2()" class="mt-3 px-3 py-1.5 bg-amber-500 text-slate-950 text-xs font-bold rounded-lg">Cek Jawaban</button>
+                            <div id="ex2-fb" class="mt-2 text-xs font-semibold hidden"></div>
+                        </div>
+                    </div>
+
+                    <!-- Latihan 3: Sudut 30-60-90 -->
+                    <div class="p-6 border border-slate-700 rounded-2xl bg-slate-900/50">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2.5 py-1 bg-teal-500/20 text-teal-400 text-xs font-bold rounded-md border border-teal-500/30">Soal 3</span>
+                            <span class="text-xs text-slate-400">Sub-topik: Rasio Sudut $30^\circ - 60^\circ - 90^\circ$</span>
+                        </div>
+                        <h3 class="font-semibold text-white text-base mb-4">
+                            Panjang sisi terpendek segitiga siku-siku sudut $30^\circ-60^\circ-90^\circ$ adalah $7\text{ cm}$. Berapakah panjang hipotenusanya?
+                        </h3>
+
+                        <div id="ex3-step1" class="step-box visible-step bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <p class="text-xs font-bold text-slate-300 mb-2">Ingat Rasio: Sisi Pendek ($x$) : Hipotenusa ($2x$)</p>
+                            <div class="flex items-center gap-2 text-xs text-slate-200">
+                                <span>Hipotenusa = 2 × </span>
+                                <input type="number" id="ex3-in1" placeholder="x" class="w-20 px-2 py-1 bg-slate-900 border border-slate-700 rounded text-center text-white">
+                                <span>=</span>
+                                <input type="number" id="ex3-in2" placeholder="Hasil" class="w-24 px-2 py-1 bg-slate-900 border border-slate-700 rounded text-center text-white">
+                            </div>
+                            <button onclick="checkEx3()" class="mt-3 px-3 py-1.5 bg-teal-500 text-slate-950 text-xs font-bold rounded-lg">Cek Jawaban</button>
+                            <div id="ex3-fb" class="mt-2 text-xs font-semibold hidden"></div>
+                        </div>
+                    </div>
+
+                    <!-- Latihan 4: Diagonal Ruang Balok -->
+                    <div class="p-6 border border-slate-700 rounded-2xl bg-slate-900/50">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2.5 py-1 bg-purple-500/20 text-purple-400 text-xs font-bold rounded-md border border-purple-500/30">Soal 4</span>
+                            <span class="text-xs text-slate-400">Sub-topik: Diagonal Ruang Balok</span>
+                        </div>
+                        <h3 class="font-semibold text-white text-base mb-4">
+                            Sebuah balok berukuran $p = 4\text{ cm}, l = 3\text{ cm}, t = 12\text{ cm}$. Berapakah panjang diagonal ruang balok tersebut?
+                        </h3>
+
+                        <div id="ex4-step1" class="step-box visible-step bg-slate-800 p-4 rounded-xl border border-slate-700 mb-3">
+                            <p class="text-xs font-bold text-slate-300 mb-2">Langkah 1: Hitung $p^2 + l^2 + t^2$</p>
+                            <div class="flex items-center gap-2 text-xs text-slate-200">
+                                <span>$4^2 + 3^2 + 12^2 = 16 + 9 + 144 =$</span>
+                                <input type="number" id="ex4-in1" placeholder="total" class="w-24 px-2 py-1 bg-slate-900 border border-slate-700 rounded text-center text-white">
+                            </div>
+                            <button onclick="checkEx4Step1()" class="mt-3 px-3 py-1.5 bg-purple-500 text-slate-950 font-bold rounded-lg text-xs">Cek Langkah 1</button>
+                            <div id="ex4-fb1" class="mt-2 text-xs font-semibold hidden"></div>
+                        </div>
+
+                        <div id="ex4-step2" class="step-box hidden-step bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <p class="text-xs font-bold text-slate-300 mb-2">Langkah 2: Akarkan hasil total ($\sqrt{169}$)</p>
+                            <div class="flex items-center gap-2 text-xs text-slate-200">
+                                <span>Diagonal Ruang = </span>
+                                <input type="number" id="ex4-in2" placeholder="cm" class="w-24 px-2 py-1 bg-slate-900 border border-slate-700 rounded text-center text-white">
+                            </div>
+                            <button onclick="checkEx4Step2()" class="mt-3 px-3 py-1.5 bg-emerald-500 text-slate-950 font-bold rounded-lg text-xs">Selesaikan Soal 4</button>
+                            <div id="ex4-fb2" class="mt-2 text-xs font-semibold hidden"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 text-slate-400 py-6 text-center text-xs border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>© E-Modul Interaktif Teorema Pythagoras - Trik & Formulasi Cepat</p>
+            <p class="mt-1 text-slate-500">Dilengkapi visualisasi SVG interaktif & pengetikan MathJax otomatis.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // TAB NAVIGATION LOGIC
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active', 'bg-slate-700'));
+            
+            document.getElementById(`sec-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'bg-slate-700');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // SUB-MATERI TAB LOGIC
+        function switchSubMateri(subId) {
+            document.querySelectorAll('.submateri-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.submateri-btn').forEach(btn => {
+                btn.classList.remove('bg-sky-500', 'text-slate-950', 'font-bold');
+                btn.classList.add('bg-slate-800', 'text-slate-300', 'border', 'border-slate-700');
+            });
+
+            document.getElementById(`materi-${subId}`).classList.remove('hidden');
+            const activeSub = document.getElementById(`subtab-${subId}`);
+            if (activeSub) {
+                activeSub.classList.remove('bg-slate-800', 'text-slate-300', 'border', 'border-slate-700');
+                activeSub.classList.add('bg-sky-500', 'text-slate-950', 'font-bold');
+            }
+
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // WARM-UP QUIZ LOGIC
+        let warmupScore = 0;
+        const answeredWarmup = {1: false, 2: false, 3: false, 4: false};
+
+        function checkWarmup(qNum, correctVal, btnEl) {
+            if (answeredWarmup[qNum]) return;
+
+            const parent = btnEl.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            const feedback = document.getElementById(`q${qNum}-feedback`);
+            feedback.classList.remove('hidden');
+
+            let isCorrect = false;
+
+            if (qNum === 1 && correctVal === 100) isCorrect = true;
+            else if (qNum === 2 && correctVal === 13) isCorrect = true;
+            else if (qNum === 3 && correctVal === 'a') isCorrect = true;
+            else if (qNum === 4 && correctVal === 'hipotenusa') isCorrect = true;
+
+            buttons.forEach(b => b.classList.add('opacity-50', 'pointer-events-none'));
+
+            if (isCorrect) {
+                btnEl.classList.remove('opacity-50', 'bg-slate-800');
+                btnEl.classList.add('bg-emerald-950', 'border-emerald-500', 'text-emerald-300', 'font-bold');
+                feedback.className = "mt-3 text-xs p-2.5 rounded-lg bg-emerald-950/80 text-emerald-300 border border-emerald-700";
+                feedback.innerHTML = "<strong>Benar!</strong> Jawaban kamu tepat sekali 🎉";
+                warmupScore++;
+            } else {
+                btnEl.classList.remove('opacity-50', 'bg-slate-800');
+                btnEl.classList.add('bg-rose-950', 'border-rose-500', 'text-rose-300');
+                feedback.className = "mt-3 text-xs p-2.5 rounded-lg bg-rose-950/80 text-rose-300 border border-rose-700";
+                feedback.innerHTML = "<strong>Kurang tepat.</strong> Pelajari pembahasannya di materi nanti ya!";
+            }
+
+            answeredWarmup[qNum] = true;
+            document.getElementById('warmup-score').classList.remove('hidden');
+            document.getElementById('warmup-score-val').innerText = `${warmupScore} / 4`;
+        }
+
+        // REAL WORLD LADDER SIMULATION
+        function updateLadderSim() {
+            const c = parseFloat(document.getElementById('ladder-c').value);
+            const a = parseFloat(document.getElementById('ladder-a').value);
+            
+            document.getElementById('ladder-c-val').innerText = `${c} meter`;
+            document.getElementById('ladder-a-val').innerText = `${a} meter`;
+
+            let b = 0;
+            const resultBox = document.getElementById('ladder-result');
+
+            if (c <= a) {
+                resultBox.className = "mt-2 text-center text-xs font-semibold text-rose-300 bg-rose-950/60 px-4 py-2 rounded-lg border border-rose-800/50";
+                resultBox.innerText = "Panjang tangga (c) harus lebih besar dari jarak ke dinding (a)!";
+                return;
+            }
+
+            b = Math.sqrt(c*c - a*a);
+            resultBox.className = "mt-2 text-center text-xs font-semibold text-sky-300 bg-sky-950/60 px-4 py-2 rounded-lg border border-sky-800/50";
+            resultBox.innerText = `Tinggi dinding yang dicapai (b) = √(${c}² - ${a}²) = ${b.toFixed(2)} meter`;
+
+            // SVG Update
+            const scale = 15;
+            const startX = 40;
+            const startY = 170;
+            const endX = startX + (a * scale);
+            const endY = startY - (b * scale);
+
+            document.getElementById('ladder-line').setAttribute('x1', endX);
+            document.getElementById('ladder-line').setAttribute('y1', startY);
+            document.getElementById('ladder-line').setAttribute('x2', startX);
+            document.getElementById('ladder-line').setAttribute('y2', endY);
+
+            document.getElementById('ladder-h-line').setAttribute('y2', endY);
+            document.getElementById('ladder-poly').setAttribute('points', `${startX},${startY} ${startX},${endY} ${endX},${startY}`);
+
+            document.getElementById('label-h').innerText = `t = ${b.toFixed(1)}m`;
+            document.getElementById('label-a').innerText = `a = ${a}m`;
+            document.getElementById('label-c').innerText = `c = ${c}m`;
+        }
+
+        // TRIPLE INTERACTIVE CHECKER
+        function checkTripleInteractive() {
+            const a = parseInt(document.getElementById('triple-a').value) || 0;
+            const b = parseInt(document.getElementById('triple-b').value) || 0;
+            const c = parseInt(document.getElementById('triple-c').value) || 0;
+
+            const resDiv = document.getElementById('triple-result');
+            const arr = [a, b, c].sort((x, y) => x - y);
+            const [s1, s2, s3] = arr;
+
+            if (s1 <= 0 || s2 <= 0 || s3 <= 0) {
+                resDiv.innerHTML = "<span class='text-rose-400'>Masukkan 3 bilangan positif!</span>";
+                return;
+            }
+
+            const lhs = s1*s1 + s2*s2;
+            const rhs = s3*s3;
+
+            if (lhs === rhs) {
+                resDiv.innerHTML = `<span class='text-emerald-400 font-bold'>✓ BENAR! (${s1}, ${s2}, ${s3}) ADALAH Triple Pythagoras.</span><br><span class='text-slate-400'>Uji: ${s1}² + ${s2}² = ${s1*s1} + ${s2*s2} = ${lhs} = ${s3}²</span>`;
+            } else {
+                resDiv.innerHTML = `<span class='text-rose-400 font-bold'>✕ BUKAN Triple Pythagoras.</span><br><span class='text-slate-400'>Uji: ${s1}² + ${s2}² = ${lhs}, sedangkan ${s3}² = ${rhs} (${lhs} ≠ ${rhs})</span>`;
+            }
+        }
+
+        // BENTUK SEGITIGA SIMULATION
+        function updateBentukSim() {
+            const a = parseFloat(document.getElementById('range-a-bent').value);
+            const b = parseFloat(document.getElementById('range-b-bent').value);
+            const c = parseFloat(document.getElementById('range-c-bent').value);
+
+            document.getElementById('val-a-bent').innerText = a;
+            document.getElementById('val-b-bent').innerText = b;
+            document.getElementById('val-c-bent').innerText = c;
+
+            const arr = [a, b, c].sort((x, y) => x - y);
+            const s1 = arr[0], s2 = arr[1], maxC = arr[2];
+
+            const details = document.getElementById('bent-calc-details');
+            const badge = document.getElementById('bent-badge');
+
+            if (maxC >= s1 + s2) {
+                details.innerText = `Sisi ${maxC} ≥ ${s1} + ${s2} (Tidak membentuk segitiga!)`;
+                badge.className = "inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-slate-700 text-slate-300";
+                badge.innerText = "Bukan Segitiga";
+                return;
+            }
+
+            const cSquare = maxC * maxC;
+            const abSquare = s1*s1 + s2*s2;
+
+            details.innerText = `c² = ${cSquare} | a² + b² = ${abSquare}`;
+
+            if (Math.abs(cSquare - abSquare) < 0.001) {
+                badge.className = "inline-block px-4 py-1.5 rounded-full text-sm font-bold bg-sky-500 text-slate-950 shadow-lg";
+                badge.innerText = "Segitiga Siku-Siku (c² = a² + b²)";
+            } else if (cSquare < abSquare) {
+                badge.className = "inline-block px-4 py-1.5 rounded-full text-sm font-bold bg-emerald-500 text-slate-950 shadow-lg";
+                badge.innerText = "Segitiga Lancip (c² < a² + b²)";
+            } else {
+                badge.className = "inline-block px-4 py-1.5 rounded-full text-sm font-bold bg-rose-500 text-white shadow-lg";
+                badge.innerText = "Segitiga Tumpul (c² > a² + b²)";
+            }
+        }
+
+        // RASIO 45 CALCULATOR
+        function calc45() {
+            const val = parseFloat(document.getElementById('input-sisi45').value) || 0;
+            const res = document.getElementById('res-45');
+            const hypo = val * Math.sqrt(2);
+            res.innerHTML = `Sisi Penyiku 1 = ${val}<br>Sisi Penyiku 2 = ${val}<br>Hipotenusa = ${val}√2 ≈ ${hypo.toFixed(2)}`;
+        }
+
+        // RASIO 30 CALCULATOR
+        function calc30() {
+            const val = parseFloat(document.getElementById('input-sisi30').value) || 0;
+            const res = document.getElementById('res-30');
+            const mid = val * Math.sqrt(3);
+            const hypo = val * 2;
+            res.innerHTML = `Sisi Sedang (depan 60°) = ${val}√3 ≈ ${mid.toFixed(2)}<br>Hipotenusa (depan 90°) = ${hypo}`;
+        }
+
+        // FAST ROOT SHORTCUT CALCULATOR SIMULATION
+        function calcFastRootSim() {
+            const a = parseFloat(document.getElementById('fast-a').value) || 1;
+            const x = parseFloat(document.getElementById('fast-x').value) || 0;
+            const y = parseFloat(document.getElementById('fast-y').value) || 0;
+            const mode = document.getElementById('fast-mode').value;
+            const res = document.getElementById('fast-root-res');
+
+            if (mode === 'miring') {
+                const total = x + y;
+                const rootTotal = Math.sqrt(total);
+                const finalVal = a * rootTotal;
+                res.innerHTML = `
+                    Miring = ${a}√(${x} + ${y}) = ${a}√${total} <br>
+                    = ${a} × ${rootTotal.toFixed(2)} = ${finalVal.toFixed(2)}
+                `;
+            } else {
+                const diff = x - y;
+                if (diff < 0) {
+                    res.innerHTML = `<span class="text-rose-400">Untuk sisi tegak, x harus lebih besar dari y! (Sisi Miring harus lebih panjang)</span>`;
+                    return;
+                }
+                const rootDiff = Math.sqrt(diff);
+                const finalVal = a * rootDiff;
+                res.innerHTML = `
+                    Sisi Tegak = ${a}√(${x} - ${y}) = ${a}√${diff} <br>
+                    = ${a} × ${rootDiff.toFixed(2)} = ${finalVal.toFixed(2)}
+                `;
+            }
+        }
+
+        // 3D CALCULATOR SIMULATION
+        function calc3DSim() {
+            const p = parseFloat(document.getElementById('3d-p').value) || 0;
+            const l = parseFloat(document.getElementById('3d-l').value) || 0;
+            const t = parseFloat(document.getElementById('3d-t').value) || 0;
+
+            const dAlas = Math.sqrt(p*p + l*l);
+            const dRuang = Math.sqrt(p*p + l*l + t*t);
+
+            document.getElementById('3d-res').innerHTML = `
+                Diagonal Alas = √(${p}² + ${l}²) = √${p*p + l*l} ≈ ${dAlas.toFixed(2)} cm<br>
+                Diagonal Ruang = √(${p}² + ${l}² + ${t}²) = √${p*p + l*l + t*t} ≈ ${dRuang.toFixed(2)} cm
+            `;
+        }
+
+        // LATIHAN SOAL TERBIMBING LOGIC
+        function checkEx1Step1() {
+            const val = parseInt(document.getElementById('ex1-in1').value);
+            const fb = document.getElementById('ex1-fb1');
+            fb.classList.remove('hidden');
+
+            if (val === 169 || val === 13) {
+                fb.className = "mt-2 text-xs font-semibold text-emerald-400";
+                fb.innerText = "✓ Benar! 13² = 169. Lanjut ke langkah 2!";
+                document.getElementById('ex1-step2').classList.remove('hidden-step');
+                document.getElementById('ex1-step2').classList.add('visible-step');
+            } else {
+                fb.className = "mt-2 text-xs font-semibold text-rose-400";
+                fb.innerText = "✕ Salah. Hipotenusanya adalah 13, sehingga 13² = 169.";
+            }
+        }
+
+        function checkEx1Step2() {
+            const val = parseInt(document.getElementById('ex1-in2').value);
+            const fb = document.getElementById('ex1-fb2');
+            fb.classList.remove('hidden');
+
+            if (val === 25) {
+                fb.className = "mt-2 text-xs font-semibold text-emerald-400";
+                fb.innerText = "✓ Benar! 169 - 144 = 25. Lanjut ke langkah terakhir!";
+                document.getElementById('ex1-step3').classList.remove('hidden-step');
+                document.getElementById('ex1-step3').classList.add('visible-step');
+            } else {
+                fb.className = "mt-2 text-xs font-semibold text-rose-400";
+                fb.innerText = "✕ Hitung kembali 169 - 144.";
+            }
+        }
+
+        function checkEx1Step3() {
+            const val = parseInt(document.getElementById('ex1-in3').value);
+            const fb = document.getElementById('ex1-fb3');
+            fb.classList.remove('hidden');
+
+            if (val === 5) {
+                fb.className = "mt-2 text-xs font-semibold text-emerald-400";
+                fb.innerText = "🎉 Sempurna! Nilai x = 5. Triple Pythagoras-nya adalah (5, 12, 13).";
+            } else {
+                fb.className = "mt-2 text-xs font-semibold text-rose-400";
+                fb.innerText = "✕ Akar dari 25 adalah 5.";
+            }
+        }
+
+        function checkEx2() {
+            const in1 = parseInt(document.getElementById('ex2-in1').value);
+            const in2 = parseInt(document.getElementById('ex2-in2').value);
+            const fb = document.getElementById('ex2-fb');
+            fb.classList.remove('hidden');
+
+            if (in1 === 2 && in2 === 6) {
+                fb.className = "mt-2 text-xs font-semibold text-emerald-400";
+                fb.innerText = "🎉 Tepat Sekali! Miring = 3 × √4 = 3 × 2 = 6.";
+            } else {
+                fb.className = "mt-2 text-xs font-semibold text-rose-400";
+                fb.innerText = "✕ Isikan √4 = 2, sehingga 3 × 2 = 6.";
+            }
+        }
+
+        function checkEx3() {
+            const in1 = parseInt(document.getElementById('ex3-in1').value);
+            const in2 = parseInt(document.getElementById('ex3-in2').value);
+            const fb = document.getElementById('ex3-fb');
+            fb.classList.remove('hidden');
+
+            if (in1 === 7 && in2 === 14) {
+                fb.className = "mt-2 text-xs font-semibold text-emerald-400";
+                fb.innerText = "🎉 Luar Biasa! Hipotenusa = 2 × 7 = 14 cm.";
+            } else {
+                fb.className = "mt-2 text-xs font-semibold text-rose-400";
+                fb.innerText = "✕ Ingat, x = 7, maka 2 × 7 = 14.";
+            }
+        }
+
+        function checkEx4Step1() {
+            const val = parseInt(document.getElementById('ex4-in1').value);
+            const fb = document.getElementById('ex4-fb1');
+            fb.classList.remove('hidden');
+
+            if (val === 169) {
+                fb.className = "mt-2 text-xs font-semibold text-emerald-400";
+                fb.innerText = "✓ Benar! 16 + 9 + 144 = 169. Silakan selesaikan Langkah 2.";
+                document.getElementById('ex4-step2').classList.remove('hidden-step');
+                document.getElementById('ex4-step2').classList.add('visible-step');
+            } else {
+                fb.className = "mt-2 text-xs font-semibold text-rose-400";
+                fb.innerText = "✕ Hitung kembali 16 + 9 + 144.";
+            }
+        }
+
+        function checkEx4Step2() {
+            const val = parseInt(document.getElementById('ex4-in2').value);
+            const fb = document.getElementById('ex4-fb2');
+            fb.classList.remove('hidden');
+
+            if (val === 13) {
+                fb.className = "mt-2 text-xs font-semibold text-emerald-400";
+                fb.innerText = "🎉 Selamat! Diagonal ruang balok tersebut adalah 13 cm.";
+            } else {
+                fb.className = "mt-2 text-xs font-semibold text-rose-400";
+                fb.innerText = "✕ Akar dari 169 adalah 13.";
+            }
+        }
+
+        // Initialize simulations on load
+        window.onload = function() {
+            switchTab('tujuan');
+            updateLadderSim();
+            updateBentukSim();
+            calcFastRootSim();
+            calc3DSim();
+        };
+    </script>
+</body>
+</html>
